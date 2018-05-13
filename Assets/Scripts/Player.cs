@@ -8,6 +8,7 @@ public class Player : MonoBehaviour {
 
 	Animator animator;
 	Rigidbody rb;
+    public GameObject cameraObject;
 
     //Time variables
     private float time;
@@ -28,9 +29,14 @@ public class Player : MonoBehaviour {
     private GameObject platformObject;
     private Collider platformCollider;
 
+    //Spawn Variables
+    public GameObject startPoint;
+    public GameObject spawnPoint;
 
     //Damage Variables
-    public float health = 100.0f;
+    public float health;
+    public float maxHealth = 100.0f;
+
     public bool dead = false;
     private float damage = 50.0f;
     private float attackTimer;
@@ -53,10 +59,16 @@ public class Player : MonoBehaviour {
     void Start () {
 		animator = GetComponent<Animator> ();
 		rb = GetComponent<Rigidbody> ();
-
 		distToGround = transform.GetComponent<Collider> ().bounds.extents.y;
-
 		newRotation = transform.rotation;
+        health = maxHealth;
+
+        try {
+            cameraObject = GameObject.Find("Camera");
+        } catch {
+            cameraObject = null;
+        }
+
     }
 	
 	// Update is called once per frame
@@ -76,8 +88,22 @@ public class Player : MonoBehaviour {
             time += Time.deltaTime;
             if (time > restartTime) {
                 gameResult.enabled = false;
+                dead = false;
+                if (spawnPoint == null) {
+                    gameObject.transform.position = startPoint.transform.position;
+                    cameraObject.transform.position = startPoint.transform.position;
+                    health = maxHealth;
+                    time = 0;
+
+                } else {
+                    gameObject.transform.position = spawnPoint.transform.position;
+                    cameraObject.transform.position = spawnPoint.transform.position;
+                    health = maxHealth;
+                    time = 0;
+                }
+
                 //SceneManager.LoadScene(0); // Return to menu
-                SceneManager.LoadScene(1);
+                //SceneManager.LoadScene(1);
             }
         }
 
@@ -161,6 +187,10 @@ public class Player : MonoBehaviour {
         if (otherObject.transform.tag == "Falloff") {
             takeDamage(health);
         }
+
+        if (otherObject.transform.tag == "Checkpoint") {
+            setCheckPoint(otherObject.gameObject);
+        }
 	}
 
     private void OnTriggerStay(Collider other) {
@@ -186,6 +216,18 @@ public class Player : MonoBehaviour {
             platformCollider = null;
             canPhase = false;
         }
+    }
+
+    public void setCheckPoint(GameObject spawnlocation) {
+        spawnPoint = spawnlocation;
+    }
+
+    public GameObject getCheckPoint() {
+        return spawnPoint;
+    }
+
+    public void setMaxHealth(float moreHealth) {
+        maxHealth += moreHealth;
     }
 
 }
