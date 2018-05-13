@@ -23,6 +23,12 @@ public class Player : MonoBehaviour {
 	private float jumpCoolDown = 0.5f;
 	private float jumpTime;
 
+    // Obstacle Variables
+    private bool canPhase;
+    private GameObject platformObject;
+    private Collider platformCollider;
+
+
     //Damage Variables
     public float health = 100.0f;
     public bool dead = false;
@@ -98,6 +104,10 @@ public class Player : MonoBehaviour {
 			attackTimer = Time.time + attackRate;
 		}
 
+        if (Input.GetKey ("s") && canPhase) {
+            platformCollider.enabled = false;
+        }
+
 		//Movement
 		if (Input.GetKey ("d"))
 			Walking (1);
@@ -157,11 +167,24 @@ public class Player : MonoBehaviour {
         if (other.tag == "MovingPlatform") {
             transform.parent = other.transform;
         }
+
+        if (other.tag == "GhostPlatform") {
+            platformObject = other.gameObject.transform.GetChild(0).gameObject;
+            platformCollider = platformObject.GetComponent<Collider>();
+            canPhase = true;
+        }
+
     }
 
     private void OnTriggerExit(Collider other) {
         if (other.tag == "MovingPlatform") {
             transform.parent = null;
+        }
+
+        if (other.tag == "GhostPlatform") {
+            platformObject = null;
+            platformCollider = null;
+            canPhase = false;
         }
     }
 

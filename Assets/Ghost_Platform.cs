@@ -13,7 +13,7 @@ public class Ghost_Platform : MonoBehaviour {
         try {
 
             playerObject = GameObject.Find("Player");
-            platformObject = this.gameObject.transform.GetChild(0).gameObject;
+            platformObject = this.gameObject.transform.GetChild(0).GetChild(0).gameObject;
             platformCollider = platformObject.GetComponent<Collider>();
 
         } catch {
