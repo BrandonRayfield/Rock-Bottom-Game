@@ -17,7 +17,7 @@ public class Enemy : MonoBehaviour {
     public float damage = 10.0f;
     public GameObject damageHitBox;
     public GameObject damageLocation;
-    public float attackRange = 0.75f;
+    private float attackRange = 1.1f; //0.75f;
     private float attackTimer;
     private float attackRate = 1.0f;
 
@@ -66,6 +66,7 @@ public class Enemy : MonoBehaviour {
 
 		//Get in range
 		if (Vector3.Distance (transform.position, target.transform.position) > attackRange) {
+            Debug.Log(Vector3.Distance(transform.position, target.transform.position));
 			animator.Play ("Walk");
 
 			//look in direction of target
@@ -79,10 +80,10 @@ public class Enemy : MonoBehaviour {
 			transform.Translate (Vector3.forward * Time.deltaTime * moveSpeed * 2);
 					
 		} else if (Vector3.Distance (transform.position, target.transform.position) <= attackRange && Time.time > attackTimer) {
-
-			animator.Play ("Attack");
-			Instantiate (attackSound, transform.position, transform.rotation);
-			attackTimer = Time.time + attackRate;
+            Debug.Log(Vector3.Distance(transform.position, target.transform.position));
+            animator.Play("Attack");
+            Instantiate(attackSound, transform.position, transform.rotation);
+            attackTimer = Time.time + attackRate;
 		}
 	}
 
