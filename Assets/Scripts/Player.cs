@@ -70,7 +70,8 @@ public class Player : MonoBehaviour {
             time += Time.deltaTime;
             if (time > restartTime) {
                 gameResult.enabled = false;
-                SceneManager.LoadScene(0);
+                //SceneManager.LoadScene(0); // Return to menu
+                SceneManager.LoadScene(1);
             }
         }
 
@@ -146,6 +147,10 @@ public class Player : MonoBehaviour {
 			Instantiate (keySound, transform.position, transform.rotation);
 			Destroy (otherObject.gameObject);
 		}
+
+        if (otherObject.transform.tag == "Falloff") {
+            takeDamage(health);
+        }
 	}
 
     private void OnTriggerStay(Collider other) {
