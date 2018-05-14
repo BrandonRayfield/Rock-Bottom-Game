@@ -55,6 +55,12 @@ public class Player : MonoBehaviour {
     public GameObject deathSound;
     public GameObject keySound;
 
+    //Magic Variables
+    public GameObject lightningControl;
+    public float magicTimer;
+    public float magicRate = 1.5f;
+    public GameObject lightningPrefab;
+
     // Use this for initialization
     void Start () {
 		animator = GetComponent<Animator> ();
@@ -129,6 +135,10 @@ public class Player : MonoBehaviour {
             Instantiate(attackSound, transform.position, transform.rotation);
 			attackTimer = Time.time + attackRate;
 		}
+        //Lightning Attack
+
+        //LIGHTNING ATTACK HAS BEEN MOVED TO THUNDER COLLIDER DUE TO ERRORS. MUST BE LOOKED INTO ASAP
+
 
         if (Input.GetKey ("s") && canPhase) {
             platformCollider.enabled = false;

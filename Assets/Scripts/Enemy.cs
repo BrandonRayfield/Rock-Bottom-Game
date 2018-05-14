@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour {
 
     Animator animator;
     Collider myCollider;
-
+    
     public GameObject target;
 
     public float moveSpeed = 1.0f;
@@ -31,6 +31,9 @@ public class Enemy : MonoBehaviour {
     //Sound Variables
     public GameObject attackSound;
     public GameObject deathSound;
+
+    //Lightning Tracking
+    public int lightningListLocation = -1;
 
     // Use this for initialization
     void Start () {
@@ -133,7 +136,13 @@ public class Enemy : MonoBehaviour {
             patrolArea.GetComponent<Rigidbody>().isKinematic = true;
             isFalling = false;
             Destroy(other.gameObject);
-        }
+        } 
     }
+
+    public void LightningChange(int newlocation) {
+        lightningListLocation = newlocation;
+    }
+
+    
 
 }
