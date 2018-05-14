@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour {
     public static GameManager instance = null;
 
     public GameObject[] enemies;
-	public Text enemiesRemaining;
+    public Text enemiesRemaining;
 
 	public bool goldKey = false;
 
