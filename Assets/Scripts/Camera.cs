@@ -19,6 +19,17 @@ public class Camera : MonoBehaviour {
     private float adjRotSpeed;
     private Quaternion targetRotation;
 	
+    private void Start() {
+        try {
+
+            player = GameObject.Find("Player");
+
+        } catch {
+
+            player = null;
+        }
+    }
+
 	// Update is called once per frame
 	void Update () {
 
