@@ -23,7 +23,7 @@ public class ThunderCollider : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Controls();
+        //Controls();
     }
 
     public void enterRange(Enemy enemy) {
@@ -64,7 +64,7 @@ public class ThunderCollider : MonoBehaviour {
         //If it's an enemy
         if (other.tag == "Enemy") {
             //Check
-            print("collision.lightning detected");
+            Debug.Log("collision.lightning detected");
             //Add the enemy to the list
             if (other.GetComponent<Enemy>().lightningListLocation != -1) {
                 removeEnemy(other.GetComponent<Enemy>().lightningListLocation);
@@ -90,16 +90,14 @@ public class ThunderCollider : MonoBehaviour {
         }
     }
 
-    public void Controls() {
-        if (Input.GetKeyDown("r") && Time.time > magicTimer) {
-            Vector3 target = findClosest();
-            target.y += 8.5f;
-            //animator.Play ("Attack");
-            GameObject prefab = Instantiate(lightningPrefab, target, player.transform.rotation);
-            prefab.GetComponent<DamageHitBox>().damage = damage;
-            prefab.GetComponent<DamageHitBox>().player = true;
-            //Instantiate(attackSound, transform.position, transform.rotation);
-            magicTimer = Time.time + magicRate;
-        }
-    }
+    //public void Controls() {
+    //    if (Input.GetKeyDown("r") && Time.time > magicTimer) {
+    //        Vector3 target = findClosest();
+    //        target.y += 8.5f;
+
+    //        player.lightningAttack(target);
+
+    //        magicTimer = Time.time + magicRate;
+    //    }
+    //}
 }

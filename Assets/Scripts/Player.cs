@@ -9,6 +9,7 @@ public class Player : MonoBehaviour {
 	Animator animator;
 	Rigidbody rb;
     public GameObject cameraObject;
+    public GameObject playerModel;
 
     //Time variables
     private float time;
@@ -17,6 +18,13 @@ public class Player : MonoBehaviour {
     //Walking
     private float moveSpeed = 2.0f;
 	private Quaternion newRotation;
+    private int currentDirection;
+    public int movementSpeed;
+    private int walkSpeed = 300;
+    private int runSpeed = 600;
+
+    //Running
+    private bool isRunning;
 
 	//Jumping
 	public float jumpForce = 200.0f;
@@ -60,6 +68,11 @@ public class Player : MonoBehaviour {
     public float magicTimer;
     public float magicRate = 1.5f;
     public GameObject lightningPrefab;
+    public float currentChannelTime;
+    private float channelTime = 1.0f;
+    public bool channelAbility;
+    public Vector3 target;
+    private Vector3 nullTarget = new Vector3(0, 0, 0);
 
     // Use this for initialization
     void Start () {
@@ -68,6 +81,7 @@ public class Player : MonoBehaviour {
 		distToGround = transform.GetComponent<Collider> ().bounds.extents.y;
 		newRotation = transform.rotation;
         health = maxHealth;
+        currentDirection = 1;
 
         try {
             cameraObject = GameObject.Find("Camera");
@@ -118,60 +132,120 @@ public class Player : MonoBehaviour {
         healthBar.value = health / 100;
     }
 
-	private void Controls(){
+    private void Controls() {
 
 		//Jump
 		if (Input.GetKeyDown ("space") && IsGrounded () && Time.time > jumpTime) {
 
-			rb.AddForce (new Vector3 (0, jumpForce, 0), ForceMode.Force);
+            //animator.Play("Jump");
+            rb.AddForce (new Vector3 (0, jumpForce, 0), ForceMode.Force);
 			Instantiate (jumpSound, transform.position, transform.rotation);
 			jumpTime = Time.time + jumpCoolDown;
-		}
-		//attack
-		if (Input.GetKeyDown ("f") && Time.time > attackTimer) {
+            
+        }
 
-            //animator.Play ("Attack");
-            GameObject hitBox = Instantiate(damageHitBox, damageLocation.transform.position, damageLocation.transform.rotation, damageLocation.transform);
+        if (!IsGrounded()) {
+            animator.Play("Jump");
+            animator.SetBool("isJumping", true);
+        } else {
+            animator.SetBool("isJumping", false);
+        }
+
+        //attack
+        if (Input.GetKeyDown ("f") && Time.time > attackTimer) {
+
+            animator.Play ("Attack");
             Instantiate(attackSound, transform.position, transform.rotation);
 			attackTimer = Time.time + attackRate;
 		}
         //Lightning Attack
+        if (Input.GetKeyDown("r") && Time.time > magicTimer) {
 
-        //LIGHTNING ATTACK HAS BEEN MOVED TO THUNDER COLLIDER DUE TO ERRORS. MUST BE LOOKED INTO ASAP
+            target = lightningControl.GetComponent<ThunderCollider>().findClosest();
 
+            if (target != nullTarget) {
+                playerModel.transform.localEulerAngles = new Vector3(0, currentDirection * 90, 0);
+                animator.Play("Guitar Playing");
+                // Channel Ability
+                channelAbility = true;
+                magicTimer = Time.time + magicRate;
+            }
+        }
+
+        if (channelAbility) {
+            currentChannelTime += Time.deltaTime;
+            if (currentChannelTime >= channelTime) {
+                target = lightningControl.GetComponent<ThunderCollider>().findClosest();
+                target.y += 8.5f;
+                lightningAttack(target);
+                currentChannelTime = 0;
+                playerModel.transform.localEulerAngles = new Vector3(0, 0, 0);
+                channelAbility = false;
+            }
+        } else {
+            playerModel.transform.localEulerAngles = new Vector3(0, 0, 0);
+            currentChannelTime = 0;
+            channelAbility = false;
+        }
 
         if (Input.GetKey ("s") && canPhase) {
             platformCollider.enabled = false;
         }
 
 		//Movement
-		if (Input.GetKey ("d"))
-			Walking (1);
-		else if (Input.GetKey ("a"))
-			Walking (-1);
+
+        if (Input.GetKey("left shift")) {
+            isRunning = true;
+            animator.SetBool("isRunning", true);
+        } else {
+            isRunning = false;
+            animator.SetBool("isRunning", false);
+        }
+
+        if (Input.GetKey("d")) {
+            Walking(1);
+        } else if (Input.GetKey("a")) {
+            Walking(-1);
+        } else {
+            animator.SetBool("isWalking", false);
+        }
 	}
 
 	private void Walking(int direction){
 
-		if (IsGrounded ())
-			animator.Play ("Walk");
-		else
-			animator.Play ("Idle");
+        currentDirection = direction;
 
-		newRotation.eulerAngles = new Vector3 (newRotation.eulerAngles.x, direction * 90, newRotation.eulerAngles.z); 
+        if (IsGrounded ()) {
+            if (isRunning) {
+                movementSpeed = runSpeed;
+                animator.Play("Run");
+            } else {
+                movementSpeed = walkSpeed;
+                animator.Play("Walk");
+                animator.SetBool("isWalking", true);
+            }
+        }
+			
+		//else
+			//animator.Play ("Idle");
+            //animator.SetBool("isWalking", false);
+
+        newRotation.eulerAngles = new Vector3 (newRotation.eulerAngles.x, direction * 90, newRotation.eulerAngles.z); 
 		transform.rotation = newRotation;
 
+
+
 		if (rb.velocity.x < 35)
-			rb.AddForce (new Vector3 (direction * 500 * Time.deltaTime, 0, 0), ForceMode.Force);
+			rb.AddForce (new Vector3 (direction * movementSpeed * Time.deltaTime, 0, 0), ForceMode.Force);
 	}
 
 	public void Damage(){
 		GameObject hitBox = Instantiate (damageHitBox, damageLocation.transform.position, damageLocation.transform.rotation, damageLocation.transform);
-        //hitBox.GetComponent<DamageHitBox> ().damage = damage;        
+        hitBox.GetComponent<DamageHitBox> ().damage = damage;        
 	}
 
 	private bool IsGrounded(){
-		return Physics.Raycast (transform.position, -Vector3.up, distToGround + 0.1f);
+        return Physics.Raycast (transform.position, -Vector3.up, distToGround + 0.1f);
 	}
 
     public void takeDamage(float damage) {
@@ -238,6 +312,15 @@ public class Player : MonoBehaviour {
 
     public void setMaxHealth(float moreHealth) {
         maxHealth += moreHealth;
+    }
+
+    public void lightningAttack(Vector3 target) {
+        if (target != null) {
+            GameObject prefab = Instantiate(lightningPrefab, target, transform.rotation);
+            prefab.GetComponent<DamageHitBox>().damage = damage;
+            prefab.GetComponent<DamageHitBox>().player = true;
+            //Instantiate(attackSound, transform.position, transform.rotation);
+        }
     }
 
 }
