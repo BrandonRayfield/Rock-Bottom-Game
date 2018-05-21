@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour {
 
     Animator animator;
     Collider myCollider;
-
+    
     public GameObject target;
 
     public float moveSpeed = 1.0f;
@@ -17,9 +17,13 @@ public class Enemy : MonoBehaviour {
     public float damage = 10.0f;
     public GameObject damageHitBox;
     public GameObject damageLocation;
-    public float attackRange = 0.75f;
+    private float attackRange = 1.1f; //0.75f;
     private float attackTimer;
     private float attackRate = 1.0f;
+
+    // Crusher Variables
+    private bool touchTopCrush;
+    private bool touchBottomCrush;
 
     //Patrolling Variables
     public float patrolPointDistance = 0.1f;
@@ -32,6 +36,9 @@ public class Enemy : MonoBehaviour {
     public GameObject attackSound;
     public GameObject deathSound;
 
+    //Lightning Tracking
+    public int lightningListLocation = -1;
+
     // Use this for initialization
     void Start () {
         animator = GetComponent<Animator>();
@@ -40,6 +47,12 @@ public class Enemy : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+
+        if (touchTopCrush && touchBottomCrush) {
+            takeDamage(health);
+            touchTopCrush = false;
+            touchBottomCrush = false;
+        }
 
         //Enemy Logic
         if (!dead) { 
@@ -66,6 +79,7 @@ public class Enemy : MonoBehaviour {
 
 		//Get in range
 		if (Vector3.Distance (transform.position, target.transform.position) > attackRange) {
+            Debug.Log(Vector3.Distance(transform.position, target.transform.position));
 			animator.Play ("Walk");
 
 			//look in direction of target
@@ -79,10 +93,10 @@ public class Enemy : MonoBehaviour {
 			transform.Translate (Vector3.forward * Time.deltaTime * moveSpeed * 2);
 					
 		} else if (Vector3.Distance (transform.position, target.transform.position) <= attackRange && Time.time > attackTimer) {
-
-			animator.Play ("Attack");
-			Instantiate (attackSound, transform.position, transform.rotation);
-			attackTimer = Time.time + attackRate;
+            Debug.Log(Vector3.Distance(transform.position, target.transform.position));
+            animator.Play("Attack");
+            Instantiate(attackSound, transform.position, transform.rotation);
+            attackTimer = Time.time + attackRate;
 		}
 	}
 
@@ -133,6 +147,34 @@ public class Enemy : MonoBehaviour {
             isFalling = false;
             Destroy(other.gameObject);
         }
+
+        if (other.transform.tag == "Falloff") {
+            takeDamage(health);
+        }
+
+        if (other.transform.tag == "Crusher") {
+            touchTopCrush = true;
+        }
+
+        if (other.transform.tag == "CrusherFloor") {
+            touchBottomCrush = true;
+        }
     }
+
+    private void OnTriggerExit(Collider other) {
+        if (other.transform.tag == "Crusher") {
+            touchTopCrush = false;
+        }
+
+        if (other.transform.tag == "CrusherFloor") {
+            touchBottomCrush = false;
+        }
+    }
+
+    public void LightningChange(int newlocation) {
+        lightningListLocation = newlocation;
+    }
+
+    
 
 }
