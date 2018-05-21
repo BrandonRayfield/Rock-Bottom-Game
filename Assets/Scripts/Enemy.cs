@@ -21,6 +21,10 @@ public class Enemy : MonoBehaviour {
     private float attackTimer;
     private float attackRate = 1.0f;
 
+    // Crusher Variables
+    private bool touchTopCrush;
+    private bool touchBottomCrush;
+
     //Patrolling Variables
     public float patrolPointDistance = 0.1f;
     public GameObject[] patrolPoints;
@@ -43,6 +47,12 @@ public class Enemy : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+
+        if (touchTopCrush && touchBottomCrush) {
+            takeDamage(health);
+            touchTopCrush = false;
+            touchBottomCrush = false;
+        }
 
         //Enemy Logic
         if (!dead) { 
@@ -136,7 +146,29 @@ public class Enemy : MonoBehaviour {
             patrolArea.GetComponent<Rigidbody>().isKinematic = true;
             isFalling = false;
             Destroy(other.gameObject);
-        } 
+        }
+
+        if (other.transform.tag == "Falloff") {
+            takeDamage(health);
+        }
+
+        if (other.transform.tag == "Crusher") {
+            touchTopCrush = true;
+        }
+
+        if (other.transform.tag == "CrusherFloor") {
+            touchBottomCrush = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other) {
+        if (other.transform.tag == "Crusher") {
+            touchTopCrush = false;
+        }
+
+        if (other.transform.tag == "CrusherFloor") {
+            touchBottomCrush = false;
+        }
     }
 
     public void LightningChange(int newlocation) {

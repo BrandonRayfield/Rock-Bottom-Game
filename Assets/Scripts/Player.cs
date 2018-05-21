@@ -37,6 +37,9 @@ public class Player : MonoBehaviour {
     private GameObject platformObject;
     private Collider platformCollider;
 
+    // Cutscene Variables
+    private bool isCutscene = false;
+
     //Spawn Variables
     public GameObject startPoint;
     public GameObject spawnPoint;
@@ -52,10 +55,23 @@ public class Player : MonoBehaviour {
 	public GameObject damageLocation;
 	public GameObject damageHitBox;
 
+    // Obstacle Variables
+    private bool touchTopCrush;
+    private bool touchBottomCrush;
+
     //UI Variables
-	public GameObject goldKeyUI;
+    public GameObject goldKeyUI;
     public Slider healthBar;
     public Text gameResult;
+    public Text shardText;
+    public Text currencyText;
+
+    //Item Variables
+    public int shardsNeeded = 3;
+    public int currencyCount;
+    public int shardCount;
+    private int itemValue;
+    private int itemID;
 
     //Sound Variables
     public GameObject jumpSound;
@@ -98,7 +114,13 @@ public class Player : MonoBehaviour {
             SceneManager.LoadScene(0);
         }
 
-		if (!dead) {
+        if (touchTopCrush && touchBottomCrush) {
+            takeDamage(health);
+            touchTopCrush = false;
+            touchBottomCrush = false;
+        }
+
+		if (!dead && !isCutscene) {
             Controls();
         }
 		else if (dead) {
@@ -137,7 +159,6 @@ public class Player : MonoBehaviour {
 		//Jump
 		if (Input.GetKeyDown ("space") && IsGrounded () && Time.time > jumpTime) {
 
-            //animator.Play("Jump");
             rb.AddForce (new Vector3 (0, jumpForce, 0), ForceMode.Force);
 			Instantiate (jumpSound, transform.position, transform.rotation);
 			jumpTime = Time.time + jumpCoolDown;
@@ -195,19 +216,24 @@ public class Player : MonoBehaviour {
 		//Movement
 
         if (Input.GetKey("left shift")) {
-            isRunning = true;
-            animator.SetBool("isRunning", true);
+            isRunning = true;     
         } else {
-            isRunning = false;
-            animator.SetBool("isRunning", false);
+            isRunning = false;     
         }
 
         if (Input.GetKey("d")) {
             Walking(1);
+            if (isRunning) {
+                animator.SetBool("isRunning", true);
+            }
         } else if (Input.GetKey("a")) {
             Walking(-1);
+            if (isRunning) {
+                animator.SetBool("isRunning", true);
+            }
         } else {
             animator.SetBool("isWalking", false);
+            animator.SetBool("isRunning", false);
         }
 	}
 
@@ -268,8 +294,36 @@ public class Player : MonoBehaviour {
 			Destroy (otherObject.gameObject);
 		}
 
+        // Placeholder for inventory system. Will implement better system during holidays
+        if(otherObject.transform.tag == "Collectable") {
+            itemID = otherObject.GetComponent<ItemPickupScript>().getItemID();
+            itemValue = otherObject.GetComponent<ItemPickupScript>().getValue();
+            
+
+            if (itemID == 0) {
+                currencyCount += itemValue;
+                currencyText.text = "Coins: " + currencyCount.ToString();
+            } else if (itemID == 1) {
+                shardCount += itemValue;
+                shardText.text = "Shards: " + shardCount.ToString() + " / " + shardsNeeded;
+            } else {
+                Debug.Log("Invalid Item ID");
+            }
+
+            Destroy(otherObject.gameObject);
+
+        }
+
         if (otherObject.transform.tag == "Falloff") {
             takeDamage(health);
+        }
+
+        if (otherObject.transform.tag == "Crusher") {
+            touchTopCrush = true;
+        }
+
+        if (otherObject.transform.tag == "CrusherFloor") {
+            touchBottomCrush = true;
         }
 
         if (otherObject.transform.tag == "Checkpoint") {
@@ -300,6 +354,14 @@ public class Player : MonoBehaviour {
             platformCollider = null;
             canPhase = false;
         }
+
+        if (other.transform.tag == "Crusher") {
+            touchTopCrush = false;
+        }
+
+        if (other.transform.tag == "CrusherFloor") {
+            touchBottomCrush = false;
+        }
     }
 
     public void setCheckPoint(GameObject spawnlocation) {
@@ -321,6 +383,15 @@ public class Player : MonoBehaviour {
             prefab.GetComponent<DamageHitBox>().player = true;
             //Instantiate(attackSound, transform.position, transform.rotation);
         }
+    }
+
+    // Used to check if the player has collected enough items
+    public int getItemCount() {
+        return shardCount;
+    }
+
+    public void setCutscene(bool cutscenePlaying) {
+        isCutscene = cutscenePlaying;
     }
 
 }

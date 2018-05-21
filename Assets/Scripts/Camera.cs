@@ -13,6 +13,7 @@ public class Camera : MonoBehaviour {
     public bool boolNewFocus;
     private float time;
     private float focusTime = 4.0f;
+    private bool isFinished;
 
     //Rotation vars
     private float rotationSpeed = 0.5f;
@@ -20,6 +21,8 @@ public class Camera : MonoBehaviour {
     private Quaternion targetRotation;
 	
     private void Start() {
+        isFinished = false;
+
         try {
 
             player = GameObject.Find("Player");
@@ -34,13 +37,17 @@ public class Camera : MonoBehaviour {
 	void Update () {
 
         if (boolNewFocus) {
+            isFinished = false;
+            player.GetComponent<Player>().setCutscene(true);
             time += Time.deltaTime;
             if (time > focusTime) {
                 boolNewFocus = false;
             }
         } else {
             time = 0;
+            player.GetComponent<Player>().setCutscene(false);
             focusPoint = player.transform.position;
+            isFinished = true;
         }
         
 
@@ -61,6 +68,10 @@ public class Camera : MonoBehaviour {
     public void SetFocusPoint(GameObject newFocus) {
         focusPoint = newFocus.transform.position;
         boolNewFocus = true;
+    }
+
+    public bool getIsFinished() {
+        return isFinished;
     }
 
 }
