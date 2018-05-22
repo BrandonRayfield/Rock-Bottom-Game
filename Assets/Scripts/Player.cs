@@ -20,8 +20,8 @@ public class Player : MonoBehaviour {
 	private Quaternion newRotation;
     private int currentDirection;
     public int movementSpeed;
-    private int walkSpeed = 300;
-    private int runSpeed = 600;
+    private int walkSpeed = 10;
+    private int runSpeed = 20;
 
     //Running
     private bool isRunning;
@@ -156,29 +156,30 @@ public class Player : MonoBehaviour {
 
     private void Controls() {
 
-		//Jump
-		if (Input.GetKeyDown ("space") && IsGrounded () && Time.time > jumpTime) {
+        //Jump
+        if (Input.GetKeyDown("space") && IsGrounded() && Time.time > jumpTime) {
 
-            rb.AddForce (new Vector3 (0, jumpForce, 0), ForceMode.Force);
-			Instantiate (jumpSound, transform.position, transform.rotation);
-			jumpTime = Time.time + jumpCoolDown;
-            
+            rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Force);
+            Instantiate(jumpSound, transform.position, transform.rotation);
+            jumpTime = Time.time + jumpCoolDown;
+
         }
 
         if (!IsGrounded()) {
             animator.Play("Jump");
             animator.SetBool("isJumping", true);
-        } else {
+        }
+        else {
             animator.SetBool("isJumping", false);
         }
 
         //attack
-        if (Input.GetKeyDown ("f") && Time.time > attackTimer) {
+        if (Input.GetKeyDown("f") && Time.time > attackTimer) {
 
-            animator.Play ("Attack");
+            animator.Play("Attack");
             Instantiate(attackSound, transform.position, transform.rotation);
-			attackTimer = Time.time + attackRate;
-		}
+            attackTimer = Time.time + attackRate;
+        }
         //Lightning Attack
         if (Input.GetKeyDown("r") && Time.time > magicTimer) {
 
@@ -203,39 +204,53 @@ public class Player : MonoBehaviour {
                 playerModel.transform.localEulerAngles = new Vector3(0, 0, 0);
                 channelAbility = false;
             }
-        } else {
+        }
+        else {
             playerModel.transform.localEulerAngles = new Vector3(0, 0, 0);
             currentChannelTime = 0;
             channelAbility = false;
         }
 
-        if (Input.GetKey ("s") && canPhase) {
+        if (Input.GetKey("s") && canPhase) {
             platformCollider.enabled = false;
         }
 
-		//Movement
+        //Movement
 
         if (Input.GetKey("left shift")) {
-            isRunning = true;     
-        } else {
-            isRunning = false;     
+            isRunning = true;
+        }
+        else {
+            isRunning = false;
         }
 
         if (Input.GetKey("d")) {
             Walking(1);
+            Debug.Log("hello");
             if (isRunning) {
                 animator.SetBool("isRunning", true);
             }
-        } else if (Input.GetKey("a")) {
+        }
+        else if (Input.GetKey("a")) {
             Walking(-1);
             if (isRunning) {
                 animator.SetBool("isRunning", true);
             }
-        } else {
+        }
+        else {
             animator.SetBool("isWalking", false);
             animator.SetBool("isRunning", false);
         }
-	}
+
+        if (!Input.GetKey("d") && !Input.GetKey("a")) {
+            rb.AddForce(new Vector3(-rb.velocity.x, 0, 0), ForceMode.Force);
+            print(rb.velocity.x.ToString());
+            Debug.Log("hello");
+            animator.SetBool("isWalking", false);
+            animator.SetBool("isRunning", false);
+        }
+    
+    }
 
 	private void Walking(int direction){
 
@@ -261,8 +276,8 @@ public class Player : MonoBehaviour {
 
 
 
-		if (rb.velocity.x < 35)
-			rb.AddForce (new Vector3 (direction * movementSpeed * Time.deltaTime, 0, 0), ForceMode.Force);
+            rb.AddForce(new Vector3(-rb.velocity.x, 0, 0), ForceMode.Force);
+			rb.AddForce (new Vector3 (direction * movementSpeed, 0, 0), ForceMode.Force);
 	}
 
 	public void Damage(){
