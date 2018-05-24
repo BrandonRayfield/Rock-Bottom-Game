@@ -100,7 +100,7 @@ public class Player : MonoBehaviour {
         currentDirection = 1;
 
         try {
-            cameraObject = GameObject.Find("MainCamera");
+            cameraObject = GameObject.Find("Camera");
         } catch {
             cameraObject = null;
         }
@@ -283,6 +283,9 @@ public class Player : MonoBehaviour {
 	}
 
 	public void Damage(){
+
+        //GameObject hitBox = Instantiate(damageHitBox, damageLocation.transform.position, damageLocation.transform.rotation, damageLocation.transform);
+
 
         Vector3 mousePos;
         Vector3 attackPos = damageLocation.transform.position;
