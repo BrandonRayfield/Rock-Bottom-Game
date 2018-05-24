@@ -100,7 +100,7 @@ public class Player : MonoBehaviour {
         currentDirection = 1;
 
         try {
-            cameraObject = GameObject.Find("Camera");
+            cameraObject = GameObject.Find("MainCamera");
         } catch {
             cameraObject = null;
         }
@@ -174,7 +174,7 @@ public class Player : MonoBehaviour {
         }
 
         //attack
-        if (Input.GetKeyDown("f") && Time.time > attackTimer) {
+        if (Input.GetMouseButtonDown(0) && Time.time > attackTimer) {
 
             animator.Play("Attack");
             Instantiate(attackSound, transform.position, transform.rotation);
@@ -242,10 +242,12 @@ public class Player : MonoBehaviour {
             animator.SetBool("isRunning", false);
         }
 
-        if (!Input.GetKey("d") && !Input.GetKey("a")) {
-            rb.AddForce(new Vector3(-rb.velocity.x, 0, 0), ForceMode.Force);
+        if (Input.GetKeyUp("d") || Input.GetKeyUp("a")) {
+            Vector3 temp = rb.velocity;
+            temp.x /= 2;
+            rb.velocity = temp;
+
             print(rb.velocity.x.ToString());
-            Debug.Log("hello");
             animator.SetBool("isWalking", false);
             animator.SetBool("isRunning", false);
         }
@@ -281,7 +283,21 @@ public class Player : MonoBehaviour {
 	}
 
 	public void Damage(){
-		GameObject hitBox = Instantiate (damageHitBox, damageLocation.transform.position, damageLocation.transform.rotation, damageLocation.transform);
+
+        Vector3 mousePos;
+        Vector3 attackPos = damageLocation.transform.position;
+        float angle;
+
+        mousePos = Input.mousePosition;
+        mousePos.z = Vector3.Distance(Camera.main.transform.position, transform.position);
+        attackPos = Camera.main.WorldToScreenPoint(attackPos);
+        mousePos.x -= attackPos.x;
+        mousePos.y -= attackPos.y;
+        angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
+        
+
+		GameObject hitBox = Instantiate (damageHitBox, damageLocation.transform.position, 
+            Quaternion.Euler(new Vector3(0,0,angle)), damageLocation.transform);
         hitBox.GetComponent<DamageHitBox> ().damage = damage;        
 	}
 
