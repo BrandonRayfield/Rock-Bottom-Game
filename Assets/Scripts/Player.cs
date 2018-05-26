@@ -81,9 +81,10 @@ public class Player : MonoBehaviour {
 
     //Magic Variables
     public GameObject lightningControl;
+    public GameObject lightningPrefab;
+    public GameObject lightningParticles;
     public float magicTimer;
     public float magicRate = 1.5f;
-    public GameObject lightningPrefab;
     public float currentChannelTime;
     private float channelTime = 1.0f;
     public bool channelAbility;
@@ -199,7 +200,7 @@ public class Player : MonoBehaviour {
             currentChannelTime += Time.deltaTime;
             if (currentChannelTime >= channelTime) {
                 target = lightningControl.GetComponent<ThunderCollider>().findClosest();
-                target.y += 8.5f;
+                //target.y += 8.5f;
                 lightningAttack(target);
                 currentChannelTime = 0;
                 playerModel.transform.localEulerAngles = new Vector3(0, 0, 0);
@@ -351,7 +352,9 @@ public class Player : MonoBehaviour {
         }
 
         if (otherObject.transform.tag == "Falloff") {
-            takeDamage(health);
+            if (!dead) {
+                takeDamage(health);
+            }
         }
 
         if (otherObject.transform.tag == "Crusher") {
@@ -417,6 +420,7 @@ public class Player : MonoBehaviour {
             GameObject prefab = Instantiate(lightningPrefab, target, transform.rotation);
             prefab.GetComponent<DamageHitBox>().damage = damage;
             prefab.GetComponent<DamageHitBox>().player = true;
+            Instantiate(lightningParticles, target, transform.rotation);
             //Instantiate(attackSound, transform.position, transform.rotation);
         }
     }
