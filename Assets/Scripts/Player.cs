@@ -179,6 +179,7 @@ public class Player : MonoBehaviour {
 
             animator.Play("Attack");
             Instantiate(attackSound, transform.position, transform.rotation);
+            Damage();
 
             attackTimer = Time.time + attackRate;
         }
