@@ -178,6 +178,7 @@ public class Player : MonoBehaviour {
 
             animator.Play("Attack");
             Instantiate(attackSound, transform.position, transform.rotation);
+
             attackTimer = Time.time + attackRate;
         }
         //Lightning Attack
@@ -301,8 +302,9 @@ public class Player : MonoBehaviour {
 
 		GameObject hitBox = Instantiate (damageHitBox, damageLocation.transform.position, 
             Quaternion.Euler(new Vector3(0,0,angle)), damageLocation.transform);
-        hitBox.GetComponent<DamageHitBox> ().damage = damage;        
-	}
+        hitBox.GetComponent<DamageHitBox> ().damage = damage;
+        hitBox.GetComponent<DamageHitBox>().moveForward(0.8f);
+    }
 
 	private bool IsGrounded(){
         return Physics.Raycast (transform.position, -Vector3.up, distToGround + 0.1f);

@@ -29,4 +29,9 @@ public class DamageHitBox : MonoBehaviour {
             }
         }
     }
+
+    public void moveForward(float distance) {
+
+           transform.Translate(new Vector3(distance,0,0),Space.Self);
+    }
 }
