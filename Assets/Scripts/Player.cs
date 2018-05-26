@@ -100,7 +100,7 @@ public class Player : MonoBehaviour {
         currentDirection = 1;
 
         try {
-            cameraObject = GameObject.Find("MainCamera");
+            cameraObject = GameObject.Find("Camera");
         } catch {
             cameraObject = null;
         }
@@ -284,6 +284,9 @@ public class Player : MonoBehaviour {
 
 	public void Damage(){
 
+        //GameObject hitBox = Instantiate(damageHitBox, damageLocation.transform.position, damageLocation.transform.rotation, damageLocation.transform);
+
+
         Vector3 mousePos;
         Vector3 attackPos = damageLocation.transform.position;
         float angle;
@@ -333,7 +336,7 @@ public class Player : MonoBehaviour {
 
             if (itemID == 0) {
                 currencyCount += itemValue;
-                currencyText.text = "Coins: " + currencyCount.ToString();
+                currencyText.text = "Beat Coins: " + currencyCount.ToString();
             } else if (itemID == 1) {
                 shardCount += itemValue;
                 shardText.text = "Shards: " + shardCount.ToString() + " / " + shardsNeeded;
