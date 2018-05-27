@@ -11,6 +11,14 @@ public class Player : MonoBehaviour {
     public GameObject cameraObject;
     public GameObject playerModel;
 
+    //Guitar Objects
+    public GameObject guitarBack;
+    public GameObject guitarFront;
+    public GameObject guitarSwing;
+
+    private int guitarStance; // Determines what guitar object is enabled. 0 for Back enabled, 1 for front, 2 for swing
+
+
     //Time variables
     private float time;
     public float restartTime = 4.0f;
@@ -115,6 +123,8 @@ public class Player : MonoBehaviour {
 
         currentPitch = minPitch;
 
+        guitarStance = 0; // Back guitar starts enabled
+
         try {
             cameraObject = GameObject.Find("Camera");
         } catch {
@@ -125,6 +135,21 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+        // Determines what guitar object is enabled. 0 for Back enabled, 1 for front, 2 for swing
+        if (guitarStance == 1) {
+            guitarBack.SetActive(false);
+            guitarFront.SetActive(true);
+            guitarSwing.SetActive(false);
+        } else if (guitarStance == 2) {
+            guitarBack.SetActive(false);
+            guitarFront.SetActive(false);
+            guitarSwing.SetActive(true);
+        } else {
+            guitarBack.SetActive(true);
+            guitarFront.SetActive(false);
+            guitarSwing.SetActive(false);
+        }
 
         if (Input.GetKeyDown(KeyCode.Escape)) {
             SceneManager.LoadScene(0);
@@ -192,7 +217,7 @@ public class Player : MonoBehaviour {
 
         //attack
         if (Input.GetMouseButtonDown(0) && Time.time > attackTimer) {
-
+            guitarStance = 2;
             animator.Play("Attack");
             Instantiate(attackSound, transform.position, transform.rotation);
             Damage();
@@ -207,6 +232,7 @@ public class Player : MonoBehaviour {
             if (target != nullTarget) {
                 playerModel.transform.localEulerAngles = new Vector3(0, currentDirection * 90, 0);
                 animator.Play("Guitar Playing");
+                guitarStance = 1;
                 Instantiate(guitarSound, transform.position, transform.rotation);
                 // Channel Ability
                 channelAbility = true;
@@ -223,6 +249,7 @@ public class Player : MonoBehaviour {
                 currentChannelTime = 0;
                 playerModel.transform.localEulerAngles = new Vector3(0, 0, 0);
                 channelAbility = false;
+                guitarStance = 0;
             }
         }
         else {
@@ -323,6 +350,18 @@ public class Player : MonoBehaviour {
             Quaternion.Euler(new Vector3(0,0,angle)), damageLocation.transform);
         hitBox.GetComponent<DamageHitBox> ().damage = damage;
         hitBox.GetComponent<DamageHitBox>().moveForward(0.8f);
+    }
+
+    public void Idle() {
+        guitarStance = 0;
+    }
+
+    public void PlayGuitar() {
+        guitarStance = 1;
+    }
+
+    public void Attack() {
+        guitarStance = 2;
     }
 
 	private bool IsGrounded(){
@@ -463,6 +502,10 @@ public class Player : MonoBehaviour {
 
     public void setCutscene(bool cutscenePlaying) {
         isCutscene = cutscenePlaying;
+    }
+
+    public void setGuitarStance(int newStance) {
+        guitarStance = newStance;
     }
 
 }
