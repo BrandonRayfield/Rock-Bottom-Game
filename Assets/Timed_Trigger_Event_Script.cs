@@ -57,7 +57,7 @@ public class Timed_Trigger_Event_Script : MonoBehaviour {
         if (padTriggered) {
             time += Time.deltaTime;
             if (time >= 1) {
-                cameraObject.GetComponent<CameraScript>().SetFocusPoint(lockedObject);
+                cameraObject.GetComponent<Camera>().SetFocusPoint(lockedObject);
                 time = 0;
                 padTriggered = false;
                 currentTime = maxTime;
@@ -67,7 +67,7 @@ public class Timed_Trigger_Event_Script : MonoBehaviour {
         }
 
         if (cutsceneTriggered) {
-            isActive = cameraObject.GetComponent<CameraScript>().getIsFinished();
+            isActive = cameraObject.GetComponent<Camera>().getIsFinished();
         }
 
 
