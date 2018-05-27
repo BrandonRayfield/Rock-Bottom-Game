@@ -352,15 +352,15 @@ public class Player : MonoBehaviour {
         hitBox.GetComponent<DamageHitBox>().moveForward(0.8f);
     }
 
-    public void Idle() {
+    public void IdleStance() {
         guitarStance = 0;
     }
 
-    public void PlayGuitar() {
+    public void PlayGuitarStance() {
         guitarStance = 1;
     }
 
-    public void Attack() {
+    public void AttackStance() {
         guitarStance = 2;
     }
 
