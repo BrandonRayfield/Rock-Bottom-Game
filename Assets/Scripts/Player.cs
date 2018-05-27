@@ -78,10 +78,23 @@ public class Player : MonoBehaviour {
     public GameObject attackSound;
     public GameObject deathSound;
     public GameObject keySound;
+    public GameObject musicNoteSound;
+    public bool randomPickupPitch; // Toggle on and off to determine if pitch is random or scaling
+    public GameObject shardSound;
+    public GameObject burnSound;
+    public GameObject guitarSound;
+    public GameObject squashSound;
+    public GameObject checkpointSound;
+
+    
+
+    private float minPitch = 0.5f;
+    private float maxPitch = 1.5f;
+    private float currentPitch;
 
     //Magic Variables
     public GameObject lightningControl;
-    public GameObject lightningPrefab;
+    public GameObject lightningHitbox;
     public GameObject lightningParticles;
     public float magicTimer;
     public float magicRate = 1.5f;
@@ -100,6 +113,8 @@ public class Player : MonoBehaviour {
         health = maxHealth;
         currentDirection = 1;
 
+        currentPitch = minPitch;
+
         try {
             cameraObject = GameObject.Find("Camera");
         } catch {
@@ -117,6 +132,7 @@ public class Player : MonoBehaviour {
 
         if (touchTopCrush && touchBottomCrush) {
             takeDamage(health);
+            Instantiate(squashSound, transform.position, transform.rotation);
             touchTopCrush = false;
             touchBottomCrush = false;
         }
@@ -191,6 +207,7 @@ public class Player : MonoBehaviour {
             if (target != nullTarget) {
                 playerModel.transform.localEulerAngles = new Vector3(0, currentDirection * 90, 0);
                 animator.Play("Guitar Playing");
+                Instantiate(guitarSound, transform.position, transform.rotation);
                 // Channel Ability
                 channelAbility = true;
                 magicTimer = Time.time + magicRate;
@@ -316,7 +333,7 @@ public class Player : MonoBehaviour {
 
         health -= damage;
 
-        if (health <= 0) {
+        if (health <= 0 && !dead) {
             dead = true;
             Instantiate(deathSound, transform.position, transform.rotation);
         }
@@ -341,9 +358,22 @@ public class Player : MonoBehaviour {
             if (itemID == 0) {
                 currencyCount += itemValue;
                 currencyText.text = "Beat Coins: " + currencyCount.ToString();
+
+                if (randomPickupPitch) {
+                    musicNoteSound.GetComponent<AudioSource>().pitch = Random.Range(0.7f, 1.5f);  // Changes pitch of sound every time a new note is picked up
+                } else {
+                    currentPitch += 0.1f;
+                    if (currentPitch >= maxPitch) {
+                        currentPitch = minPitch;
+                    }
+                    musicNoteSound.GetComponent<AudioSource>().pitch = currentPitch;
+                }
+
+                Instantiate(musicNoteSound, transform.position, transform.rotation);
             } else if (itemID == 1) {
                 shardCount += itemValue;
                 shardText.text = "Shards: " + shardCount.ToString() + " / " + shardsNeeded;
+                Instantiate(shardSound, transform.position, transform.rotation);
             } else {
                 Debug.Log("Invalid Item ID");
             }
@@ -353,9 +383,8 @@ public class Player : MonoBehaviour {
         }
 
         if (otherObject.transform.tag == "Falloff") {
-            if (!dead) {
-                takeDamage(health);
-            }
+            Instantiate(burnSound, transform.position, transform.rotation);
+            takeDamage(health);
         }
 
         if (otherObject.transform.tag == "Crusher") {
@@ -368,6 +397,7 @@ public class Player : MonoBehaviour {
 
         if (otherObject.transform.tag == "Checkpoint") {
             setCheckPoint(otherObject.gameObject);
+            Instantiate(checkpointSound, transform.position, transform.rotation);
         }
 	}
 
@@ -418,7 +448,7 @@ public class Player : MonoBehaviour {
 
     public void lightningAttack(Vector3 target) {
         if (target != null) {
-            GameObject prefab = Instantiate(lightningPrefab, target, transform.rotation);
+            GameObject prefab = Instantiate(lightningHitbox, target, transform.rotation);
             prefab.GetComponent<DamageHitBox>().damage = damage;
             prefab.GetComponent<DamageHitBox>().player = true;
             Instantiate(lightningParticles, target, transform.rotation);

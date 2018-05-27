@@ -8,6 +8,8 @@ public class Timed_Trigger_Event_Script : MonoBehaviour {
     public GameObject playerObject;
     private GameObject cameraObject;
 
+    public GameObject guitarSound;
+
     public Text timerText;
     public float maxTime;
     private float currentTime;
@@ -48,6 +50,7 @@ public class Timed_Trigger_Event_Script : MonoBehaviour {
 
         if (isTouching && Input.GetKeyDown(KeyCode.E)) {
             playerAnimator.Play("Guitar Playing");
+            Instantiate(guitarSound, transform.position, transform.rotation);
             padTriggered = true;
         }
 
