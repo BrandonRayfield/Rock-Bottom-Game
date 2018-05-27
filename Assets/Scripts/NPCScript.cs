@@ -175,7 +175,7 @@ public class NPCScript : MonoBehaviour {
                 currentlyDisplayingText = 5;
                 timeToExit = true;
 
-                cameraObject.GetComponent<CameraScript>().SetFocusPoint(keyObject);
+                cameraObject.GetComponent<Camera>().SetFocusPoint(keyObject);
 
                 StartCoroutine(AnimateText());
                 
@@ -305,7 +305,7 @@ public class NPCScript : MonoBehaviour {
         }
 
         if (currentlyDisplayingText == 1) {
-            cameraObject.GetComponent<CameraScript>().SetFocusPoint(keyObject);
+            cameraObject.GetComponent<Camera>().SetFocusPoint(keyObject);
             yesSelected = true;
             decisionTime = true;
         }
