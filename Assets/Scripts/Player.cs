@@ -28,8 +28,8 @@ public class Player : MonoBehaviour {
 	private Quaternion newRotation;
     private int currentDirection;
     public int movementSpeed;
-    private int walkSpeed = 10;
-    private int runSpeed = 20;
+    private int walkSpeed = 300;
+    private int runSpeed = 600;
 
     //Running
     private bool isRunning;
@@ -102,10 +102,14 @@ public class Player : MonoBehaviour {
 
     //Magic Variables
     public GameObject lightningControl;
+<<<<<<< HEAD
     public GameObject lightningHitbox;
     public GameObject lightningParticles;
+=======
+>>>>>>> 4919591e33ba0c355a3a111cee3bd576dc95cf8e
     public float magicTimer;
     public float magicRate = 1.5f;
+    public GameObject lightningPrefab;
     public float currentChannelTime;
     private float channelTime = 1.0f;
     public bool channelAbility;
@@ -198,32 +202,35 @@ public class Player : MonoBehaviour {
 
     private void Controls() {
 
-        //Jump
-        if (Input.GetKeyDown("space") && IsGrounded() && Time.time > jumpTime) {
+		//Jump
+		if (Input.GetKeyDown ("space") && IsGrounded () && Time.time > jumpTime) {
 
-            rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Force);
-            Instantiate(jumpSound, transform.position, transform.rotation);
-            jumpTime = Time.time + jumpCoolDown;
-
+            rb.AddForce (new Vector3 (0, jumpForce, 0), ForceMode.Force);
+			Instantiate (jumpSound, transform.position, transform.rotation);
+			jumpTime = Time.time + jumpCoolDown;
+            
         }
 
         if (!IsGrounded()) {
             animator.Play("Jump");
             animator.SetBool("isJumping", true);
-        }
-        else {
+        } else {
             animator.SetBool("isJumping", false);
         }
 
         //attack
+<<<<<<< HEAD
         if (Input.GetMouseButtonDown(0) && Time.time > attackTimer) {
             guitarStance = 2;
             animator.Play("Attack");
-            Instantiate(attackSound, transform.position, transform.rotation);
-            Damage();
+=======
+        if (Input.GetKeyDown ("f") && Time.time > attackTimer) {
 
-            attackTimer = Time.time + attackRate;
-        }
+            animator.Play ("Attack");
+>>>>>>> 4919591e33ba0c355a3a111cee3bd576dc95cf8e
+            Instantiate(attackSound, transform.position, transform.rotation);
+			attackTimer = Time.time + attackRate;
+		}
         //Lightning Attack
         if (Input.GetKeyDown("r") && Time.time > magicTimer) {
 
@@ -244,62 +251,46 @@ public class Player : MonoBehaviour {
             currentChannelTime += Time.deltaTime;
             if (currentChannelTime >= channelTime) {
                 target = lightningControl.GetComponent<ThunderCollider>().findClosest();
-                //target.y += 8.5f;
+                target.y += 8.5f;
                 lightningAttack(target);
                 currentChannelTime = 0;
                 playerModel.transform.localEulerAngles = new Vector3(0, 0, 0);
                 channelAbility = false;
                 guitarStance = 0;
             }
-        }
-        else {
+        } else {
             playerModel.transform.localEulerAngles = new Vector3(0, 0, 0);
             currentChannelTime = 0;
             channelAbility = false;
         }
 
-        if (Input.GetKey("s") && canPhase) {
+        if (Input.GetKey ("s") && canPhase) {
             platformCollider.enabled = false;
         }
 
-        //Movement
+		//Movement
 
         if (Input.GetKey("left shift")) {
-            isRunning = true;
-        }
-        else {
-            isRunning = false;
+            isRunning = true;     
+        } else {
+            isRunning = false;     
         }
 
         if (Input.GetKey("d")) {
             Walking(1);
-            Debug.Log("hello");
             if (isRunning) {
                 animator.SetBool("isRunning", true);
             }
-        }
-        else if (Input.GetKey("a")) {
+        } else if (Input.GetKey("a")) {
             Walking(-1);
             if (isRunning) {
                 animator.SetBool("isRunning", true);
             }
-        }
-        else {
+        } else {
             animator.SetBool("isWalking", false);
             animator.SetBool("isRunning", false);
         }
-
-        if (Input.GetKeyUp("d") || Input.GetKeyUp("a")) {
-            Vector3 temp = rb.velocity;
-            temp.x /= 2;
-            rb.velocity = temp;
-
-            print(rb.velocity.x.ToString());
-            animator.SetBool("isWalking", false);
-            animator.SetBool("isRunning", false);
-        }
-    
-    }
+	}
 
 	private void Walking(int direction){
 
@@ -325,32 +316,14 @@ public class Player : MonoBehaviour {
 
 
 
-            rb.AddForce(new Vector3(-rb.velocity.x, 0, 0), ForceMode.Force);
-			rb.AddForce (new Vector3 (direction * movementSpeed, 0, 0), ForceMode.Force);
+		if (rb.velocity.x < 35)
+			rb.AddForce (new Vector3 (direction * movementSpeed * Time.deltaTime, 0, 0), ForceMode.Force);
 	}
 
 	public void Damage(){
-
-        //GameObject hitBox = Instantiate(damageHitBox, damageLocation.transform.position, damageLocation.transform.rotation, damageLocation.transform);
-
-
-        Vector3 mousePos;
-        Vector3 attackPos = damageLocation.transform.position;
-        float angle;
-
-        mousePos = Input.mousePosition;
-        mousePos.z = Vector3.Distance(Camera.main.transform.position, transform.position);
-        attackPos = Camera.main.WorldToScreenPoint(attackPos);
-        mousePos.x -= attackPos.x;
-        mousePos.y -= attackPos.y;
-        angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
-        
-
-		GameObject hitBox = Instantiate (damageHitBox, damageLocation.transform.position, 
-            Quaternion.Euler(new Vector3(0,0,angle)), damageLocation.transform);
-        hitBox.GetComponent<DamageHitBox> ().damage = damage;
-        hitBox.GetComponent<DamageHitBox>().moveForward(0.8f);
-    }
+		GameObject hitBox = Instantiate (damageHitBox, damageLocation.transform.position, damageLocation.transform.rotation, damageLocation.transform);
+        hitBox.GetComponent<DamageHitBox> ().damage = damage;        
+	}
 
     public void Idle() {
         guitarStance = 0;
@@ -396,6 +369,7 @@ public class Player : MonoBehaviour {
 
             if (itemID == 0) {
                 currencyCount += itemValue;
+<<<<<<< HEAD
                 currencyText.text = "Beat Coins: " + currencyCount.ToString();
 
                 if (randomPickupPitch) {
@@ -409,6 +383,9 @@ public class Player : MonoBehaviour {
                 }
 
                 Instantiate(musicNoteSound, transform.position, transform.rotation);
+=======
+                currencyText.text = "Coins: " + currencyCount.ToString();
+>>>>>>> 4919591e33ba0c355a3a111cee3bd576dc95cf8e
             } else if (itemID == 1) {
                 shardCount += itemValue;
                 shardText.text = "Shards: " + shardCount.ToString() + " / " + shardsNeeded;
@@ -422,7 +399,10 @@ public class Player : MonoBehaviour {
         }
 
         if (otherObject.transform.tag == "Falloff") {
+<<<<<<< HEAD
             Instantiate(burnSound, transform.position, transform.rotation);
+=======
+>>>>>>> 4919591e33ba0c355a3a111cee3bd576dc95cf8e
             takeDamage(health);
         }
 
@@ -490,7 +470,6 @@ public class Player : MonoBehaviour {
             GameObject prefab = Instantiate(lightningHitbox, target, transform.rotation);
             prefab.GetComponent<DamageHitBox>().damage = damage;
             prefab.GetComponent<DamageHitBox>().player = true;
-            Instantiate(lightningParticles, target, transform.rotation);
             //Instantiate(attackSound, transform.position, transform.rotation);
         }
     }

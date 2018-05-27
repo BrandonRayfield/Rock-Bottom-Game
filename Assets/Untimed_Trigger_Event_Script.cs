@@ -45,7 +45,7 @@ public class Untimed_Trigger_Event_Script : MonoBehaviour {
         if (padTriggered) {
             time += Time.deltaTime;
             if (time >= 1) {
-                cameraObject.GetComponent<CameraScript>().SetFocusPoint(lockedObject);
+                cameraObject.GetComponent<Camera>().SetFocusPoint(lockedObject);
                 lockedObjectAnimator.Play("doorOpening");
                 time = 0;
                 padTriggered = false;
