@@ -5,22 +5,28 @@ using UnityEngine.UI;
 
 public class Timed_Trigger_Event_Script : MonoBehaviour {
 
+    // Player and Camera Variables
     public GameObject playerObject;
     private GameObject cameraObject;
 
+    // Sound Variables
     public GameObject guitarSound;
 
+    // UI Variables
+    public Text interactText;
+
+    //Timer Variables
     public Text timerText;
     public float maxTime;
     private float currentTime;
     private float restartTime = 0;
     public bool isActive;
-
     private bool isTouching;
     private float time;
     private bool padTriggered;
     private bool cutsceneTriggered;
 
+    // Check if player made it in time Variables
     public GameObject lockedObject;
     public bool madeIt;
     public GameObject madeItZone;
@@ -93,12 +99,15 @@ public class Timed_Trigger_Event_Script : MonoBehaviour {
     private void OnTriggerEnter(Collider other) {
         if (other.gameObject == playerObject) {
             isTouching = true;
+            interactText.text = "Press 'E' to Rock out!";
+            interactText.enabled = true;
         }
     }
 
     private void OnTriggerExit(Collider other) {
         if (other.gameObject == playerObject) {
             isTouching = false;
+            interactText.enabled = false;
         }
     }
 
