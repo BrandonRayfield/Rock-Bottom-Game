@@ -15,8 +15,12 @@ public class Flying_Enemy : MonoBehaviour {
     private float speed = 20f;
     private Vector3 direction;
     private Rigidbody rb;
-	// Use this for initialization
-	void Start () {
+
+    private float health = 100.0f;
+    private bool dead = false;
+    public float damage = 10.0f;
+    // Use this for initialization
+    void Start () {
         shotTimer = Time.time + Random.Range(0f,0.75f);
 
         rb = GetComponent<Rigidbody>();
@@ -33,10 +37,12 @@ public class Flying_Enemy : MonoBehaviour {
 
     public void Search() {
         Vector3 direction = player.transform.position - transform.position;
-        LayerMask mask = 8;
+        direction.z = 0;
+        LayerMask mask = 9;
 
         if (!Physics.Linecast(transform.position, player.transform.position, mask)) {
 
+            Debug.DrawLine(transform.position, player.transform.position, Color.blue);
             Vector3 angle = player.transform.position - transform.position;
 
             transform.rotation = Quaternion.Euler(angle);
@@ -61,8 +67,8 @@ public class Flying_Enemy : MonoBehaviour {
     }
 
     public Vector3 randomizeDirection() {
-        float x = Random.Range(0, 10);
-        float y = Random.Range(0, 10);
+        float x = Random.Range(-10, 10);
+        float y = Random.Range(-10, 10);
 
         float mag = Mathf.Sqrt(Mathf.Pow(x, 2) + Mathf.Pow(y, 2));
 
@@ -70,5 +76,17 @@ public class Flying_Enemy : MonoBehaviour {
         y = speed * Time.deltaTime * y / mag;
 
         return new Vector3(x, y, 0);
+    }
+
+    public void takeDamage(float damage) {
+
+        health -= damage;
+
+        if (health <= 0) {
+            dead = true;
+            //Instantiate(deathSound, transform.position, transform.rotation);
+            this.transform.tag = "Untagged";
+            Destroy(this.gameObject);
+        }
     }
 }

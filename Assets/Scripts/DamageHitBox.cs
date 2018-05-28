@@ -21,6 +21,9 @@ public class DamageHitBox : MonoBehaviour {
             if (otherObject.transform.tag == "Enemy") {
                 otherObject.GetComponent<Enemy>().takeDamage(damage);
                 Destroy(this.gameObject);
+            } else if (otherObject.transform.tag == "FlyingEnemy") {
+                otherObject.GetComponent<Flying_Enemy>().takeDamage(damage);
+                Destroy(this.gameObject);
             }
         } else if (!player) {
             if (otherObject.transform.tag == "Player") {
