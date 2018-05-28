@@ -1,19 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Untimed_Trigger_Event_Script : MonoBehaviour {
 
+    // General Variables
     public GameObject playerObject;
     public GameObject lockedObject;
     private GameObject cameraObject;
 
+    // Sound Variables
     public GameObject guitarSound;
 
+    // UI Variables
+    public Text interactText;
+
+    //Trigger Variables
     private bool isTouching;
     private float time;
     private bool padTriggered;
 
+    // Animation Variables
     private Animator playerAnimator;
     private Animator lockedObjectAnimator;
 
@@ -56,12 +64,15 @@ public class Untimed_Trigger_Event_Script : MonoBehaviour {
     private void OnTriggerEnter(Collider other) {
         if (other.gameObject == playerObject) {
             isTouching = true;
+            interactText.text = "Press 'E' to Rock out!";
+            interactText.enabled = true;
         }
     }
 
     private void OnTriggerExit(Collider other) {
         if (other.gameObject == playerObject) {
             isTouching = false;
+            interactText.enabled = false;
         }
     }
 }

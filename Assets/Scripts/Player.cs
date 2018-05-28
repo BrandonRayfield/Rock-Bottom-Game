@@ -71,6 +71,7 @@ public class Player : MonoBehaviour {
     public GameObject goldKeyUI;
     public Slider healthBar;
     public Text gameResult;
+    public Text gameResult2;
     public Text shardText;
     public Text currencyText;
 
@@ -151,9 +152,8 @@ public class Player : MonoBehaviour {
             guitarSwing.SetActive(false);
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            SceneManager.LoadScene(0);
-        }
+        gameResult2.text = gameResult.text;
+        gameResult2.enabled = gameResult.enabled;
 
         if (touchTopCrush && touchBottomCrush) {
             takeDamage(health);
