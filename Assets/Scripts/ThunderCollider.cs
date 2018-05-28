@@ -30,9 +30,10 @@ public class ThunderCollider : MonoBehaviour {
     public void enterRange(EnemyGeneric enemy) {
         //Get the count which will be the index of the newly added enemy
         int length = (InRange.Count);
+        print(length.ToString());
         //Add the enemy (at index length (because indexes start at 0))
         InRange.Add(enemy);
-        enemy.LightningChange(InRange.Count - 1);
+        enemy.LightningChange(length);
     }
 
 
