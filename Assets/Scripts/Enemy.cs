@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour {
     //Damage variables
     public EnemyGeneric enemygeneric;
     private bool dead = false;
-    public float damage = 10.0f;
+    private float damage = 20.0f;
     public GameObject damageHitBox;
     public GameObject damageLocation;
     private float attackRange = 1.1f; //0.75f;
@@ -42,7 +42,7 @@ public class Enemy : MonoBehaviour {
         animator = GetComponent<Animator>();
         myCollider = GetComponent<Collider>();
         enemygeneric = GetComponent<EnemyGeneric>();
-        enemygeneric.health = 100;
+        enemygeneric.health = 200;
     }
 
     // Update is called once per frame

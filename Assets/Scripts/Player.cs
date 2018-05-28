@@ -18,7 +18,6 @@ public class Player : MonoBehaviour {
 
     private int guitarStance; // Determines what guitar object is enabled. 0 for Back enabled, 1 for front, 2 for swing
 
-
     //Time variables
     private float time = 3.0f;
     private float restartTime = 0;
@@ -60,9 +59,20 @@ public class Player : MonoBehaviour {
     public bool dead = false;
     private float damage = 50.0f;
     private float attackTimer;
-    public float attackRate = 0.5f;
+    private float attackRate = 1.5f;
 	public GameObject damageLocation;
 	public GameObject damageHitBox;
+
+    private float lightningDamage = 150.0f;
+
+    // Debuff Variables
+    private int slowDebuff;
+    private int minSlowDebuff = 1;
+    private int maxSlowDebuff = 2;
+    private bool isSlowed;
+
+    private float slowTime;
+    private float slowDuration = 2.0f;
 
     // Obstacle Variables
     private bool touchTopCrush;
@@ -92,12 +102,9 @@ public class Player : MonoBehaviour {
     public GameObject musicNoteSound;
     public bool randomPickupPitch; // Toggle on and off to determine if pitch is random or scaling
     public GameObject shardSound;
-    public GameObject burnSound;
     public GameObject guitarSound;
     public GameObject squashSound;
     public GameObject checkpointSound;
-
-    
 
     private float minPitch = 0.5f;
     private float maxPitch = 1.5f;
@@ -108,7 +115,7 @@ public class Player : MonoBehaviour {
     public GameObject lightningHitbox;
     public GameObject lightningParticles;
     public float magicTimer;
-    public float magicRate = 1.5f;
+    private float magicRate = 2f;
     public float currentChannelTime;
     private float channelTime = 1.0f;
     public bool channelAbility;
@@ -127,6 +134,7 @@ public class Player : MonoBehaviour {
         livesLeft = 3;
         currentPitch = minPitch;
         guitarStance = 0; // Back guitar starts enabled
+        slowDebuff = minSlowDebuff;
 
         livesText.text = "Lives: " + livesLeft;
 
@@ -154,6 +162,20 @@ public class Player : MonoBehaviour {
             guitarBack.SetActive(true);
             guitarFront.SetActive(false);
             guitarSwing.SetActive(false);
+        }
+
+        movementSpeed = movementSpeed / slowDebuff;
+        Debug.Log("current Movement Speed: " + movementSpeed);
+
+        if (isSlowed) {
+            Debug.Log("Is Slowed");
+            slowDebuff = maxSlowDebuff;
+            slowTime += Time.deltaTime;
+            if (slowTime >= slowDuration) {
+                isSlowed = false;
+                slowDebuff = minSlowDebuff;
+                slowTime = 0f;
+            }
         }
 
         gameResult2.text = gameResult.text;
@@ -318,10 +340,10 @@ public class Player : MonoBehaviour {
 
         if (IsGrounded ()) {
             if (isRunning) {
-                movementSpeed = runSpeed;
+                movementSpeed = runSpeed / slowDebuff;
                 animator.Play("Run");
             } else {
-                movementSpeed = walkSpeed;
+                movementSpeed = walkSpeed / slowDebuff;
                 animator.Play("Walk");
                 animator.SetBool("isWalking", true);
             }
@@ -382,6 +404,7 @@ public class Player : MonoBehaviour {
     public void takeDamage(float damage) {
 
         health -= damage;
+        isSlowed = true;
 
         if (health <= 0 && !dead) {
             dead = true;
@@ -437,7 +460,6 @@ public class Player : MonoBehaviour {
         }
 
         if (otherObject.transform.tag == "Falloff") {
-            Instantiate(burnSound, transform.position, transform.rotation);
             takeDamage(health);
         }
 
@@ -503,7 +525,7 @@ public class Player : MonoBehaviour {
     public void lightningAttack(Vector3 target) {
         if (target != null) {
             GameObject prefab = Instantiate(lightningHitbox, target, transform.rotation);
-            prefab.GetComponent<DamageHitBox>().damage = damage;
+            prefab.GetComponent<DamageHitBox>().damage = lightningDamage;
             prefab.GetComponent<DamageHitBox>().player = true;
             Instantiate(lightningParticles, target, transform.rotation);
             //Instantiate(attackSound, transform.position, transform.rotation);
