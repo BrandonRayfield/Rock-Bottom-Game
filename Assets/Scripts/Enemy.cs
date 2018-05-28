@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour {
     public float moveSpeed = 1.0f;
 
     //Damage variables
-    private float health = 100.0f;
+    public EnemyGeneric enemygeneric;
     private bool dead = false;
     public float damage = 10.0f;
     public GameObject damageHitBox;
@@ -36,20 +36,20 @@ public class Enemy : MonoBehaviour {
     public GameObject attackSound;
     public GameObject deathSound;
 
-    //Lightning Tracking
-    public int lightningListLocation = -1;
 
     // Use this for initialization
     void Start () {
         animator = GetComponent<Animator>();
         myCollider = GetComponent<Collider>();
+        enemygeneric = GetComponent<EnemyGeneric>();
+        enemygeneric.health = 100;
     }
 
     // Update is called once per frame
     void Update() {
 
         if (touchTopCrush && touchBottomCrush) {
-            takeDamage(health);
+            takeDamage(enemygeneric.health);
             touchTopCrush = false;
             touchBottomCrush = false;
         }
@@ -129,11 +129,11 @@ public class Enemy : MonoBehaviour {
 
     public void takeDamage(float damage) {
 
-        health -= damage;
+        enemygeneric.health -= damage;
         animator.Play("Damage");
         attackTimer = Time.time + attackRate / 2;
 
-        if (health <= 0) {
+        if (enemygeneric.health <= 0) {
             dead = true;
             Instantiate(deathSound, transform.position, transform.rotation);
             this.transform.tag = "Untagged";
@@ -149,7 +149,7 @@ public class Enemy : MonoBehaviour {
         }
 
         if (other.transform.tag == "Falloff") {
-            takeDamage(health);
+            takeDamage(enemygeneric.health);
         }
 
         if (other.transform.tag == "Crusher") {
@@ -169,10 +169,6 @@ public class Enemy : MonoBehaviour {
         if (other.transform.tag == "CrusherFloor") {
             touchBottomCrush = false;
         }
-    }
-
-    public void LightningChange(int newlocation) {
-        lightningListLocation = newlocation;
     }
 
     

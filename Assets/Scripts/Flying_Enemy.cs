@@ -16,9 +16,12 @@ public class Flying_Enemy : MonoBehaviour {
     private Vector3 direction;
     private Rigidbody rb;
 
-    private float health = 100.0f;
+    public EnemyGeneric enemygeneric;
     private bool dead = false;
     public float damage = 10.0f;
+
+    //Lightning Tracking
+    public int lightningListLocation = -1;
     // Use this for initialization
     void Start () {
         shotTimer = Time.time + Random.Range(0f,0.75f);
@@ -26,7 +29,10 @@ public class Flying_Enemy : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
 
         Movement();
-	}
+
+        enemygeneric = GetComponent<EnemyGeneric>();
+        enemygeneric.health = 100;
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -42,7 +48,7 @@ public class Flying_Enemy : MonoBehaviour {
 
         if (!Physics.Linecast(transform.position, player.transform.position, mask)) {
 
-            Debug.DrawLine(transform.position, player.transform.position, Color.blue);
+            //Debug.DrawLine(transform.position, player.transform.position, Color.blue);
             Vector3 angle = player.transform.position - transform.position;
 
             transform.rotation = Quaternion.Euler(angle);
@@ -80,13 +86,17 @@ public class Flying_Enemy : MonoBehaviour {
 
     public void takeDamage(float damage) {
 
-        health -= damage;
+        enemygeneric.health -= damage;
 
-        if (health <= 0) {
+        if (enemygeneric.health <= 0) {
             dead = true;
             //Instantiate(deathSound, transform.position, transform.rotation);
             this.transform.tag = "Untagged";
             Destroy(this.gameObject);
         }
+    }
+
+    public void LightningChange(int newlocation) {
+        lightningListLocation = newlocation;
     }
 }

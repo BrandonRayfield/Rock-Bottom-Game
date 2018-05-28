@@ -273,7 +273,6 @@ public class Player : MonoBehaviour {
 
         if (Input.GetKey("d")) {
             Walking(1);
-            Debug.Log("hello");
             if (isRunning) {
                 animator.SetBool("isRunning", true);
             }
@@ -294,7 +293,6 @@ public class Player : MonoBehaviour {
             temp.x /= 2;
             rb.velocity = temp;
 
-            print(rb.velocity.x.ToString());
             animator.SetBool("isWalking", false);
             animator.SetBool("isRunning", false);
         }
