@@ -20,8 +20,8 @@ public class Player : MonoBehaviour {
 
 
     //Time variables
-    private float time;
-    public float restartTime = 4.0f;
+    private float time = 3.0f;
+    private float restartTime = 0;
 
     //Walking
     private float moveSpeed = 2.0f;
@@ -55,6 +55,7 @@ public class Player : MonoBehaviour {
     //Damage Variables
     public float health;
     public float maxHealth = 100.0f;
+    private int livesLeft;
 
     public bool dead = false;
     private float damage = 50.0f;
@@ -74,6 +75,7 @@ public class Player : MonoBehaviour {
     public Text gameResult2;
     public Text shardText;
     public Text currencyText;
+    public Text livesText;
 
     //Item Variables
     public int shardsNeeded = 3;
@@ -122,9 +124,11 @@ public class Player : MonoBehaviour {
         health = maxHealth;
         currentDirection = 1;
 
+        livesLeft = 3;
         currentPitch = minPitch;
-
         guitarStance = 0; // Back guitar starts enabled
+
+        livesText.text = "Lives: " + livesLeft;
 
         try {
             cameraObject = GameObject.Find("Camera");
@@ -167,27 +171,36 @@ public class Player : MonoBehaviour {
         }
 		else if (dead) {
             animator.Play("Dead");
-            gameResult.text = "Game Over.";
-            gameResult.enabled = true;
-            time += Time.deltaTime;
-            if (time > restartTime) {
-                gameResult.enabled = false;
-                dead = false;
-                if (spawnPoint == null) {
-                    gameObject.transform.position = startPoint.transform.position;
-                    cameraObject.transform.position = startPoint.transform.position;
-                    health = maxHealth;
-                    time = 0;
 
+            time -= Time.deltaTime;
+
+            if (livesLeft < 0) {
+                gameResult.text = "Game Over.";
+                gameResult.enabled = true;
+            } else {
+                gameResult.text = Mathf.RoundToInt(time).ToString();
+                gameResult.enabled = true;
+            }
+
+            if (time <= restartTime) {
+                if (livesLeft < 0) {
+                    SceneManager.LoadScene(0);
                 } else {
-                    gameObject.transform.position = spawnPoint.transform.position;
-                    cameraObject.transform.position = spawnPoint.transform.position;
-                    health = maxHealth;
-                    time = 0;
-                }
+                    gameResult.enabled = false;
+                    dead = false;
+                    if (spawnPoint == null) {
+                        gameObject.transform.position = startPoint.transform.position;
+                        cameraObject.transform.position = startPoint.transform.position;
+                        health = maxHealth;
+                        time = 3f;
 
-                //SceneManager.LoadScene(0); // Return to menu
-                //SceneManager.LoadScene(1);
+                    } else {
+                        gameObject.transform.position = spawnPoint.transform.position;
+                        cameraObject.transform.position = spawnPoint.transform.position;
+                        health = maxHealth;
+                        time = 3f;
+                    }
+                }
             }
         }
 
@@ -374,6 +387,10 @@ public class Player : MonoBehaviour {
 
         if (health <= 0 && !dead) {
             dead = true;
+            livesLeft--;
+            if (livesLeft >= 0) {
+                livesText.text = "Lives: " + livesLeft;
+            }
             Instantiate(deathSound, transform.position, transform.rotation);
         }
     }
