@@ -10,6 +10,8 @@ public class Bounce_Script : MonoBehaviour {
     private Rigidbody rb;
     private Vector3 v3;
 
+    public GameObject bounceSound;
+
     // Use this for initialization
     void Start () {
         try {
@@ -34,6 +36,8 @@ public class Bounce_Script : MonoBehaviour {
     private void OnTriggerEnter(Collider other) {
         if (other.gameObject == playerObject) {
             bounce = true;
+            bounceSound.GetComponent<AudioSource>().pitch = Random.Range(0.5f, 1.3f);
+            Instantiate(bounceSound, transform.position, transform.rotation);
         }
     }
 }

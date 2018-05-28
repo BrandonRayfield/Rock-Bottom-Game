@@ -37,17 +37,16 @@ public class CameraScript : MonoBehaviour {
 	void Update () {
 
         if (boolNewFocus) {
-            isFinished = false;
             player.GetComponent<Player>().setCutscene(true);
             time += Time.deltaTime;
             if (time > focusTime) {
                 boolNewFocus = false;
+                isFinished = true;
             }
         } else {
             time = 0;
             player.GetComponent<Player>().setCutscene(false);
             focusPoint = player.transform.position;
-            isFinished = true;
         }
         
 
@@ -67,6 +66,7 @@ public class CameraScript : MonoBehaviour {
 
     public void SetFocusPoint(GameObject newFocus) {
         focusPoint = newFocus.transform.position;
+        isFinished = false;
         boolNewFocus = true;
     }
 

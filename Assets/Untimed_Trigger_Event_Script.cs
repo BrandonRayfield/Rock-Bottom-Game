@@ -12,6 +12,7 @@ public class Untimed_Trigger_Event_Script : MonoBehaviour {
 
     // Sound Variables
     public GameObject guitarSound;
+    public GameObject doorSound;
 
     // UI Variables
     public Text interactText;
@@ -55,6 +56,7 @@ public class Untimed_Trigger_Event_Script : MonoBehaviour {
             if (time >= 1) {
                 cameraObject.GetComponent<CameraScript>().SetFocusPoint(lockedObject);
                 lockedObjectAnimator.Play("doorOpening");
+                Instantiate(doorSound, transform.position, transform.rotation);
                 time = 0;
                 padTriggered = false;
             }

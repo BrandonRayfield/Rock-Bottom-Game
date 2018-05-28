@@ -11,6 +11,7 @@ public class Timed_Trigger_Event_Script : MonoBehaviour {
 
     // Sound Variables
     public GameObject guitarSound;
+    public GameObject doorSound;
 
     // UI Variables
     public Text interactText;
@@ -68,17 +69,22 @@ public class Timed_Trigger_Event_Script : MonoBehaviour {
                 padTriggered = false;
                 currentTime = maxTime;
                 lockedObjectAnimator.Play("doorOpening");
+                Instantiate(doorSound, transform.position, transform.rotation);
                 cutsceneTriggered = true;
             }
         }
 
         if (cutsceneTriggered) {
+            timerText.enabled = true;
+            timerText.text = Mathf.RoundToInt(currentTime).ToString();
             isActive = cameraObject.GetComponent<CameraScript>().getIsFinished();
+            Debug.Log(isActive);
         }
 
 
 
         if (isActive) {
+            cutsceneTriggered = false;
             // Count down
             timerText.enabled = true;
             currentTime -= Time.deltaTime;
@@ -91,7 +97,9 @@ public class Timed_Trigger_Event_Script : MonoBehaviour {
                 madeItZone.GetComponent<Made_It_Zone_Script>().setMadeItStatus(false);
                 timerText.enabled = false;
                 lockedObjectAnimator.Play("doorClosing");
+                Instantiate(doorSound, transform.position, transform.rotation);
                 isActive = false;
+                
             }
         }
     }

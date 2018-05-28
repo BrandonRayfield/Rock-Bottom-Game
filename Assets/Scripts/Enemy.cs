@@ -79,7 +79,6 @@ public class Enemy : MonoBehaviour {
 
 		//Get in range
 		if (Vector3.Distance (transform.position, target.transform.position) > attackRange) {
-            Debug.Log(Vector3.Distance(transform.position, target.transform.position));
 			animator.Play ("Walk");
 
 			//look in direction of target
@@ -93,7 +92,6 @@ public class Enemy : MonoBehaviour {
 			transform.Translate (Vector3.forward * Time.deltaTime * moveSpeed * 2);
 					
 		} else if (Vector3.Distance (transform.position, target.transform.position) <= attackRange && Time.time > attackTimer) {
-            Debug.Log(Vector3.Distance(transform.position, target.transform.position));
             animator.Play("Attack");
             Instantiate(attackSound, transform.position, transform.rotation);
             attackTimer = Time.time + attackRate;
@@ -121,7 +119,6 @@ public class Enemy : MonoBehaviour {
 
     public void Damage() {
         GameObject hitbox = Instantiate(damageHitBox, damageLocation.transform.position, damageLocation.transform.rotation) as GameObject;
-        Debug.Log("Enemy Attacked");
         hitbox.GetComponent<DamageHitBox>().damage = damage;
         hitbox.GetComponent<DamageHitBox>().player = false;
 

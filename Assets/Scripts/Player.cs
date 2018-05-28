@@ -286,7 +286,6 @@ public class Player : MonoBehaviour {
 
         if (Input.GetKey("d")) {
             Walking(1);
-            Debug.Log("hello");
             if (isRunning) {
                 animator.SetBool("isRunning", true);
             }
