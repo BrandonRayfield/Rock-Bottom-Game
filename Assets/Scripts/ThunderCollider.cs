@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class ThunderCollider : MonoBehaviour {
 
-    public List<Enemy> InRange = new List<Enemy>();
+    public List<EnemyGeneric> InRange = new List<EnemyGeneric>();
 
     public Player player;
 
@@ -24,50 +24,49 @@ public class ThunderCollider : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //Controls();
+        checkDead();
     }
 
-    public void enterRange(Enemy enemy) {
+    public void enterRange(EnemyGeneric enemy) {
         //Get the count which will be the index of the newly added enemy
         int length = (InRange.Count);
         //Add the enemy (at index length (because indexes start at 0))
         InRange.Add(enemy);
-        //Tell the enemy its new index in the list
-        InRange[length].GetComponent<Enemy>().LightningChange(InRange.Count - 1);
-
-
+        enemy.LightningChange(InRange.Count - 1);
     }
 
 
     public void removeEnemy(int location/*the location contained within the enemy itself*/) {
-        //Inform the enemy that it will not part of the list
-        InRange[location].GetComponent<Enemy>().LightningChange(-1);
-        //Remove the index the enemy has been told it has
-        InRange.RemoveAt(location);
+            //Inform the enemy that it will not part of the list
+            InRange[location].LightningChange(-1);
+            //Remove the index the enemy has been told it has
+            InRange.RemoveAt(location);
+
         //For each enemy in the list that it has been moved
         for (int i = location; i < InRange.Count; i++) {
-            //The enemy has already been moved in the list just inform it that it has
-            InRange[i].GetComponent<Enemy>().LightningChange(i);
+                //The enemy has already been moved in the list just inform it that it has
+                InRange[i].LightningChange(i);
         }
     }
     public void OnTriggerEnter(Collider other) {
         //If it's an enemy
-        if (other.tag == "Enemy") {
+        if (other.tag == "Enemy" || other.tag == "FlyingEnemy") {
             //Check
             print("collision.lightning detected");
             //Add the enemy to the list
-            enterRange(other.GetComponent<Enemy>());
+            enterRange(other.GetComponent<EnemyGeneric>());
         }
     }
 
 
     public void OnTriggerExit(Collider other) {
         //If it's an enemy
-        if (other.tag == "Enemy") {
+        if (other.tag == "Enemy" || other.tag == "FlyingEnemy") {
             //Check
             Debug.Log("collision.lightning detected");
             //Add the enemy to the list
-            if (other.GetComponent<Enemy>().lightningListLocation != -1) {
-                removeEnemy(other.GetComponent<Enemy>().lightningListLocation);
+            if (other.GetComponent<EnemyGeneric>().lightningListLocation != -1) {
+                removeEnemy(other.GetComponent<EnemyGeneric>().lightningListLocation);
                 //other.GetComponent<Enemy>().Lightnin gChange(-1);
             }
         }
@@ -75,7 +74,7 @@ public class ThunderCollider : MonoBehaviour {
 
     public Vector3 findClosest() {
         float optimalDistance = 1000000;
-        Enemy target = null;
+        EnemyGeneric target = null;
         for (int i = 0; i < InRange.Count; i++) {
             float distance = Vector3.Distance(player.transform.position, InRange[i].transform.position);
             if(distance < optimalDistance) {
@@ -90,14 +89,11 @@ public class ThunderCollider : MonoBehaviour {
         }
     }
 
-    //public void Controls() {
-    //    if (Input.GetKeyDown("r") && Time.time > magicTimer) {
-    //        Vector3 target = findClosest();
-    //        target.y += 8.5f;
+ public void checkDead() {
 
-    //        player.lightningAttack(target);
+        for (int i = 0; i < InRange.Count; i++) {
 
-    //        magicTimer = Time.time + magicRate;
-    //    }
-    //}
+            if (InRange[i].health <= 0) InRange.Remove(InRange[i]);
+        }
+    }
 }

@@ -306,7 +306,6 @@ public class Player : MonoBehaviour {
             temp.x /= 2;
             rb.velocity = temp;
 
-            print(rb.velocity.x.ToString());
             animator.SetBool("isWalking", false);
             animator.SetBool("isRunning", false);
         }
