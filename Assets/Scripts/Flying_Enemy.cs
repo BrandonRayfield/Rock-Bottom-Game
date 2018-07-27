@@ -12,19 +12,27 @@ public class Flying_Enemy : MonoBehaviour {
 
     private float moveTimer;
     private float moveTime;
-    private float speed = 20f;
+    private float speed = 150;
     private Vector3 direction;
     private Rigidbody rb;
 
     public EnemyGeneric enemygeneric;
+
     private bool dead = false;
     public float damage = 10.0f;
 
     //Lightning Tracking
     public int lightningListLocation = -1;
+
+    //Swoop Variables
+    public Vector3 swoop_target;
+    private float swoop_c;
+    public float targetRadius;
+    public float rotationSpeed;
+
     // Use this for initialization
-    void Start () {
-        shotTimer = Time.time + Random.Range(0f,0.75f);
+    void Start() {
+        shotTimer = Time.time + Random.Range(0f, 0.75f);
 
         rb = GetComponent<Rigidbody>();
 
@@ -32,13 +40,16 @@ public class Flying_Enemy : MonoBehaviour {
 
         enemygeneric = GetComponent<EnemyGeneric>();
         enemygeneric.health = 100;
+
+        swoop_target = new Vector3(Random.Range(-4, 4) + transform.position.x,
+                Random.Range(-4, 4) + transform.position.y, 0f);
     }
 	
 	// Update is called once per frame
 	void Update () {
         Search();
 
-        if (Time.time > moveTimer) Movement();
+        Movement();
 	}
 
     public void Search() {
@@ -64,24 +75,28 @@ public class Flying_Enemy : MonoBehaviour {
 
     public void Movement() {
 
-        moveTime = Random.Range(3f, 7f);
-        moveTimer = Time.time + moveTime;
-
-        Vector3 temp = rb.velocity;
-        temp = randomizeDirection();
-        rb.velocity = temp;
+        if (Vector3.Distance(transform.position, swoop_target) <= targetRadius || moveTimer < Time.time) {
+            swoop_target = new Vector3(Random.Range(-4, 4) + transform.position.x,
+                player.transform.position.y, 0f);
+            moveTimer = Time.time + 0.5f;
+        } else {
+            MoveTowardsTarget(swoop_target);
+        }
     }
 
-    public Vector3 randomizeDirection() {
-        float x = Random.Range(-10, 10);
-        float y = Random.Range(-10, 10);
+    public void swoop_variables() {
+        //function: y = (x^4)/c
+        //y & x = enemy
+        float x = transform.position.x - player.transform.position.x;
+        float y = transform.position.y - player.transform.position.y;
 
-        float mag = Mathf.Sqrt(Mathf.Pow(x, 2) + Mathf.Pow(y, 2));
+        swoop_target = player.transform.position;
 
-        x = speed * Time.deltaTime * x / mag;
-        y = speed * Time.deltaTime * y / mag;
+        swoop_c = (Mathf.Pow(x, 4) / y);
+    }
 
-        return new Vector3(x, y, 0);
+    public void swoop_update() {
+
     }
 
     public void takeDamage(float damage) {
@@ -98,5 +113,18 @@ public class Flying_Enemy : MonoBehaviour {
 
     public void LightningChange(int newlocation) {
         lightningListLocation = newlocation;
+    }
+
+    private void MoveTowardsTarget(Vector3 targetPos) {
+        //Rotate and move towards target if out of range
+        if (Vector3.Distance(targetPos, transform.position) > targetRadius) {
+
+            //Lerp Towards target
+            Quaternion targetRotation = Quaternion.LookRotation(targetPos - transform.position);
+            float adjRotSpeed = Mathf.Min(rotationSpeed * Time.deltaTime, 1f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, adjRotSpeed);
+
+            rb.AddRelativeForce(Vector3.forward * speed  * Time.deltaTime);
+        }
     }
 }

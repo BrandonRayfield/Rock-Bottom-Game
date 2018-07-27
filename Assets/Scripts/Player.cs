@@ -165,10 +165,10 @@ public class Player : MonoBehaviour {
         }
 
         movementSpeed = movementSpeed / slowDebuff;
-        Debug.Log("current Movement Speed: " + movementSpeed);
+        //Debug.Log("current Movement Speed: " + movementSpeed);
 
         if (isSlowed) {
-            Debug.Log("Is Slowed");
+            //Debug.Log("Is Slowed");
             slowDebuff = maxSlowDebuff;
             slowTime += Time.deltaTime;
             if (slowTime >= slowDuration) {
