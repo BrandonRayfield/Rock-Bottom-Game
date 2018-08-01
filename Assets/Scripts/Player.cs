@@ -12,9 +12,12 @@ public class Player : MonoBehaviour {
     public GameObject playerModel;
 
     //Guitar Objects
-    public GameObject guitarBack;
-    public GameObject guitarFront;
-    public GameObject guitarSwing;
+    public GameObject guitarObject;
+    //public GameObject guitarFront;
+    //public GameObject guitarSwing;
+
+    public GameObject guitarParentSpine;
+    public GameObject guitarParentHand;
 
     private int guitarStance; // Determines what guitar object is enabled. 0 for Back enabled, 1 for front, 2 for swing
 
@@ -151,24 +154,33 @@ public class Player : MonoBehaviour {
 
         // Determines what guitar object is enabled. 0 for Back enabled, 1 for front, 2 for swing
         if (guitarStance == 1) {
-            guitarBack.SetActive(false);
-            guitarFront.SetActive(true);
-            guitarSwing.SetActive(false);
+            // Adjusts the guitar objects position and rotation
+            guitarObject.gameObject.transform.localPosition = new Vector3(-0.1985897f, -0.08787628f, 0.381499f);
+            guitarObject.gameObject.transform.localEulerAngles = new Vector3(3.086f, 15.034f, 75.04601f);
+
+            // Adjusts the guitar object parent so it moves with the body
+            guitarObject.gameObject.transform.parent = guitarParentSpine.transform;
+
         } else if (guitarStance == 2) {
-            guitarBack.SetActive(false);
-            guitarFront.SetActive(false);
-            guitarSwing.SetActive(true);
+            // Adjusts the guitar objects position and rotation
+            guitarObject.gameObject.transform.localPosition = new Vector3(-0.04300219f, -0.3379997f, -0.3949996f);
+            guitarObject.gameObject.transform.localEulerAngles = new Vector3(197.45f, 77.406f, 135.738f);
+           
+            // Adjusts the guitar object parent so it moves with the body
+            guitarObject.gameObject.transform.parent = guitarParentHand.transform;
         } else {
-            guitarBack.SetActive(true);
-            guitarFront.SetActive(false);
-            guitarSwing.SetActive(false);
+            // Adjusts the guitar objects position and rotation
+            guitarObject.gameObject.transform.localPosition = new Vector3(0.2679967f, 0.6450007f, -0.1319958f);
+            guitarObject.gameObject.transform.localEulerAngles = new Vector3(-1.448f, 157.108f, 20.164f);
+           
+            // Adjusts the guitar object parent so it moves with the body
+            guitarObject.gameObject.transform.parent = guitarParentSpine.transform;
         }
 
         movementSpeed = movementSpeed / slowDebuff;
-        //Debug.Log("current Movement Speed: " + movementSpeed);
 
         if (isSlowed) {
-            //Debug.Log("Is Slowed");
+            Debug.Log("Is Slowed");
             slowDebuff = maxSlowDebuff;
             slowTime += Time.deltaTime;
             if (slowTime >= slowDuration) {
