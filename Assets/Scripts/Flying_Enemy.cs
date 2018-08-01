@@ -76,9 +76,19 @@ public class Flying_Enemy : MonoBehaviour {
     public void Movement() {
 
         if (Vector3.Distance(transform.position, swoop_target) <= targetRadius || moveTimer < Time.time) {
-            swoop_target = new Vector3(Random.Range(-4, 4) + transform.position.x,
-                player.transform.position.y, 0f);
-            moveTimer = Time.time + 0.5f;
+
+            LayerMask mask = 9;
+
+            if (!Physics.Linecast(transform.position, player.transform.position, mask)) {
+                swoop_target = new Vector3(Random.Range(-4, 4) + player.transform.position.x,
+                    player.transform.position.y, 0f);
+                moveTimer = Time.time + 0.5f;
+            } else {
+                swoop_target = new Vector3(Random.Range(-4, 4) + transform.position.x,
+                    player.transform.position.y, 0f);
+                moveTimer = Time.time + 0.5f;
+            }
+                
         } else {
             MoveTowardsTarget(swoop_target);
         }
