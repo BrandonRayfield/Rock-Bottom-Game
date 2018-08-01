@@ -126,8 +126,11 @@ public class Enemy : MonoBehaviour {
 
     public void takeDamage(float damage) {
 
+        Debug.Log("Enemy Took Damage: " + damage);
+
         enemygeneric.health -= damage;
         animator.Play("Damage");
+        Instantiate(attackSound, transform.position, transform.rotation);
         attackTimer = Time.time + attackRate / 2;
 
         if (enemygeneric.health <= 0) {
