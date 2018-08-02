@@ -152,31 +152,6 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        // Determines what guitar object is enabled. 0 for Back enabled, 1 for front, 2 for swing
-        if (guitarStance == 1) {
-            // Adjusts the guitar objects position and rotation
-            guitarObject.gameObject.transform.localPosition = new Vector3(-0.1985897f, -0.08787628f, 0.381499f);
-            guitarObject.gameObject.transform.localEulerAngles = new Vector3(3.086f, 15.034f, 75.04601f);
-
-            // Adjusts the guitar object parent so it moves with the body
-            guitarObject.gameObject.transform.parent = guitarParentSpine.transform;
-
-        } else if (guitarStance == 2) {
-            // Adjusts the guitar objects position and rotation
-            guitarObject.gameObject.transform.localPosition = new Vector3(-0.04300219f, -0.3379997f, -0.3949996f);
-            guitarObject.gameObject.transform.localEulerAngles = new Vector3(197.45f, 77.406f, 135.738f);
-           
-            // Adjusts the guitar object parent so it moves with the body
-            guitarObject.gameObject.transform.parent = guitarParentHand.transform;
-        } else {
-            // Adjusts the guitar objects position and rotation
-            guitarObject.gameObject.transform.localPosition = new Vector3(0.2679967f, 0.6450007f, -0.1319958f);
-            guitarObject.gameObject.transform.localEulerAngles = new Vector3(-1.448f, 157.108f, 20.164f);
-           
-            // Adjusts the guitar object parent so it moves with the body
-            guitarObject.gameObject.transform.parent = guitarParentSpine.transform;
-        }
-
         movementSpeed = movementSpeed / slowDebuff;
 
         if (isSlowed) {
@@ -245,13 +220,11 @@ public class Player : MonoBehaviour {
 
     private void Controls() {
 
-        //Jump
+        //Jumping
         if (Input.GetKeyDown("space") && IsGrounded() && Time.time > jumpTime) {
-
             rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Force);
             Instantiate(jumpSound, transform.position, transform.rotation);
             jumpTime = Time.time + jumpCoolDown;
-
         }
 
         if (!IsGrounded()) {
@@ -262,55 +235,11 @@ public class Player : MonoBehaviour {
             animator.SetBool("isJumping", false);
         }
 
-        //attack
-        if (Input.GetMouseButtonDown(0) && Time.time > attackTimer) {
-            guitarStance = 2;
-            animator.Play("Attack");
-            Instantiate(attackSound, transform.position, transform.rotation);
-            Damage();
-
-            attackTimer = Time.time + attackRate;
-        }
-        //Lightning Attack
-        if (Input.GetKeyDown("r") && Time.time > magicTimer) {
-
-            target = lightningControl.GetComponent<ThunderCollider>().findClosest();
-
-            if (target != nullTarget) {
-                playerModel.transform.localEulerAngles = new Vector3(0, currentDirection * 90, 0);
-                animator.Play("Guitar Playing");
-                guitarStance = 1;
-                Instantiate(guitarSound, transform.position, transform.rotation);
-                // Channel Ability
-                channelAbility = true;
-                magicTimer = Time.time + magicRate;
-            }
-        }
-
-        if (channelAbility) {
-            currentChannelTime += Time.deltaTime;
-            if (currentChannelTime >= channelTime) {
-                target = lightningControl.GetComponent<ThunderCollider>().findClosest();
-                //target.y += 8.5f;
-                lightningAttack(target);
-                currentChannelTime = 0;
-                playerModel.transform.localEulerAngles = new Vector3(0, 0, 0);
-                channelAbility = false;
-                guitarStance = 0;
-            }
-        }
-        else {
-            playerModel.transform.localEulerAngles = new Vector3(0, 0, 0);
-            currentChannelTime = 0;
-            channelAbility = false;
-        }
-
         if (Input.GetKey("s") && canPhase) {
             platformCollider.enabled = false;
         }
 
         //Movement
-
         if (Input.GetKey("left shift")) {
             isRunning = true;
         }
@@ -374,41 +303,6 @@ public class Player : MonoBehaviour {
 			rb.AddForce (new Vector3 (direction * movementSpeed, 0, 0), ForceMode.Force);
 	}
 
-	public void Damage(){
-
-        //GameObject hitBox = Instantiate(damageHitBox, damageLocation.transform.position, damageLocation.transform.rotation, damageLocation.transform);
-
-
-        Vector3 mousePos;
-        Vector3 attackPos = damageLocation.transform.position;
-        float angle;
-
-        mousePos = Input.mousePosition;
-        mousePos.z = Vector3.Distance(Camera.main.transform.position, transform.position);
-        attackPos = Camera.main.WorldToScreenPoint(attackPos);
-        mousePos.x -= attackPos.x;
-        mousePos.y -= attackPos.y;
-        angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
-        
-
-		GameObject hitBox = Instantiate (damageHitBox, damageLocation.transform.position, 
-            Quaternion.Euler(new Vector3(0,0,angle)), damageLocation.transform);
-        hitBox.GetComponent<DamageHitBox> ().damage = damage;
-        hitBox.GetComponent<DamageHitBox>().moveForward(0.8f);
-    }
-
-    public void IdleStance() {
-        guitarStance = 0;
-    }
-
-    public void PlayGuitarStance() {
-        guitarStance = 1;
-    }
-
-    public void AttackStance() {
-        guitarStance = 2;
-    }
-
 	private bool IsGrounded(){
         return Physics.Raycast (transform.position, -Vector3.up, distToGround + 0.1f);
 	}
@@ -427,7 +321,6 @@ public class Player : MonoBehaviour {
             Instantiate(deathSound, transform.position, transform.rotation);
         }
     }
-
 
 	void OnTriggerEnter(Collider otherObject){
 
@@ -522,6 +415,23 @@ public class Player : MonoBehaviour {
         }
     }
 
+    //---------------------------------------------------------------------------------------------------------------------
+    // These are used in animation events, make sure to keep them.
+    public void IdleStance() {
+        guitarObject.GetComponent<Weapon>().SetIdleStance(0);
+    }
+
+    public void PlayGuitarStance() {
+        guitarObject.GetComponent<Weapon>().SetIdleStance(1);
+
+    }
+
+    public void AttackStance() {
+        guitarObject.GetComponent<Weapon>().SetIdleStance(2);
+    }
+
+    //---------------------------------------------------------------------------------------------------------------------
+
     public void setCheckPoint(GameObject spawnlocation) {
         spawnPoint = spawnlocation;
     }
@@ -532,16 +442,6 @@ public class Player : MonoBehaviour {
 
     public void setMaxHealth(float moreHealth) {
         maxHealth += moreHealth;
-    }
-
-    public void lightningAttack(Vector3 target) {
-        if (target != null) {
-            GameObject prefab = Instantiate(lightningHitbox, target, transform.rotation);
-            prefab.GetComponent<DamageHitBox>().damage = lightningDamage;
-            prefab.GetComponent<DamageHitBox>().player = true;
-            Instantiate(lightningParticles, target, transform.rotation);
-            //Instantiate(attackSound, transform.position, transform.rotation);
-        }
     }
 
     // Used to check if the player has collected enough items
@@ -555,6 +455,10 @@ public class Player : MonoBehaviour {
 
     public void setGuitarStance(int newStance) {
         guitarStance = newStance;
+    }
+
+    public int getPlayerDirection() {
+        return currentDirection;
     }
 
 }
