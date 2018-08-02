@@ -33,6 +33,12 @@ public class Destructable_Object : MonoBehaviour {
         }
 	}
 
+    private void OnTriggerEnter(Collider other) {
+        if(other.gameObject.tag == "Crusher") {
+            Destroy(gameObject);
+        }
+    }
+
     public void takeDamage(float damage) {
         isDamaged = true;
         currentObjectHealth -= damage;
