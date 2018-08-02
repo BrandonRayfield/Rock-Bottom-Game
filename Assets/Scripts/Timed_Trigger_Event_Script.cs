@@ -43,6 +43,8 @@ public class Timed_Trigger_Event_Script : MonoBehaviour {
 
             playerObject = GameObject.Find("Player");
             cameraObject = GameObject.Find("Camera");
+            interactText = GameObject.Find("InteractText").GetComponent<Text>();
+            timerText = GameObject.Find("CountDown").GetComponent<Text>();
             playerAnimator = playerObject.GetComponent<Animator>();
 
         } catch {

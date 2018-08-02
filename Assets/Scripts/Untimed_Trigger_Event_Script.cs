@@ -34,6 +34,7 @@ public class Untimed_Trigger_Event_Script : MonoBehaviour {
 
             playerObject = GameObject.Find("Player");
             cameraObject = GameObject.Find("Camera");
+            interactText = GameObject.Find("InteractText").GetComponent<Text>();
             playerAnimator = playerObject.GetComponent<Animator>();
 
         } catch {

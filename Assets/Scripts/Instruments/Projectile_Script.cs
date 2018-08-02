@@ -25,6 +25,11 @@ public class Projectile_Script : MonoBehaviour {
             other.GetComponent<Enemy>().takeDamage(damage);
             //Create explosion effect?
             Destroy(gameObject);
+        } else if (other.transform.tag == "Destructable") {
+            other.GetComponent<Destructable_Object>().takeDamage(damage);
+            Destroy(gameObject);
+        } else if (other.transform.tag == "Wall" || other.transform.tag == "Obstacle") {
+            Destroy(gameObject);
         }
 
 

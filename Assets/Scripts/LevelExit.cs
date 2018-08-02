@@ -22,6 +22,8 @@ public class LevelExit : MonoBehaviour {
     void Start() {
         try {
             playerObject = GameObject.Find("Player");
+            interactText = GameObject.Find("InteractText").GetComponent<Text>();
+            gameResult = GameObject.Find("ResultText").GetComponent<Text>();
         } catch {
             playerObject = null;
         }
