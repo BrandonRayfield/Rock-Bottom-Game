@@ -32,6 +32,12 @@ public class Flying_Enemy : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
+        try {
+            player = GameObject.Find("Player").GetComponent<Player>();
+        } catch {
+            player = null;
+        }
+
         shotTimer = Time.time + Random.Range(0f, 0.75f);
 
         rb = GetComponent<Rigidbody>();
