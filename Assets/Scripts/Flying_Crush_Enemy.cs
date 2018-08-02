@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Flying_Enemy : MonoBehaviour {
+public class Flying_Crush_Enemy : MonoBehaviour {
 
     public Player player;
     public Projectile shot;
@@ -34,7 +34,8 @@ public class Flying_Enemy : MonoBehaviour {
     void Start() {
         try {
             player = GameObject.Find("Player").GetComponent<Player>();
-        } catch {
+        }
+        catch {
             player = null;
         }
 
@@ -50,13 +51,13 @@ public class Flying_Enemy : MonoBehaviour {
         swoop_target = new Vector3(Random.Range(-4, 4) + transform.position.x,
                 Random.Range(-4, 4) + transform.position.y, 0f);
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update() {
        // Search();
 
         Movement();
-	}
+    }
 
     public void Search() {
         Vector3 direction = player.transform.position - transform.position;
@@ -84,29 +85,32 @@ public class Flying_Enemy : MonoBehaviour {
         if (Vector3.Distance(transform.position, swoop_target) <= targetRadius || moveTimer < Time.time) {
 
             LayerMask mask = 9;
-            
+
             if (!Physics.Linecast(transform.position, player.transform.position, mask)) {
-                if (Mathf.Abs(transform.position.y - player.transform.position.y) <= 1f) {
+                if (Mathf.Abs(transform.position.x - player.transform.position.x) <= 1f) {
                     swoop_target = player.transform.position + (player.transform.position - transform.position);
-                    swoop_target.y = transform.position.y;
+                    swoop_target.x = transform.position.x;
                     moveTimer = Time.time + 0.5f;
                     speed = 500f;
+                    print("working boi");
                 }
                 else {
-                    swoop_target = new Vector3(Random.Range(-4, 4) + player.transform.position.x,
-                        player.transform.position.y, 0f);
+                    swoop_target = new Vector3(player.transform.position.x,
+                        Random.Range(2, 4) + player.transform.position.y, 0f);
                     moveTimer = Time.time + 0.5f;
                     speed = 150f;
                 }
 
-            } else {
+            }
+            else {
                 swoop_target = new Vector3(Random.Range(-4, 4) + transform.position.x,
-                    player.transform.position.y, 0f);
+                    Random.Range(-2, 2) + transform.position.y, 0f);
                 moveTimer = Time.time + 0.5f;
                 speed = 150f;
             }
-                
-        } else {
+
+        }
+        else {
             MoveTowardsTarget(swoop_target);
         }
     }
@@ -151,14 +155,14 @@ public class Flying_Enemy : MonoBehaviour {
             float adjRotSpeed = Mathf.Min(rotationSpeed * Time.deltaTime, 1f);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, adjRotSpeed);
 
-            rb.AddRelativeForce(Vector3.forward * speed  * Time.deltaTime);
+            rb.AddRelativeForce(Vector3.forward * speed * Time.deltaTime);
         }
     }
 
     void OnTriggerStay(Collider otherObject) {
 
-        if (otherObject.transform.tag == "Player") {
-            otherObject.GetComponent<Player>().takeDamage(damage);
+            if (otherObject.transform.tag == "Player") {
+                otherObject.GetComponent<Player>().takeDamage(damage);
+            }
         }
     }
-}
