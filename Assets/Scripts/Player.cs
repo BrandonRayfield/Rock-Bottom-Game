@@ -309,7 +309,7 @@ public class Player : MonoBehaviour {
     public void takeDamage(float damage) {
 
         health -= damage;
-        isSlowed = true;
+        //isSlowed = true;
 
         if (health <= 0 && !dead) {
             dead = true;
