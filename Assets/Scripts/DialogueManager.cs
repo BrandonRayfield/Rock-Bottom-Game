@@ -16,8 +16,19 @@ public class DialogueManager : MonoBehaviour {
     private bool isTalking;
     private bool finishedTalking;
 
+    private int questID;
+    private bool isQuestGiver;
+    private bool acceptedQuest;
+    private bool finishedQuest;
+
+    // GameManager Object for quests
+    private GameManager gameManager;
+
     // Use this for initialization
     void Start() {
+
+        gameManager = FindObjectOfType<GameManager>();
+
         sentences = new Queue<Dialogue>();
         finishedTalking = true;
         try {
@@ -87,6 +98,12 @@ public class DialogueManager : MonoBehaviour {
         isTalking = false;
         finishedTalking = true;
         animator.SetBool("IsOpen", false);
+
+        if(isQuestGiver && !acceptedQuest) {
+            acceptedQuest = true;
+            gameManager.AcceptQuest(questID);
+        }
+
     }
 
     public bool getIsTalking() {
@@ -95,6 +112,18 @@ public class DialogueManager : MonoBehaviour {
 
     public bool getFinishedTalking() {
         return finishedTalking;
+    }
+
+    public bool getAcceptedQuest() {
+        return acceptedQuest;
+    }
+
+    public void setIsQuestGiver(bool isQuest) {
+        isQuestGiver = isQuest;
+    }
+
+    public void setQuestID(int newQuestID) {
+        questID = newQuestID;
     }
 
 }

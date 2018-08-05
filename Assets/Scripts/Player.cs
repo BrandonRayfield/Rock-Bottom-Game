@@ -341,7 +341,7 @@ public class Player : MonoBehaviour {
             itemValue = otherObject.GetComponent<ItemPickupScript>().getValue();
             
 
-            if (itemID == 0) {
+            if (itemID == 420) {
                 currencyCount += itemValue;
                 currencyText.text = "Beat Coins: " + currencyCount.ToString();
 
@@ -356,12 +356,13 @@ public class Player : MonoBehaviour {
                 }
 
                 Instantiate(musicNoteSound, transform.position, transform.rotation);
-            } else if (itemID == 1) {
-                shardCount += itemValue;
-                shardText.text = "Shards: " + shardCount.ToString() + " / " + shardsNeeded;
-                Instantiate(shardSound, transform.position, transform.rotation);
             } else {
-                Debug.Log("Invalid Item ID");
+                GameManager.instance.AddCounter(itemID, itemValue);
+                Instantiate(shardSound, transform.position, transform.rotation);
+
+                //shardCount += itemValue;
+                //shardText.text = "Shards: " + shardCount.ToString() + " / " + shardsNeeded;
+                //Instantiate(shardSound, transform.position, transform.rotation);
             }
 
             Destroy(otherObject.gameObject);

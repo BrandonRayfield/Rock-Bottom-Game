@@ -1,7 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using System;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
 
@@ -12,6 +12,16 @@ public class GameManager : MonoBehaviour {
     public Text enemiesRemaining;
 
 	public bool goldKey = false;
+
+
+    // New Stuff
+    public Quest[] questList;
+    private GameObject[] questObjects;
+    public List<string> UIQuestText;
+    [TextArea(3, 10)]
+    public string currentUIQuestText;
+
+    private bool questUpdated;
 
     // Awake Checks - Singleton setup
     void Awake() {
@@ -30,14 +40,138 @@ public class GameManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		
+		foreach (Quest quest in questList) {
+            if (quest.isCollectQuest) {
+                if(quest.totalAmount == 0) {
+                    quest.totalAmount = GetAmountTotal(quest.objectTag);
+                    quest.currentAmount = quest.totalAmount - GetAmountTotal(quest.objectTag);
+                } else {
+                    quest.currentAmount = 0;
+                }
+                
+                quest.previousAmount = quest.currentAmount;
+            } else if (quest.isKillQuest) {
+                if (quest.totalAmount == 0) {
+                    quest.totalAmount = GetAmountTotal(quest.objectTag);
+                    quest.currentAmount = quest.totalAmount - GetAmountTotal(quest.objectTag);
+                } else {
+                    quest.currentAmount = quest.totalAmount - quest.currentAmount;
+                }
+                
+                quest.previousAmount = quest.currentAmount;
+            } else if (quest.isDestroyQuest) {
+                quest.targetObject = GameObject.FindGameObjectWithTag(quest.objectTag);
+            }
+        }
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-        enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        //enemies = GameObject.FindGameObjectsWithTag("Enemy");
+		//enemiesRemaining.text = "Enemies Remaining: " + enemies.Length;
 
-		enemiesRemaining.text = "Enemies Remaining: " + enemies.Length;
-	}
+        foreach (Quest quest in questList) {
+
+            if(quest.currentAmount >= quest.totalAmount && (quest.isKillQuest || quest.isCollectQuest)) {
+                quest.isComplete = true;
+            }
+
+            //quest.currentAmount = quest.totalAmount - quest.currentAmount;
+
+            if(quest.isCollectQuest) {
+                //quest.currentAmount = quest.totalAmount - GetAmountTotal(quest.objectTag);
+            } else if (quest.isKillQuest) {
+                //quest.currentAmount = quest.totalAmount - GetAmountTotal(quest.objectTag);
+            } else if (quest.isDestroyQuest) {
+                quest.isComplete = isDestroyed(quest.targetObject);
+            }
+
+            if (quest.currentAmount != quest.previousAmount) {
+                updateUI();
+                quest.previousAmount = quest.currentAmount;
+            }
+
+        }
+
+        //enemiesRemaining.text = UIQuestText;
+
+
+    }
+
+    public int GetAmountTotal(string objectTag) {
+        questObjects = GameObject.FindGameObjectsWithTag(objectTag);
+        return questObjects.Length;
+    }
+
+    public bool GetIsComplete(int IDcheck) {
+
+        if(IDcheck < questList.Length) {
+            return questList[IDcheck].isComplete;
+        } else {
+            throw new Exception("Invalid Quest ID");
+        }
+    }
+
+    public bool isDestroyed(GameObject target) {
+        if(target == null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void updateUI() {
+
+        UIQuestText.Clear();
+
+        for (int i = 0; i < questList.Length; i++) {
+            Quest quest = questList[i];
+            if (quest.hasAccepted) {
+                if (quest.currentAmount > quest.totalAmount) {
+                    UIQuestText.Add(quest.UITextDisplay + quest.totalAmount + " / " + quest.totalAmount);
+                } else {
+                    UIQuestText.Add(quest.UITextDisplay + quest.currentAmount + " / " + quest.totalAmount);
+                }
+
+            } else {
+                //UIQuestText.Add("");
+            }
+        }
+
+        currentUIQuestText = "";
+
+        foreach (string text in UIQuestText) {
+            currentUIQuestText += text + "\n";
+            Debug.Log(currentUIQuestText);
+        }
+
+        enemiesRemaining.text = currentUIQuestText;
+
+        //if (UIQuestText == "") {
+        //    UIQuestText = quest.UITextDisplay + quest.currentAmount + " / " + quest.totalAmount;
+        //} else {
+        //    UIQuestText += "\n" + quest.UITextDisplay + quest.currentAmount + " / " + quest.totalAmount;
+        //}
+    }
+
+    public void AcceptQuest(int IDcheck) {
+
+        if(IDcheck < questList.Length) {
+            questList[IDcheck].hasAccepted = true;
+            updateUI();
+        } else {
+            throw new Exception("Invalid Quest ID");
+        }
+    }
+
+    public void AddCounter(int questID, int amount) {
+        if(questID < questList.Length) {
+            questList[questID].currentAmount += amount;
+        } else {
+            throw new Exception("Invalid Quest ID");
+        }
+        
+    }
+
 }
