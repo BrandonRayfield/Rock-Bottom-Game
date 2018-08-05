@@ -68,6 +68,9 @@ public class Player : MonoBehaviour {
 
     private float lightningDamage = 150.0f;
 
+    private float damageTimer;
+    private float damageTime = 0.5f;
+
     // Debuff Variables
     private int slowDebuff;
     private int minSlowDebuff = 1;
@@ -307,17 +310,19 @@ public class Player : MonoBehaviour {
 	}
 
     public void takeDamage(float damage) {
+        if (Time.time >= damageTimer) {
+            health -= damage;
+            damageTimer = Time.time + damageTime;
+            //isSlowed = true;
 
-        health -= damage;
-        //isSlowed = true;
-
-        if (health <= 0 && !dead) {
-            dead = true;
-            livesLeft--;
-            if (livesLeft >= 0) {
-                livesText.text = "Lives: " + livesLeft;
+            if (health <= 0 && !dead) {
+                dead = true;
+                livesLeft--;
+                if (livesLeft >= 0) {
+                    livesText.text = "Lives: " + livesLeft;
+                }
+                Instantiate(deathSound, transform.position, transform.rotation);
             }
-            Instantiate(deathSound, transform.position, transform.rotation);
         }
     }
 
