@@ -32,3 +32,10 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+# Changing Music sounds
+*/ChangingSounds/
+
+# Project stuff
+*/ProjectVersion.txt
+*/EditorBuildSettings.asset
