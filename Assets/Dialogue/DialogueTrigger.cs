@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DialogueTrigger : MonoBehaviour {
 
+    public int NpcID;
     public Dialogue[] dialogue;
     public Dialogue[] dialogueDuringQuest;
     public Dialogue[] dialogueAfterQuest;
@@ -14,6 +15,8 @@ public class DialogueTrigger : MonoBehaviour {
     private bool acceptedQuest;
     private bool finishedQuest;
 
+    private int currentNpcID;
+
     private GameManager gameManager;
 
     void Start() {
@@ -22,21 +25,32 @@ public class DialogueTrigger : MonoBehaviour {
 
     public void Update() {
 
-        isTalking = FindObjectOfType<DialogueManager>().getIsTalking();
-        acceptedQuest = FindObjectOfType<DialogueManager>().getAcceptedQuest();
-        finishedQuest = gameManager.GetComponent<GameManager>().GetIsComplete(questID);
+        currentNpcID = FindObjectOfType<DialogueManager>().getCurrentNpcID();
+
+        if (canTalk) {
+            isTalking = FindObjectOfType<DialogueManager>().getIsTalking();
+            acceptedQuest = FindObjectOfType<DialogueManager>().getAcceptedQuest();
+            finishedQuest = gameManager.GetComponent<GameManager>().GetIsComplete(questID);
+        }
+
+        if(canTalk && isQuestGiver) {
+
+        }
+
 
         if (canTalk && Input.GetKeyDown(KeyCode.E)) {
 
             FindObjectOfType<DialogueManager>().setIsQuestGiver(isQuestGiver);
             FindObjectOfType<DialogueManager>().setQuestID(questID);
 
-            Debug.Log("Talking");
+            if (isQuestGiver) {
+                
+            }
 
             if(!isTalking) {
-                if(acceptedQuest && !finishedQuest) {
+                if(isQuestGiver && acceptedQuest && !finishedQuest) {
                     FindObjectOfType<DialogueManager>().StartDialogue(dialogueDuringQuest);
-                } else if (acceptedQuest && finishedQuest) {
+                } else if (isQuestGiver && acceptedQuest && finishedQuest) {
                     FindObjectOfType<DialogueManager>().StartDialogue(dialogueAfterQuest);
                 } else {
                     FindObjectOfType<DialogueManager>().StartDialogue(dialogue);
@@ -46,7 +60,7 @@ public class DialogueTrigger : MonoBehaviour {
             }
         }
 
-        if(!canTalk) {
+        if (currentNpcID == NpcID && !canTalk) {
             FindObjectOfType<DialogueManager>().EndDialogue();
             isTalking = false;
         }
@@ -59,6 +73,7 @@ public class DialogueTrigger : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other) {
         if (other.gameObject.tag == "Player") {
+            FindObjectOfType<DialogueManager>().setCurrentNpcID(NpcID);
             canTalk = true;
         }
     }
