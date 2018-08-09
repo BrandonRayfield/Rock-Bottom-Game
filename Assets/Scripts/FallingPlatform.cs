@@ -38,6 +38,7 @@ public class FallingPlatform : MonoBehaviour {
                 playerTouched = false;
                 fallingPlatform.transform.position = platformStartPosition;
                 fallingPlatform.transform.rotation = platformStartRotation;
+                time = 0;
             }
 
         }
@@ -45,10 +46,8 @@ public class FallingPlatform : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.transform.tag == "Player")
-        {
+        if (other.transform.tag == "Player") {
             playerTouched = true;
-            time = 0;
         }
     }
 

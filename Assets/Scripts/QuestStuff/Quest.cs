@@ -27,13 +27,13 @@ public class Quest {
     public bool hasAccepted;
     [HideInInspector]
     public bool isComplete;
-    [HideInInspector]
+
     public int totalAmount;
     [HideInInspector]
     public int currentAmount;
     [HideInInspector]
     public int previousAmount;
-    [HideInInspector]
+
     public GameObject targetObject;
 
 }

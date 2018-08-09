@@ -13,13 +13,15 @@ public class DialogueManager : MonoBehaviour {
     public GameObject cameraObject;
 
     private Dialogue sentence;
-    private bool isTalking;
-    private bool finishedTalking;
+    public bool isTalking;
+    public bool finishedTalking;
 
     private int questID;
     private bool isQuestGiver;
     private bool acceptedQuest;
     private bool finishedQuest;
+
+    private int currentNpcID;
 
     // GameManager Object for quests
     private GameManager gameManager;
@@ -99,8 +101,7 @@ public class DialogueManager : MonoBehaviour {
         finishedTalking = true;
         animator.SetBool("IsOpen", false);
 
-        if(isQuestGiver && !acceptedQuest) {
-            acceptedQuest = true;
+        if(isQuestGiver) {
             gameManager.AcceptQuest(questID);
         }
 
@@ -114,16 +115,20 @@ public class DialogueManager : MonoBehaviour {
         return finishedTalking;
     }
 
-    public bool getAcceptedQuest() {
-        return acceptedQuest;
-    }
-
     public void setIsQuestGiver(bool isQuest) {
         isQuestGiver = isQuest;
     }
 
     public void setQuestID(int newQuestID) {
         questID = newQuestID;
+    }
+
+    public void setCurrentNpcID(int newID) {
+        currentNpcID = newID;
+    }
+
+    public int getCurrentNpcID() {
+        return currentNpcID;
     }
 
 }

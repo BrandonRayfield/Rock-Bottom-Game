@@ -17,8 +17,9 @@ public class GameManager : MonoBehaviour {
     // New Stuff
     public Quest[] questList;
     private GameObject[] questObjects;
+    [HideInInspector]
     public List<string> UIQuestText;
-    [TextArea(3, 10)]
+    [HideInInspector]
     public string currentUIQuestText;
 
     private bool questUpdated;
@@ -60,7 +61,7 @@ public class GameManager : MonoBehaviour {
                 
                 quest.previousAmount = quest.currentAmount;
             } else if (quest.isDestroyQuest) {
-                quest.targetObject = GameObject.FindGameObjectWithTag(quest.objectTag);
+                //quest.targetObject = GameObject.FindGameObjectWithTag(quest.objectTag);
             }
         }
 
@@ -85,9 +86,9 @@ public class GameManager : MonoBehaviour {
             if(quest.isCollectQuest) {
                 //quest.currentAmount = quest.totalAmount - GetAmountTotal(quest.objectTag);
             } else if (quest.isKillQuest) {
-                //quest.currentAmount = quest.totalAmount - GetAmountTotal(quest.objectTag);
+                quest.currentAmount = quest.totalAmount - GetAmountTotal(quest.objectTag);
             } else if (quest.isDestroyQuest) {
-                quest.isComplete = isDestroyed(quest.targetObject);
+                quest.isComplete = isDestroyed(quest.targetObject, quest);
             }
 
             if (quest.currentAmount != quest.previousAmount) {
@@ -116,8 +117,19 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public bool isDestroyed(GameObject target) {
+    public bool GetHasAccepted(int IDcheck) {
+
+        if (IDcheck < questList.Length) {
+            return questList[IDcheck].hasAccepted;
+        }
+        else {
+            throw new Exception("Invalid Quest ID");
+        }
+    }
+
+    public bool isDestroyed(GameObject target, Quest quest ) {
         if(target == null) {
+            quest.currentAmount++;
             return true;
         } else {
             return false;
