@@ -11,6 +11,8 @@ public class Destructable_Object : MonoBehaviour {
     public float currentObjectHealth;
     private bool isDamaged;
 
+    public bool isRock;
+
 	// Use this for initialization
 	void Start () {
         currentObjectHealth = maxObjectHealth;
@@ -27,9 +29,13 @@ public class Destructable_Object : MonoBehaviour {
             damagedVersion.SetActive(true);
         } else if (isDamaged && (currentObjectHealth / maxObjectHealth) <= 0) {
             isDamaged = false;
-            //Instantiate(destroyedVersion, transform.position, transform.rotation);
-            //damagedVersion.SetActive(false);
-            Destroy(gameObject);
+
+            if(isRock) {
+                destroyedVersion.SetActive(true);
+                damagedVersion.SetActive(false);
+            } else {
+                Destroy(gameObject);
+            }
         }
 	}
 

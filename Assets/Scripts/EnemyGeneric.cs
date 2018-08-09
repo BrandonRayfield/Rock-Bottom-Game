@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyGeneric : MonoBehaviour {
 
     public float health;
+    public float maxHealth;
 
 
     //Lightning Tracking
@@ -13,8 +14,8 @@ public class EnemyGeneric : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		
-	}
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
