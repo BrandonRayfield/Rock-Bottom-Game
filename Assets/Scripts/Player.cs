@@ -25,6 +25,13 @@ public class Player : MonoBehaviour {
     private float time = 3.0f;
     private float restartTime = 0;
 
+    private bool canMove; // Disables player movement. Mainly used for pausing and dialogue
+    private bool canJump; // Work around for weird bug we are having
+
+    private bool unlockedDoubleJump = false;
+    private bool canDoubleJump;
+
+
     //Walking
     private float moveSpeed = 2.0f;
 	private Quaternion newRotation;
@@ -39,7 +46,7 @@ public class Player : MonoBehaviour {
 	//Jumping
 	public float jumpForce = 200.0f;
 	private float distToGround = 1;
-	private float jumpCoolDown = 0.5f;
+	private float jumpCoolDown = 0.6f;
 	private float jumpTime;
 
     // Obstacle Variables
@@ -144,6 +151,10 @@ public class Player : MonoBehaviour {
 
         livesText.text = "Lives: " + livesLeft;
 
+        canMove = true;
+        canJump = false;
+        canDoubleJump = false;
+
         try {
             cameraObject = GameObject.Find("Camera");
         } catch {
@@ -222,62 +233,82 @@ public class Player : MonoBehaviour {
 
     private void Controls() {
 
-        //Jumping
-        if (Input.GetKeyDown("space") && IsGrounded() && Time.time > jumpTime) {
-            rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Force);
-            Instantiate(jumpSound, transform.position, transform.rotation);
-            jumpTime = Time.time + jumpCoolDown;
-        }
+        if (canMove) {
+            //Jumping
+            if(canJump) {
+                if (Input.GetKeyDown("space") && IsGrounded() && Time.time > jumpTime) {
+                    rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Force);
+                    Instantiate(jumpSound, transform.position, transform.rotation);
+                    canDoubleJump = true;
+                    jumpTime = Time.time + jumpCoolDown;
+                }
 
-        if (!IsGrounded()) {
-            animator.Play("Jump");
-            animator.SetBool("isJumping", true);
-        }
-        else {
-            animator.SetBool("isJumping", false);
-        }
+                if(unlockedDoubleJump) {
+                    if (Input.GetKeyDown("space") && !IsGrounded() && canDoubleJump) {
+                        animator.SetBool("isJumping", false);
+                        animator.Play("Jump");
+                        animator.SetBool("isJumping", true);
+                        rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Force);
+                        Instantiate(jumpSound, transform.position, transform.rotation);
+                        canDoubleJump = false;
+                    }
+                }
 
-        if (Input.GetKey("s") && canPhase) {
-            platformCollider.enabled = false;
-        }
+            }
+            
+            if (!IsGrounded()) {
+                animator.Play("Jump");
+                animator.SetBool("isJumping", true);
+            }
+            else {
+                animator.SetBool("isJumping", false);
+            }
 
-        //Movement
-        if (Input.GetKey("left shift")) {
-            isRunning = true;
-        }
-        else {
-            isRunning = false;
-        }
+            if (Input.GetKey("s") && canPhase) {
+                platformCollider.enabled = false;
+            }
 
-        if (Input.GetKey("d")) {
-            Walking(1);
-            if (isRunning) {
-                animator.SetBool("isRunning", true);
+            //Movement
+            if (Input.GetKey("left shift")) {
+                isRunning = true;
+            }
+            else {
+                isRunning = false;
+            }
+
+            if (Input.GetKey("d")) {
+                Walking(1);
+                if (isRunning) {
+                    animator.SetBool("isRunning", true);
+                }
+            }
+            else if (Input.GetKey("a")) {
+                Walking(-1);
+                if (isRunning) {
+                    animator.SetBool("isRunning", true);
+                }
+            }
+            else {
+                animator.SetBool("isWalking", false);
+                animator.SetBool("isRunning", false);
+            }
+
+            if (Input.GetKeyUp("d") || Input.GetKeyUp("a")) {
+                Vector3 temp = rb.velocity;
+                temp.x /= 2;
+                rb.velocity = temp;
+
+                animator.SetBool("isWalking", false);
+                animator.SetBool("isRunning", false);
             }
         }
-        else if (Input.GetKey("a")) {
-            Walking(-1);
-            if (isRunning) {
-                animator.SetBool("isRunning", true);
-            }
-        }
-        else {
-            animator.SetBool("isWalking", false);
-            animator.SetBool("isRunning", false);
-        }
 
-        if (Input.GetKeyUp("d") || Input.GetKeyUp("a")) {
-            Vector3 temp = rb.velocity;
-            temp.x /= 2;
-            rb.velocity = temp;
-
-            animator.SetBool("isWalking", false);
-            animator.SetBool("isRunning", false);
-        }
     
     }
 
 	private void Walking(int direction){
+
+        canJump = true;
 
         currentDirection = direction;
 
@@ -464,6 +495,14 @@ public class Player : MonoBehaviour {
 
     public int getPlayerDirection() {
         return currentDirection;
+    }
+
+    public void setCanMove(bool ableToMove) {
+        canMove = ableToMove;
+    }
+
+    public void setUnlockedDoubleJump(bool hasUnlocked) {
+        unlockedDoubleJump = hasUnlocked;
     }
 
 }

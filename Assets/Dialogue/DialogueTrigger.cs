@@ -29,12 +29,12 @@ public class DialogueTrigger : MonoBehaviour {
 
         if (canTalk) {
             isTalking = FindObjectOfType<DialogueManager>().getIsTalking();
-            acceptedQuest = FindObjectOfType<DialogueManager>().getAcceptedQuest();
-            finishedQuest = gameManager.GetComponent<GameManager>().GetIsComplete(questID);
+
         }
 
         if(canTalk && isQuestGiver) {
-
+            acceptedQuest = gameManager.GetComponent<GameManager>().GetHasAccepted(questID);
+            finishedQuest = gameManager.GetComponent<GameManager>().GetIsComplete(questID);
         }
 
 

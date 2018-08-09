@@ -101,8 +101,7 @@ public class DialogueManager : MonoBehaviour {
         finishedTalking = true;
         animator.SetBool("IsOpen", false);
 
-        if(isQuestGiver && !acceptedQuest) {
-            acceptedQuest = true;
+        if(isQuestGiver) {
             gameManager.AcceptQuest(questID);
         }
 
@@ -114,10 +113,6 @@ public class DialogueManager : MonoBehaviour {
 
     public bool getFinishedTalking() {
         return finishedTalking;
-    }
-
-    public bool getAcceptedQuest() {
-        return acceptedQuest;
     }
 
     public void setIsQuestGiver(bool isQuest) {

@@ -9,7 +9,7 @@ public class PauseMenu : MonoBehaviour {
     public GameObject playerObject;
 
     // Booleans
-    public static bool GameIsPaused;
+    public bool GameIsPaused;
     private bool weaponUIOpen;
     public bool controlUIOpen;
     
@@ -42,12 +42,14 @@ public class PauseMenu : MonoBehaviour {
             weaponUIOpen = true;
             Time.timeScale = 0.25f;
             weaponSelectUI.SetActive(true);
+            playerObject.GetComponent<Player>().setCanMove(false);
             guitarObject.GetComponent<Weapon>().setCanAttack(false);
             //weaponSelectUI.GetComponent<Animator>().Play("Expand");
         } else if (!GameIsPaused && weaponUIOpen && Input.GetKeyDown(KeyCode.Q)) {
             weaponUIOpen = false;
             Time.timeScale = 1f;
             weaponSelectUI.SetActive(false);
+            playerObject.GetComponent<Player>().setCanMove(true);
             guitarObject.GetComponent<Weapon>().setCanAttack(true);
             //weaponSelectUI.GetComponent<Animator>().Play("Close");
         }
@@ -76,6 +78,7 @@ public class PauseMenu : MonoBehaviour {
         weaponUIOpen = false;
         Time.timeScale = 1f;
         weaponSelectUI.SetActive(false);
+        playerObject.GetComponent<Player>().setCanMove(true);
         guitarObject.GetComponent<Weapon>().setCanAttack(true);
     }
 
@@ -86,6 +89,7 @@ public class PauseMenu : MonoBehaviour {
         weaponUIOpen = false;
         Time.timeScale = 1f;
         weaponSelectUI.SetActive(false);
+        playerObject.GetComponent<Player>().setCanMove(true);
         guitarObject.GetComponent<Weapon>().setCanAttack(true);
     }
 
@@ -94,6 +98,7 @@ public class PauseMenu : MonoBehaviour {
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
+        playerObject.GetComponent<Player>().setCanMove(true);
         guitarObject.GetComponent<Weapon>().setCanAttack(true);
     }
 
@@ -106,6 +111,7 @@ public class PauseMenu : MonoBehaviour {
             pauseMenuUI.SetActive(true);
             Time.timeScale = 0f;
             GameIsPaused = true;
+            playerObject.GetComponent<Player>().setCanMove(false);
             guitarObject.GetComponent<Weapon>().setCanAttack(false);
 
         } else {

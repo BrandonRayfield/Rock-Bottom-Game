@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour {
             if(quest.isCollectQuest) {
                 //quest.currentAmount = quest.totalAmount - GetAmountTotal(quest.objectTag);
             } else if (quest.isKillQuest) {
-                //quest.currentAmount = quest.totalAmount - GetAmountTotal(quest.objectTag);
+                quest.currentAmount = quest.totalAmount - GetAmountTotal(quest.objectTag);
             } else if (quest.isDestroyQuest) {
                 quest.isComplete = isDestroyed(quest.targetObject, quest);
             }
@@ -110,6 +110,16 @@ public class GameManager : MonoBehaviour {
         if(IDcheck < questList.Length) {
             return questList[IDcheck].isComplete;
         } else {
+            throw new Exception("Invalid Quest ID");
+        }
+    }
+
+    public bool GetHasAccepted(int IDcheck) {
+
+        if (IDcheck < questList.Length) {
+            return questList[IDcheck].hasAccepted;
+        }
+        else {
             throw new Exception("Invalid Quest ID");
         }
     }
