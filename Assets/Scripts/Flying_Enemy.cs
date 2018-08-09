@@ -101,7 +101,7 @@ public class Flying_Enemy : MonoBehaviour {
 
             } else {
                 swoop_target = new Vector3(Random.Range(-4, 4) + transform.position.x,
-                    player.transform.position.y, 0f);
+                    Random.Range(-4, 4) + transform.position.y, 0f);
                 moveTimer = Time.time + 0.5f;
                 speed = 150f;
             }
@@ -159,6 +159,9 @@ public class Flying_Enemy : MonoBehaviour {
 
         if (otherObject.transform.tag == "Player") {
             otherObject.GetComponent<Player>().takeDamage(damage);
+
+            Vector3 direction = swoop_target - transform.position;
+            swoop_target = transform.position - direction;
         }
     }
 }

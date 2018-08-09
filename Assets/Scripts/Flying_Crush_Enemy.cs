@@ -163,6 +163,9 @@ public class Flying_Crush_Enemy : MonoBehaviour {
 
             if (otherObject.transform.tag == "Player") {
                 otherObject.GetComponent<Player>().takeDamage(damage);
-            }
+
+            Vector3 direction = swoop_target - transform.position;
+            swoop_target = transform.position - direction;
+        }
         }
     }

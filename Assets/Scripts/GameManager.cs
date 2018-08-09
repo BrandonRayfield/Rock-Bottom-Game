@@ -63,7 +63,10 @@ public class GameManager : MonoBehaviour {
                 quest.targetObject = GameObject.FindGameObjectWithTag(quest.objectTag);
             }
         }
-	}
+
+        //Collider setup (bosses move through player)
+        Physics.IgnoreLayerCollision(8, 10);
+    }
 	
 	// Update is called once per frame
 	void Update () {
