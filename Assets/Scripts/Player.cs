@@ -28,7 +28,7 @@ public class Player : MonoBehaviour {
     private bool canMove; // Disables player movement. Mainly used for pausing and dialogue
     private bool canJump; // Work around for weird bug we are having
 
-    private bool unlockedDoubleJump = false;
+    public bool unlockedDoubleJump = false;
     private bool canDoubleJump;
 
 
@@ -301,9 +301,7 @@ public class Player : MonoBehaviour {
                 animator.SetBool("isWalking", false);
                 animator.SetBool("isRunning", false);
             }
-        }
-
-    
+        } 
     }
 
 	private void Walking(int direction){
@@ -357,7 +355,7 @@ public class Player : MonoBehaviour {
         }
     }
 
-	void OnTriggerEnter(Collider otherObject){
+	void OnTriggerEnter(Collider otherObject) {
 
 		if (otherObject.transform.tag == "GoldKey") {
 			GameManager.instance.goldKey = true;
@@ -370,9 +368,9 @@ public class Player : MonoBehaviour {
         if(otherObject.transform.tag == "Collectable") {
             itemID = otherObject.GetComponent<ItemPickupScript>().getItemID();
             itemValue = otherObject.GetComponent<ItemPickupScript>().getValue();
-            
 
-            if (itemID == 420) {
+
+            if (itemID == 420) { // Player picks up currency object
                 currencyCount += itemValue;
                 currencyText.text = "Beat Coins: " + currencyCount.ToString();
 
@@ -387,7 +385,17 @@ public class Player : MonoBehaviour {
                 }
 
                 Instantiate(musicNoteSound, transform.position, transform.rotation);
-            } else {
+
+            } else if (itemID == 421) { // Player picks up health object
+                Instantiate(shardSound, transform.position, transform.rotation);
+                gainHealth(itemValue);
+
+            } else if (itemID == 422) { // Player picks up health object
+                Instantiate(shardSound, transform.position, transform.rotation);
+                livesLeft = livesLeft + itemValue;
+                livesText.text = "Lives: " + livesLeft;
+
+            } else { // Player picks up quest item. itemID should be the same as the questID
                 GameManager.instance.AddCounter(itemID, itemValue);
                 Instantiate(shardSound, transform.position, transform.rotation);
 
@@ -449,6 +457,16 @@ public class Player : MonoBehaviour {
         if (other.transform.tag == "CrusherFloor") {
             touchBottomCrush = false;
         }
+    }
+
+    public void gainHealth(int healthRecovered) {
+        if (health <= maxHealth - healthRecovered) {
+            health += healthRecovered;
+        }
+        else if (health < maxHealth && health > maxHealth - healthRecovered) {
+            health = maxHealth;
+        }
+        healthBar.value = (health / maxHealth);
     }
 
     //---------------------------------------------------------------------------------------------------------------------
