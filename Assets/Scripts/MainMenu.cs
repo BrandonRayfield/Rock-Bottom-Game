@@ -71,7 +71,7 @@ public class MainMenu : MonoBehaviour {
 	}
 
 	public void Load_Test_Game() {
-		SceneManager.LoadScene(3);
+		SceneManager.LoadScene(4);
 	}
     public void ExitGame() {
         Application.Quit();

@@ -160,8 +160,12 @@ public class Flying_Enemy : MonoBehaviour {
         if (otherObject.transform.tag == "Player") {
             otherObject.GetComponent<Player>().takeDamage(damage);
 
-            Vector3 direction = swoop_target - transform.position;
-            swoop_target = transform.position - direction;
+            float away = Random.Range(-1, 1);
+            away = away + (Mathf.Sign(away) * 4);
+            float away2 = Random.Range(-1, 1);
+            away2 = away2 + (Mathf.Sign(away) * 4);
+
+            rb.velocity = new Vector3(away, away2, 0f);
         }
     }
 }

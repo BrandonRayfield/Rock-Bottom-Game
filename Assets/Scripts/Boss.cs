@@ -24,6 +24,10 @@ public class Boss : MonoBehaviour {
 
     //Crush variables
     private Vector3 crush_location;
+    private bool drop = false;
+
+    //Smash variables
+    public GameObject smash_projectile;
 	// Use this for initialization
 	void Start () {
 
@@ -42,6 +46,9 @@ public class Boss : MonoBehaviour {
             case state.crush:
                 crush();
                 break;
+            case state.smash:
+                smash();
+                break;
         }
 
         if (cycle_timer < Time.time) cycle();
@@ -59,8 +66,9 @@ public class Boss : MonoBehaviour {
 
         //Reset variables
         crush_location = Vector3.zero;
+        drop = false;
 
-        int new_state = Random.Range(1, 8);
+        int new_state = Random.Range(1, 5);
         if (new_state > 5) new_state = 5;
         switch (new_state) {
             case 1:
@@ -68,6 +76,7 @@ public class Boss : MonoBehaviour {
                 current_state = state.charge;
                 break;
             case 2:
+                
                 current_state = state.crush;
                 break;
             case 3:
@@ -118,9 +127,25 @@ public class Boss : MonoBehaviour {
     }
 
     public void crush() {
-        Vector3 above_player = player.transform.position + new Vector3(0f, 9f,0f);
-        
+        if (crush_location == Vector3.zero) {
+            crush_location = player.transform.position + new Vector3(0f, 8f, 0f);
+        }
+        if (!drop) {
+            rb.velocity = Vector3.Normalize(crush_location - transform.position) * speed * 1.5f * Time.deltaTime;
+            if (Vector3.Distance(crush_location, transform.position) <= 2) drop = true;
+        } else {
+            rb.velocity = Vector3.down * speed * 4 * Time.deltaTime;
+        }
+    }
 
-        rb.velocity = Vector3.Normalize(above_player - transform.position) * speed * Time.deltaTime;
+    public void smash() {
+        if (!drop) {
+            GameObject projectile = Instantiate(smash_projectile, transform.position + new Vector3(direction,-0.5f,0), transform.rotation);
+            Rigidbody projectile_rb = projectile.GetComponent<Rigidbody>();
+            projectile_rb.velocity = new Vector3(direction * speed * Time.deltaTime, 0f, 0f);
+            projectile_rb.useGravity = false;
+
+            drop = true;
+        }
     }
 }

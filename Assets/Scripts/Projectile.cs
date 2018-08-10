@@ -9,10 +9,10 @@ public class Projectile : MonoBehaviour {
     public Rigidbody rb;
 	// Use this for initialization
 	void Start () {
-        Vector3 direction = player.transform.position - transform.position;
+        /*Vector3 direction = player.transform.position - transform.position;
         float magnatude = Mathf.Pow(Mathf.Sqrt(Mathf.Abs(direction.x)) + Mathf.Sqrt(Mathf.Abs(direction.y)), 2);
         print(magnatude.ToString());
-        rb.AddForce(new Vector3((direction.x) * movementSpeed/ magnatude, direction.y*movementSpeed / magnatude, 0), ForceMode.Force);
+        rb.AddForce(new Vector3((direction.x) * movementSpeed/ magnatude, direction.y*movementSpeed / magnatude, 0), ForceMode.Force);*/
 
     }
 	
