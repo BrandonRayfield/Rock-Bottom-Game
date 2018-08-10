@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour {
 
@@ -10,6 +11,18 @@ public class Enemy : MonoBehaviour {
     public GameObject target;
 
     public float moveSpeed = 1.0f;
+
+    //Object Spawn Variables
+    private int randomNumberDrop;
+    public GameObject healthDrop;
+
+    //Health Bar Objects
+    public GameObject EnemyHealthBar;
+    private Transform healthBarTarget;
+    private GameObject EnemyHealth;
+    private bool hasBeenDamaged;
+    private float healthBarDisappearTime = 3.0f;
+    private float currentHealthDisTime;
 
     //Damage variables
     public EnemyGeneric enemygeneric;
@@ -43,10 +56,33 @@ public class Enemy : MonoBehaviour {
         myCollider = GetComponent<Collider>();
         enemygeneric = GetComponent<EnemyGeneric>();
         enemygeneric.health = 100;
+        enemygeneric.maxHealth = enemygeneric.health;
+
+        EnemyHealth = Instantiate(EnemyHealthBar);
+        EnemyHealth.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
+
+        EnemyHealth.SetActive(false);
+    }
+
+    private void Awake() {
+        healthBarTarget = gameObject.transform;
     }
 
     // Update is called once per frame
     void Update() {
+
+        if(hasBeenDamaged) {
+            currentHealthDisTime += Time.deltaTime;
+            if (currentHealthDisTime >= healthBarDisappearTime) {
+                EnemyHealth.SetActive(false);
+                hasBeenDamaged = false;
+                currentHealthDisTime = 0;
+            }
+        }
+
+        //Updating position of enemy healthbar
+
+        EnemyHealth.transform.position = Camera.main.WorldToScreenPoint(new Vector3 (healthBarTarget.position.x, healthBarTarget.position.y + 1, healthBarTarget.position.z));
 
         if (touchTopCrush && touchBottomCrush) {
             takeDamage(enemygeneric.health);
@@ -128,13 +164,22 @@ public class Enemy : MonoBehaviour {
 
         Debug.Log("Enemy Took Damage: " + damage);
 
+        currentHealthDisTime = 0;
+        hasBeenDamaged = true;
+
         enemygeneric.health -= damage;
         animator.Play("Damage");
         Instantiate(attackSound, transform.position, transform.rotation);
         attackTimer = Time.time + attackRate / 2;
 
+        EnemyHealth.SetActive(true);
+        Debug.Log("Enemy health: " + enemygeneric.health);
+        Debug.Log("Enemy Max health: " + enemygeneric.maxHealth);
+        EnemyHealth.GetComponent<Slider>().value = (enemygeneric.health / enemygeneric.maxHealth);
+
         if (enemygeneric.health <= 0) {
             dead = true;
+            randomDrop();
             Instantiate(deathSound, transform.position, transform.rotation);
             this.transform.tag = "Untagged";
         }
@@ -171,6 +216,12 @@ public class Enemy : MonoBehaviour {
         }
     }
 
-    
+    private void randomDrop() {
+        randomNumberDrop = Random.Range(1, 3);
+
+        if (randomNumberDrop == 1) {
+            Instantiate(healthDrop, new Vector3 (transform.position.x, transform.position.y + 0.5f, transform.position.z), transform.rotation);
+        }
+    }
 
 }
