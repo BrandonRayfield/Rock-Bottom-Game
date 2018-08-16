@@ -56,7 +56,7 @@ public abstract class Weapon : MonoBehaviour {
         //attack
         if(canAttack) {
             if (Input.GetMouseButtonDown(0) && Time.time > attackTimer) {
-                Debug.Log("Player Attacked");
+                //Debug.Log("Player Attacked");
                 animator.Play(attackAnimationName);
                 Instantiate(attackSound, transform.position, transform.rotation);
                 Damage();

@@ -9,6 +9,10 @@ public class Harmonica_Script : Weapon {
     public GameObject projectileObject;
     public int ammoCount;
 
+    //Magic
+    public GameObject shield;
+    private GameObject createdShield;
+
 
     protected override void Damage() {
         Vector3 mousePos;
@@ -33,4 +37,11 @@ public class Harmonica_Script : Weapon {
         
     }
 
+    protected override void SpecialAttack1() {
+        createdShield = Instantiate(shield, transform.parent.transform.position, transform.parent.transform.rotation);
+
+        createdShield.transform.parent = gameObject.transform.parent;
+        createdShield.transform.position +=new Vector3(0f,1f,0.1f);
+        playerObject.GetComponent<Player>().invulnerable = true;
+    }
 }

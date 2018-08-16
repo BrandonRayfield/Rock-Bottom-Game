@@ -38,6 +38,10 @@ public class PauseMenu : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 
+        if (Input.GetKeyDown("3")) {
+            selectHarmonica();
+        }
+
         if (!GameIsPaused && !weaponUIOpen && Input.GetKeyDown(KeyCode.Q)) {
             weaponUIOpen = true;
             Time.timeScale = 0.25f;

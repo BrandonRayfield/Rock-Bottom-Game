@@ -61,7 +61,7 @@ public class Flying_Enemy : MonoBehaviour {
     public void Search() {
         Vector3 direction = player.transform.position - transform.position;
         direction.z = 0;
-        LayerMask mask = 9;
+        LayerMask mask = 1 << 9;
 
         if (!Physics.Linecast(transform.position, player.transform.position, mask)) {
 
