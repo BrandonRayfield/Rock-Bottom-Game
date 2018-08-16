@@ -24,10 +24,27 @@ public class DamageHitBox : MonoBehaviour {
             if (otherObject.transform.tag == "Enemy" && !hasDamaged) {
                 otherObject.GetComponent<Enemy>().takeDamage(damage);
                 hasDamaged = true;
-            } else if (otherObject.transform.tag == "FlyingEnemy" && !hasDamaged) {
+            }
+            //----------------------------------------------------------------------------------
+            // These are 'work arounds' for now. Delete after reworking enemy class.
+            else if (otherObject.transform.tag == "Flying_Enemy")
+            {
                 otherObject.GetComponent<Flying_Enemy>().takeDamage(damage);
-                hasDamaged = true;
-            } else if (otherObject.transform.tag == "Destructable" && !hasDamaged) {
+                Destroy(gameObject);
+            }
+            else if (otherObject.transform.tag == "Ranged_Enemy")
+            {
+                otherObject.GetComponent<Ranged_Enemy>().takeDamage(damage);
+                Destroy(gameObject);
+            }
+            else if (otherObject.transform.tag == "Ranged_Enemy2")
+            {
+                otherObject.GetComponent<Ranged_Enemy2>().takeDamage(damage);
+                Destroy(gameObject);
+            }
+            //----------------------------------------------------------------------------------
+
+            else if (otherObject.transform.tag == "Destructable" && !hasDamaged) {
                 otherObject.GetComponent<Destructable_Object>().takeDamage(damage);
                 hasDamaged = true;
             }

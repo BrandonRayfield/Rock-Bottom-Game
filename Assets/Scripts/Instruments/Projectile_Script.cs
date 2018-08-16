@@ -25,7 +25,26 @@ public class Projectile_Script : MonoBehaviour {
             other.GetComponent<Enemy>().takeDamage(damage);
             //Create explosion effect?
             Destroy(gameObject);
-        } else if (other.transform.tag == "Destructable") {
+        }
+
+        //----------------------------------------------------------------------------------
+        // These are 'work arounds' for now. Delete after reworking enemy class.
+        else if (isFriendly && other.transform.tag == "Flying_Enemy") {
+            other.GetComponent<Flying_Enemy>().takeDamage(damage);
+            //Create explosion effect?
+            Destroy(gameObject);
+        } else if (isFriendly && other.transform.tag == "Ranged_Enemy") {
+            other.GetComponent<Ranged_Enemy>().takeDamage(damage);
+            //Create explosion effect?
+            Destroy(gameObject);
+        } else if (isFriendly && other.transform.tag == "Ranged_Enemy2") {
+            other.GetComponent<Ranged_Enemy2>().takeDamage(damage);
+            //Create explosion effect?
+            Destroy(gameObject);
+        }
+        //----------------------------------------------------------------------------------
+
+        else if (other.transform.tag == "Destructable") {
             other.GetComponent<Destructable_Object>().takeDamage(damage);
             Destroy(gameObject);
         } else if (other.transform.tag == "Wall" || other.transform.tag == "Obstacle") {
