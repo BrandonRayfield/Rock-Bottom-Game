@@ -68,6 +68,7 @@ public class Player : MonoBehaviour {
     public float health;
     public float maxHealth = 100.0f;
     private int livesLeft;
+    public bool invulnerable = false;
 
     public bool dead = false;
     private float damage = 50.0f;
@@ -349,7 +350,7 @@ public class Player : MonoBehaviour {
 	}
 
     public void takeDamage(float damage) {
-        if (Time.time >= damageTimer) {
+        if (Time.time >= damageTimer && !invulnerable) {
             health -= damage;
             damageTimer = Time.time + damageTime;
             //isSlowed = true;

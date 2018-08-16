@@ -67,6 +67,8 @@ public class GameManager : MonoBehaviour {
 
         //Collider setup (bosses move through player)
         Physics.IgnoreLayerCollision(8, 10);
+        Physics.IgnoreLayerCollision(8, 11);
+        Physics.IgnoreLayerCollision(11, 11);
     }
 	
 	// Update is called once per frame
