@@ -13,6 +13,7 @@ public class Player : MonoBehaviour {
 
     //Guitar Objects
     public GameObject guitarObject;
+    public GameObject harmonicaObject;
     //public GameObject guitarFront;
     //public GameObject guitarSwing;
 
@@ -491,15 +492,18 @@ public class Player : MonoBehaviour {
     // These are used in animation events, make sure to keep them.
     public void IdleStance() {
         guitarObject.GetComponent<Weapon>().SetIdleStance(0);
+        harmonicaObject.GetComponent<Weapon>().SetIdleStance(0);
     }
 
     public void PlayGuitarStance() {
         guitarObject.GetComponent<Weapon>().SetIdleStance(1);
+        harmonicaObject.GetComponent<Weapon>().SetIdleStance(1);
 
     }
 
     public void AttackStance() {
         guitarObject.GetComponent<Weapon>().SetIdleStance(2);
+        harmonicaObject.GetComponent<Weapon>().SetIdleStance(2);
     }
 
     //---------------------------------------------------------------------------------------------------------------------
