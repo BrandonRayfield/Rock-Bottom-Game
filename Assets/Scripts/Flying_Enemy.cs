@@ -76,6 +76,8 @@ public class Flying_Enemy : MonoBehaviour {
 
                 shotTimer = Time.time + shotRate;
             }
+        } else {
+            print("can't see");
         }
     }
 
