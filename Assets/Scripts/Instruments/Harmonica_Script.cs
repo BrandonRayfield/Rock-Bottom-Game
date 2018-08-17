@@ -41,7 +41,7 @@ public class Harmonica_Script : Weapon {
         createdShield = Instantiate(shield, transform.parent.transform.position, transform.parent.transform.rotation);
 
         createdShield.transform.parent = gameObject.transform.parent;
-        createdShield.transform.position +=new Vector3(0f,1f,0.1f);
+        createdShield.transform.position +=new Vector3(0f,1f,-0.4f);
         playerObject.GetComponent<Player>().invulnerable = true;
     }
 }
