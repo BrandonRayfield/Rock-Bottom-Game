@@ -279,7 +279,10 @@ public class Player : MonoBehaviour {
             //Jumping
             if(canJump) {
                 if (Input.GetKeyDown("space") && IsGrounded() && Time.time > jumpTime) {
-                    rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Force);
+                    Vector3 velocity = rb.velocity;
+                    velocity.y = jumpForce * Time.deltaTime;
+                    rb.velocity = velocity;
+                    //rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Force);
                     Instantiate(jumpSound, transform.position, transform.rotation);
                     canDoubleJump = true;
                     jumpTime = Time.time + jumpCoolDown;
@@ -290,7 +293,10 @@ public class Player : MonoBehaviour {
                         animator.SetBool("isJumping", false);
                         animator.Play("Jump");
                         animator.SetBool("isJumping", true);
-                        rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Force);
+                        Vector3 velocity = rb.velocity;
+                        velocity.y = jumpForce * Time.deltaTime;
+                        rb.velocity = velocity;
+                        //rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Force);
                         Instantiate(jumpSound, transform.position, transform.rotation);
                         canDoubleJump = false;
                     }
