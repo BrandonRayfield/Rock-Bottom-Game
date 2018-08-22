@@ -24,6 +24,8 @@ public class DialogueTrigger : MonoBehaviour {
 
     private bool acceptedQuest;
     private bool finishedQuest;
+    private bool isUnlocked;
+    private bool isRewarded;
 
     private int currentNpcID;
 
@@ -32,7 +34,10 @@ public class DialogueTrigger : MonoBehaviour {
 
     void Start() {
         gameManager = FindObjectOfType<GameManager>();
-        progressObjectAnimator = progressObject.GetComponent<Animator>();
+
+        if(isProgressor) {
+            progressObjectAnimator = progressObject.GetComponent<Animator>();
+        }
 
         try {
             cameraObject = GameObject.Find("Camera");
@@ -69,17 +74,17 @@ public class DialogueTrigger : MonoBehaviour {
                     FindObjectOfType<DialogueManager>().StartDialogue(dialogueAfterQuest);
 
                     // If the NPC is supposed to provide the player with a reward for completing the quest, spawn reward item
-                    if(isRewardGiver) {
+                    if(isRewardGiver && !isRewarded) {
                         Vector3 spawnLocation = new Vector3(transform.position.x, transform.position.y + rewardHeightPosition, transform.position.z);
                         Instantiate(rewardObject, spawnLocation, transform.rotation);
+                        isRewarded = true;
                     }
 
                     // If the NPC is supposed to unlock the next area for the player, open object
-                    if (isProgressor) {
+                    if (isProgressor && !isUnlocked) {
                         progressObjectAnimator.Play("doorOpening");
                         cameraObject.GetComponent<CameraScript>().SetFocusPoint(progressObject);
-
-
+                        isUnlocked = true;
                     }
 
                 } else {
