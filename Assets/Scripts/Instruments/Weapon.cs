@@ -61,7 +61,7 @@ public abstract class Weapon : MonoBehaviour {
                 //Debug.Log("Player Attacked");
                 animator.SetTrigger(attackAnimationName);
                 Instantiate(attackSound, transform.position, transform.rotation);
-                Damage();
+                //Damage();
 
                 attackTimer = Time.time + attackRate;
             }
@@ -126,6 +126,10 @@ public abstract class Weapon : MonoBehaviour {
             // Adjusts the guitar object parent so it moves with the body
             this.gameObject.transform.parent = guitarParentSpine.transform;
         }
+    }
+
+    public void CallDamage() {
+        Damage();
     }
 
     
