@@ -160,7 +160,6 @@ public class GameManager : MonoBehaviour {
 
         foreach (string text in UIQuestText) {
             currentUIQuestText += text + "\n";
-            Debug.Log(currentUIQuestText);
         }
 
         enemiesRemaining.text = currentUIQuestText;
@@ -182,13 +181,31 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    public void CompletedQuest(int IDcheck) {
+        if (IDcheck < questList.Length) {
+            questList[IDcheck].isComplete = true;
+            updateUI();
+        } else {
+            throw new Exception("Invalid Quest ID");
+        }
+    }
+
     public void AddCounter(int questID, int amount) {
         if(questID < questList.Length) {
             questList[questID].currentAmount += amount;
+            updateUI();
         } else {
             throw new Exception("Invalid Quest ID");
         }
         
     }
 
+    public void SetCounter(int questID, int amount) {
+        if (questID < questList.Length) {
+            questList[questID].currentAmount = amount;
+            updateUI();
+        } else {
+            throw new Exception("Invalid Quest ID");
+        }
+    }
 }

@@ -9,7 +9,10 @@ public class Destructable_Object : MonoBehaviour {
     public GameObject destroyedVersion;
     public float maxObjectHealth;
     public float currentObjectHealth;
-    private bool isDamaged;
+    private bool isDamaged, isDestroyed;
+
+    public float destroyTime = 3.0f;
+    public float currentTime;
 
     public bool isRock;
 
@@ -29,14 +32,23 @@ public class Destructable_Object : MonoBehaviour {
             damagedVersion.SetActive(true);
         } else if (isDamaged && (currentObjectHealth / maxObjectHealth) <= 0) {
             isDamaged = false;
+            isDestroyed = true;
 
-            if(isRock) {
+            if (isRock) {
                 destroyedVersion.SetActive(true);
                 damagedVersion.SetActive(false);
             } else {
                 Destroy(gameObject);
             }
         }
+
+        if (isDestroyed) {
+            currentTime += Time.deltaTime;
+            if (currentTime >= destroyTime) {
+                Destroy(gameObject);
+            }
+        }
+
 	}
 
     private void OnTriggerEnter(Collider other) {

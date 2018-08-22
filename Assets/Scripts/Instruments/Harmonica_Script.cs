@@ -34,7 +34,32 @@ public class Harmonica_Script : Weapon {
     }
 
     protected override void AdjustWeaponPosition() {
-        
+        // Determines what harmonica object is enabled. 0 for Back enabled, 1 for stage, 2 for attack
+        if (guitarStance == 1) {
+            // Adjusts the harmonica objects position and rotation
+            //this.gameObject.transform.localPosition = new Vector3(0.02f, 2.057f, 0.779f);
+            //this.gameObject.transform.localEulerAngles = new Vector3(0.0f, -90.00001f, 0.0f);
+
+            // Adjusts the harmonica object parent so it moves with the body
+            //this.gameObject.transform.parent = guitarParentSpine.transform;
+
+        } else if (guitarStance == 2) {
+            // Adjusts the harmonica object parent so it moves with the body
+            //this.gameObject.transform.parent = guitarParentHand.transform;
+            
+            // Adjusts the harmonica objects position and rotation
+            //this.gameObject.transform.localPosition = new Vector3(-0.4303697f, 0.6051218f, 0.6971588f);
+            //this.gameObject.transform.localEulerAngles = new Vector3(2.145f, 51.479f, 0.791f);
+
+        } else {
+            // Adjusts the harmonica objects position and rotation
+            //this.gameObject.transform.localPosition = new Vector3(-0.2714013f, -0.1477957f, -0.0788268f);
+            //this.gameObject.transform.localEulerAngles = new Vector3(65.565f, -37.631f, 85.8f);
+
+
+            // Adjusts the harmonica object parent so it moves with the body
+            //this.gameObject.transform.parent = guitarParentSpine.transform;
+        }
     }
 
     protected override void SpecialAttack1() {

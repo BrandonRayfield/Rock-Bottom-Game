@@ -13,6 +13,7 @@ public class Player : MonoBehaviour {
 
     //Guitar Objects
     public GameObject guitarObject;
+    public GameObject harmonicaObject;
     //public GameObject guitarFront;
     //public GameObject guitarSwing;
 
@@ -25,8 +26,11 @@ public class Player : MonoBehaviour {
     private float time = 3.0f;
     private float restartTime = 0;
 
+
     private bool canMove; // Disables player movement. Mainly used for pausing and dialogue
     private bool canJump; // Work around for weird bug we are having
+    private bool canSwing; // Used for rope swings
+    private GameObject ropeObject;
 
     public bool unlockedDoubleJump = false;
     private bool canDoubleJump;
@@ -163,9 +167,16 @@ public class Player : MonoBehaviour {
         }
 
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update() {
+
+        if (canSwing && Input.GetKey(KeyCode.E)) {
+
+            //gameObject.transform.parent = ropeObject.transform;
+            //gameObject.transform.position = ropeObject.transform.position; 
+            ropeObject.GetComponent<Rope_Swing>().setIsSwinging(true);
+        }
 
         movementSpeed = movementSpeed / slowDebuff;
 
@@ -425,6 +436,13 @@ public class Player : MonoBehaviour {
             setCheckPoint(otherObject.gameObject);
             Instantiate(checkpointSound, transform.position, transform.rotation);
         }
+
+        if(otherObject.transform.tag == "Rope")
+        {
+            canSwing = true;
+            ropeObject = otherObject.gameObject;
+        }
+
 	}
 
     private void OnTriggerStay(Collider other) {
@@ -474,15 +492,18 @@ public class Player : MonoBehaviour {
     // These are used in animation events, make sure to keep them.
     public void IdleStance() {
         guitarObject.GetComponent<Weapon>().SetIdleStance(0);
+        harmonicaObject.GetComponent<Weapon>().SetIdleStance(0);
     }
 
     public void PlayGuitarStance() {
         guitarObject.GetComponent<Weapon>().SetIdleStance(1);
+        harmonicaObject.GetComponent<Weapon>().SetIdleStance(1);
 
     }
 
     public void AttackStance() {
         guitarObject.GetComponent<Weapon>().SetIdleStance(2);
+        harmonicaObject.GetComponent<Weapon>().SetIdleStance(2);
     }
 
     //---------------------------------------------------------------------------------------------------------------------
@@ -522,6 +543,16 @@ public class Player : MonoBehaviour {
 
     public void setUnlockedDoubleJump(bool hasUnlocked) {
         unlockedDoubleJump = hasUnlocked;
+    }
+
+    //---------------------------------------------------------------------------------------------------------------------
+    // Getters and Setters for Rope swing
+    public bool getCanSwing() {
+        return canSwing;
+    }
+
+    public void setCanSwing(bool letSwing) {
+        canSwing = letSwing;
     }
 
 }

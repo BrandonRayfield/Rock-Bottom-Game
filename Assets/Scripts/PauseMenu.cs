@@ -76,6 +76,7 @@ public class PauseMenu : MonoBehaviour {
 	}
 
     public void selectGuitar() {
+        Debug.Log("Selected Guitar");
         guitarObject.SetActive(true);
         harmonicaObject.SetActive(false);
 
@@ -87,6 +88,7 @@ public class PauseMenu : MonoBehaviour {
     }
 
     public void selectHarmonica() {
+        Debug.Log("Selected Harmonica");
         harmonicaObject.SetActive(true);
         guitarObject.SetActive(false);
 
