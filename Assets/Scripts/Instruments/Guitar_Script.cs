@@ -27,10 +27,10 @@ public class Guitar_Script : Weapon {
             playerModel.transform.localEulerAngles = new Vector3(0, currentDirection * 90, 0);
             animator.Play("Guitar Playing");
             guitarStance = 1;
-            Instantiate(guitarSound, transform.position, transform.rotation);
+            Instantiate(magicSound1, transform.position, transform.rotation);
             // Channel Ability
             Invoke("channelAbility", channelTime);
-            magicTimer = Time.time + magicRate1;
+            magicTimer1 = Time.time + magicRate1;
         } else {
             Debug.Log("No valid target.");
         }
