@@ -28,7 +28,7 @@ public abstract class Weapon : MonoBehaviour {
 
     // Animation variables
     protected Animator animator;
-    public string attackAnimationName = "Attack";
+    public string attackAnimationName = "Attacking";
 
     // Where the instrument is located on the player model
     protected int guitarStance; // Determines what guitar object is enabled. 0 for Back enabled, 1 for front, 2 for swing
@@ -59,7 +59,7 @@ public abstract class Weapon : MonoBehaviour {
         if(canAttack) {
             if (Input.GetMouseButtonDown(0) && Time.time > attackTimer) {
                 //Debug.Log("Player Attacked");
-                animator.Play(attackAnimationName);
+                animator.SetTrigger(attackAnimationName);
                 Instantiate(attackSound, transform.position, transform.rotation);
                 Damage();
 
