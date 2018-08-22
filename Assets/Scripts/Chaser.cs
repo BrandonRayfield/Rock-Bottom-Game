@@ -19,6 +19,9 @@ public class Chaser : MonoBehaviour {
     public bool playerSeen = false;
     public float searchTimer = 0f;
     public Player player;
+
+    //Attacking
+    public Vector3 damageLocation;
 	// Use this for initialization
 	void Start () {
         rb = GetComponent<Rigidbody>();
@@ -28,11 +31,12 @@ public class Chaser : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //Check if player is visible
-        if (playerSeen) {
-            if(direction != (int)Mathf.Sign(player.transform.position.x - transform.position.x)){
+        if (playerSeen && direction != (int)Mathf.Sign(player.transform.position.x - transform.position.x) &&
+            turnTimer < Time.time) {
                 transform.Rotate(new Vector3(0f, 180f, 0f));
                 direction = direction * -1;
-            }
+
+            turnTimer = Time.time + 0.1f;
 
         }
 
@@ -48,6 +52,7 @@ public class Chaser : MonoBehaviour {
         if (platform()) {
             jump();
         }
+
 
         
 
