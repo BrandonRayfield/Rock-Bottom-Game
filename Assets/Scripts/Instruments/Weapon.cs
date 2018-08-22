@@ -16,13 +16,15 @@ public abstract class Weapon : MonoBehaviour {
     public float attackRate = 1.5f;
     public GameObject damageLocation;
     public GameObject damageHitBox;
-    protected float magicTimer;
+    protected float magicTimer1;
+    protected float magicTimer2;
     public float magicRate1 = 2f; // How long the player has to wait between activating abilities
     public float magicRate2 = 2f; // How long the player has to wait between activating abilities
 
     // Sound variables
     public GameObject attackSound;
-    public GameObject guitarSound;
+    public GameObject magicSound1;
+    public GameObject magicSound2;
 
     // Animation variables
     protected Animator animator;
@@ -64,12 +66,14 @@ public abstract class Weapon : MonoBehaviour {
                 attackTimer = Time.time + attackRate;
             }
             //Lightning Attack
-            if (Input.GetKeyDown("1") && Time.time > magicTimer) {
+            if (Input.GetKeyDown("1") && Time.time > magicTimer1) {
                 SpecialAttack1();
+                magicTimer1 = Time.time + magicRate1;
             }
 
-            if (Input.GetKeyDown("2") && Time.time > magicTimer) {
-                SpecialAttack1();
+            if (Input.GetKeyDown("2") && Time.time > magicTimer2) {
+                SpecialAttack2();
+                magicTimer2 = Time.time + magicRate2;
             }
         }
     }
@@ -132,13 +136,13 @@ public abstract class Weapon : MonoBehaviour {
     protected virtual void SpecialAttack1() {
 
         Debug.Log("Special Attack 1 activated.");
-        magicTimer = Time.time + magicRate1;
+        magicTimer1 = Time.time + magicRate1;
 
     }
 
     protected virtual void SpecialAttack2() {
         Debug.Log("Special Attack 2 activated.");
-        magicTimer = Time.time + magicRate2;
+        magicTimer2 = Time.time + magicRate2;
     }
 
     public void setCanAttack(bool attackSetting) {
