@@ -21,6 +21,11 @@ public class Timed_Trigger_Event_Script : MonoBehaviour {
     public float maxTime;
     private float currentTime;
     private float restartTime = 0;
+
+    private bool isCooldown;
+    private float cooldownTimer;
+    public float playCoolDown = 5.0f;
+
     public bool isActive;
     private bool isTouching;
     private float time;
@@ -38,6 +43,7 @@ public class Timed_Trigger_Event_Script : MonoBehaviour {
     // Use this for initialization
     void Start() {
         lockedObjectAnimator = lockedObject.GetComponent<Animator>();
+        currentTime = playCoolDown;
 
         try {
 
@@ -57,9 +63,18 @@ public class Timed_Trigger_Event_Script : MonoBehaviour {
     // Update is called once per frame
     void Update() {
 
-        if (isTouching && Input.GetKeyDown(KeyCode.E)) {
+        if (isCooldown) {
+            cooldownTimer += Time.deltaTime;
+            if(cooldownTimer >= playCoolDown) {
+                isCooldown = false;
+                cooldownTimer = 0;
+            }
+        }
+
+        if (isTouching && Input.GetKeyDown(KeyCode.E) && !isCooldown) {
             playerAnimator.Play("Guitar Playing");
             Instantiate(guitarSound, transform.position, transform.rotation);
+            isCooldown = true;
             padTriggered = true;
         }
 
