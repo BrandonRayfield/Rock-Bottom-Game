@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Flying_Enemy : MonoBehaviour {
 
@@ -30,6 +31,12 @@ public class Flying_Enemy : MonoBehaviour {
     public float targetRadius;
     public float rotationSpeed;
 
+    //health
+    public int health = 100;
+    public GameObject EnemyHealthBar;
+    private Transform healthBarTarget;
+    public GameObject EnemyHealth;
+    private float currentHealthDisTime;
     // Use this for initialization
     void Start() {
         try {
@@ -49,14 +56,26 @@ public class Flying_Enemy : MonoBehaviour {
 
         swoop_target = new Vector3(Random.Range(-4, 4) + transform.position.x,
                 Random.Range(-4, 4) + transform.position.y, 0f);
+
+        //health bar
+        EnemyHealth = Instantiate(EnemyHealthBar);
+        EnemyHealth.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
+
+        EnemyHealth.SetActive(false);
     }
-	
-	// Update is called once per frame
-	void Update () {
+    private void Awake() {
+        healthBarTarget = gameObject.transform;
+    }
+
+
+    // Update is called once per frame
+    void Update () {
        // Search();
 
         Movement();
-	}
+
+        EnemyHealth.transform.position = Camera.main.WorldToScreenPoint(new Vector3(healthBarTarget.position.x, healthBarTarget.position.y + 1, healthBarTarget.position.z));
+    }
 
     public void Search() {
         Vector3 direction = player.transform.position - transform.position;
@@ -76,9 +95,7 @@ public class Flying_Enemy : MonoBehaviour {
 
                 shotTimer = Time.time + shotRate;
             }
-        } else {
-            print("can't see");
-        }
+        } 
     }
 
     public void Movement() {
@@ -88,7 +105,8 @@ public class Flying_Enemy : MonoBehaviour {
             LayerMask mask = 9;
             
             if (!Physics.Linecast(transform.position, player.transform.position, mask)) {
-                if (Mathf.Abs(transform.position.y - player.transform.position.y) <= 1f) {
+                if (Mathf.Abs(transform.position.y - player.transform.position.y) <= 1f &&
+                    Mathf.Abs(transform.position.y - player.transform.position.y) <= 5f) {
                     swoop_target = player.transform.position + (player.transform.position - transform.position);
                     swoop_target.y = transform.position.y;
                     moveTimer = Time.time + 0.5f;
@@ -129,14 +147,21 @@ public class Flying_Enemy : MonoBehaviour {
     }
 
     public void takeDamage(float damage) {
+        if (currentHealthDisTime < Time.time) {
+            enemygeneric.health -= damage;
 
-        enemygeneric.health -= damage;
+            EnemyHealth.SetActive(true);
+            EnemyHealth.GetComponent<Slider>().value = (enemygeneric.health / enemygeneric.maxHealth);
 
-        if (enemygeneric.health <= 0) {
-            dead = true;
-            //Instantiate(deathSound, transform.position, transform.rotation);
-            this.transform.tag = "Untagged";
-            Destroy(this.gameObject);
+            currentHealthDisTime = Time.time + 0.5f;
+
+            if (enemygeneric.health <= 0) {
+                dead = true;
+                //Instantiate(deathSound, transform.position, transform.rotation);
+                this.transform.tag = "Untagged";
+                Destroy(EnemyHealth.gameObject);
+                Destroy(this.gameObject);
+            }
         }
     }
 
@@ -157,17 +182,25 @@ public class Flying_Enemy : MonoBehaviour {
         }
     }
 
-    void OnTriggerStay(Collider otherObject) {
+    void OnTriggerEnter(Collider otherObject) {
 
         if (otherObject.transform.tag == "Player") {
             otherObject.GetComponent<Player>().takeDamage(damage);
 
-            float away = Random.Range(-1, 1);
-            away = away + (Mathf.Sign(away) * 4);
-            float away2 = Random.Range(-1, 1);
-            away2 = away2 + (Mathf.Sign(away) * 4);
+            Vector3 away = transform.position - player.transform.position;
+            Vector3.Normalize(away);
+            away.z = 0;
+            //away *= 10;
+            
+            away.x *= 100;
+            if (Mathf.Sign(away.y) == -1f) {
+                away.y *= -10;
+            } else {
+                away.y *= 10;
+            }
 
-            rb.velocity = new Vector3(away, away2, 0f);
+            swoop_target = away;
+            moveTimer = Time.time + 1f;
         }
     }
 }
