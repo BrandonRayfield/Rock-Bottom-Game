@@ -378,6 +378,10 @@ public class Player : MonoBehaviour {
         return Physics.Raycast (transform.position, -Vector3.up, distToGround + 0.1f);
 	}
 
+    public void Damage() {
+        currentGuitarObject.GetComponent<Weapon>().CallDamage();
+    }
+
     public void takeDamage(float damage) {
         if (Time.time >= damageTimer && !invulnerable) {
             health -= damage;
