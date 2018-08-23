@@ -70,12 +70,16 @@ public class MainMenu : MonoBehaviour {
 		SceneManager.LoadScene(2);
 	}
 
-    public void Load_Test_Game() {
+    public void Load_Prototype_Game() {
         SceneManager.LoadScene(3);
     }
 
+    public void Load_Test_Game() {
+        SceneManager.LoadScene(4);
+    }
+
     public void Load_Boss_Game() {
-		SceneManager.LoadScene(4);
+		SceneManager.LoadScene(5);
 	}
     public void ExitGame() {
         Application.Quit();
