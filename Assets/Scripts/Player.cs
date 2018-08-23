@@ -22,7 +22,6 @@ public class Player : MonoBehaviour {
     public GameObject currentHarmonicaObject;
 
     // Instument Unlocks
-    public GameObject harmonicaSelectImage;
     public bool harmonicaUnlocked;
     public bool guitarUnlocked;
     public bool megaphoneUnlocked;
@@ -116,6 +115,17 @@ public class Player : MonoBehaviour {
     public Text currencyText;
     public Text livesText;
 
+    // Weapon UI Variables
+    public GameObject currentGuitarIcon;
+    public Text guitarText;
+    public GameObject currentWindIcon;
+    public Text windText;
+
+    public Sprite banjoImage;
+    public Sprite guitarImage;
+    public Sprite harmonicaImage;
+    public Sprite megaphoneImage;
+
     //Item Variables
     public int shardsNeeded = 3;
     public int currencyCount;
@@ -168,16 +178,40 @@ public class Player : MonoBehaviour {
         livesText.text = "Lives: " + livesLeft;
 
         //Sets current weapon
-        if (!guitarUnlocked && !megaphoneUnlocked) {
+        if (!guitarUnlocked) {
             currentGuitarObject = banjoObject;
-            currentHarmonicaObject = harmonicaObject;
             gameObject.GetComponent<PauseMenu>().setGuitarWeapon(currentGuitarObject);
-            gameObject.GetComponent<PauseMenu>().setHarmonicaWeapon(currentHarmonicaObject);
+            // Set UI stuff
+            currentGuitarIcon.GetComponent<Image>().sprite = banjoImage;
+            guitarText.text = "Banjo";
+        } else {
+            currentGuitarObject = guitarObject;
+            gameObject.GetComponent<PauseMenu>().setGuitarWeapon(currentGuitarObject);
+            // Set UI stuff
+            currentGuitarIcon.GetComponent<Image>().sprite = guitarImage;
+            guitarText.text = "Guitar";
         }
 
-        if(!harmonicaUnlocked) {
-            harmonicaSelectImage.SetActive(false);
+        if(!megaphoneUnlocked) {
+            currentHarmonicaObject = harmonicaObject;
+            gameObject.GetComponent<PauseMenu>().setHarmonicaWeapon(currentHarmonicaObject);
+            // Set UI stuff
+            currentWindIcon.GetComponent<Image>().sprite = harmonicaImage;
+            windText.text = "Harmonica";
+        } else {
+            currentHarmonicaObject = megaphoneObject;
+            gameObject.GetComponent<PauseMenu>().setHarmonicaWeapon(currentHarmonicaObject);
+            // Set UI stuff
+            currentWindIcon.GetComponent<Image>().sprite = megaphoneImage;
+            windText.text = "Megaphone";
         }
+
+        if(!megaphoneUnlocked && !harmonicaUnlocked) {
+            currentWindIcon.SetActive(false);
+        }
+
+        // Updating Guitar
+        gameObject.GetComponent<PauseMenu>().selectGuitar();
 
         canMove = true;
         canJump = false;
@@ -488,6 +522,15 @@ public class Player : MonoBehaviour {
 
 	}
 
+    public void updateCurrencyAmount(int costAmount) {
+        currencyCount -= costAmount;
+        currencyText.text = "Beat Coins: " + currencyCount.ToString();
+    }
+
+    public int getCurrencyAmount() {
+        return currencyCount;
+    }
+
     private void OnTriggerStay(Collider other) {
         if (other.tag == "MovingPlatform") {
             transform.parent = other.transform;
@@ -538,13 +581,15 @@ public class Player : MonoBehaviour {
     }
 
     private void unlockHarmonica() {
-        harmonicaSelectImage.SetActive(true);
+        currentWindIcon.GetComponent<Image>().sprite = harmonicaImage;
+        currentWindIcon.SetActive(true);
         currentHarmonicaObject = harmonicaObject;
         gameObject.GetComponent<PauseMenu>().setHarmonicaWeapon(currentHarmonicaObject);
         gameObject.GetComponent<PauseMenu>().selectHarmonica();
     }
 
     private void unlockGuitar() {
+        currentGuitarIcon.GetComponent<Image>().sprite = guitarImage;
         currentGuitarObject.SetActive(false);
         currentGuitarObject = guitarObject;
         gameObject.GetComponent<PauseMenu>().setGuitarWeapon(currentGuitarObject);
@@ -552,6 +597,7 @@ public class Player : MonoBehaviour {
     }
 
     private void unlockMegaphone() {
+        currentWindIcon.GetComponent<Image>().sprite = megaphoneImage;
         currentHarmonicaObject.SetActive(false);
         currentHarmonicaObject = megaphoneObject;
         gameObject.GetComponent<PauseMenu>().setHarmonicaWeapon(currentHarmonicaObject);

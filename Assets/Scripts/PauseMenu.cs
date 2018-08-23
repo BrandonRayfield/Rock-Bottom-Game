@@ -22,16 +22,18 @@ public class PauseMenu : MonoBehaviour {
     public GameObject guitarObject;
     public GameObject harmonicaObject;
 
-    private void Start() {
-        GameIsPaused = false;
-        weaponUIOpen = false;
-        weaponSelectUI.SetActive(false);
-
+    private void Awake() {
         try {
             playerObject = GameObject.Find("Player");
         } catch {
             playerObject = null;
         }
+    }
+
+    private void Start() {
+        GameIsPaused = false;
+        weaponUIOpen = false;
+        weaponSelectUI.SetActive(false);
 
     }
 
