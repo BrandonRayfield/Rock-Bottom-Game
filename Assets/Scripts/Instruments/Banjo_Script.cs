@@ -47,7 +47,7 @@ public class Banjo_Script : Weapon {
 
     public void lightningAttack(Vector3 target) {
         if (target != null) {
-            GameObject prefab = Instantiate(cowObject, target, transform.rotation);
+            GameObject prefab = Instantiate(cowObject, new Vector3(target.x, target.y + 4, target.z), transform.rotation);
             prefab.GetComponent<DamageHitBox>().damage = lightningDamage;
             prefab.GetComponent<DamageHitBox>().player = true;
             //Instantiate(attackSound, transform.position, transform.rotation);

@@ -61,7 +61,7 @@ public abstract class Weapon : MonoBehaviour {
                 //Debug.Log("Player Attacked");
                 animator.SetTrigger(attackAnimationName);
                 Instantiate(attackSound, transform.position, transform.rotation);
-                //Damage();
+                Damage();
 
                 attackTimer = Time.time + attackRate;
             }
