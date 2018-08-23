@@ -190,6 +190,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    // Adds an specific ammount to the current amount
     public void AddCounter(int questID, int amount) {
         if(questID < questList.Length) {
             questList[questID].currentAmount += amount;
@@ -200,6 +201,7 @@ public class GameManager : MonoBehaviour {
         
     }
 
+    // Sets the current amount to a specific amount
     public void SetCounter(int questID, int amount) {
         if (questID < questList.Length) {
             questList[questID].currentAmount = amount;

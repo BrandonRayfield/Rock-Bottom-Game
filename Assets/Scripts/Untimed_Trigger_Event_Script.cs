@@ -13,6 +13,7 @@ public class Untimed_Trigger_Event_Script : MonoBehaviour {
     // Sound Variables
     public GameObject guitarSound;
     public GameObject doorSound;
+    public GameObject errorSound;
 
     // UI Variables
     public Text interactText;
@@ -21,14 +22,30 @@ public class Untimed_Trigger_Event_Script : MonoBehaviour {
     private bool isTouching;
     private float time;
     private bool padTriggered;
+    private bool hasUsed;
+    public float songLength = 1.0f;
 
     // Animation Variables
     private Animator playerAnimator;
     private Animator lockedObjectAnimator;
 
+    // Currency Variables
+    public int costAmount;
+    private int currentAmount;
+    public Text costText;
+
+    // Quest variables
+    public bool isQuestStage;
+    public int questID;
+    private int stageValue = 1;
+
     // Use this for initialization
     void Start () {
         lockedObjectAnimator = lockedObject.GetComponent<Animator>();
+
+        if(costText == null) {
+            costText = interactText.gameObject.transform.GetChild(0).GetComponent<Text>();
+        }
 
         try {
 
@@ -46,15 +63,34 @@ public class Untimed_Trigger_Event_Script : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (isTouching && Input.GetKeyDown(KeyCode.E)) {
-            playerAnimator.Play("Guitar Playing");
-            Instantiate(guitarSound, transform.position, transform.rotation);
-            padTriggered = true;
+
+        if (isTouching && !hasUsed && Input.GetKeyDown(KeyCode.E)) {
+
+            currentAmount = playerObject.GetComponent<Player>().getCurrencyAmount();
+
+            if(currentAmount >= costAmount) {
+                playerAnimator.Play("Guitar Playing");
+                Instantiate(guitarSound, transform.position, transform.rotation);
+                interactText.enabled = false;
+                padTriggered = true;
+                hasUsed = true;
+
+                playerObject.GetComponent<Player>().updateCurrencyAmount(costAmount);
+                costText.enabled = false;
+
+                if (isQuestStage) {
+                    GameManager.instance.AddCounter(questID, stageValue);
+                }
+            } else {
+                Instantiate(errorSound, transform.position, transform.rotation);
+            }
+
+
         }
 
         if (padTriggered) {
             time += Time.deltaTime;
-            if (time >= 1) {
+            if (time >= songLength) {
                 cameraObject.GetComponent<CameraScript>().SetFocusPoint(lockedObject);
                 lockedObjectAnimator.Play("doorOpening");
                 Instantiate(doorSound, transform.position, transform.rotation);
@@ -67,8 +103,12 @@ public class Untimed_Trigger_Event_Script : MonoBehaviour {
     private void OnTriggerEnter(Collider other) {
         if (other.gameObject == playerObject) {
             isTouching = true;
-            interactText.text = "Press 'E' to Rock out!";
-            interactText.enabled = true;
+            if(!hasUsed) {
+                interactText.text = "Press 'E' to Rock out!";
+                interactText.enabled = true;
+                costText.text = "Required: " + costAmount + " Beat Coins";
+                costText.enabled = true;
+            }
         }
     }
 
@@ -76,6 +116,7 @@ public class Untimed_Trigger_Event_Script : MonoBehaviour {
         if (other.gameObject == playerObject) {
             isTouching = false;
             interactText.enabled = false;
+            costText.enabled = false;
         }
     }
 }
