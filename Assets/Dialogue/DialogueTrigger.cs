@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DialogueTrigger : MonoBehaviour {
 
@@ -31,6 +32,9 @@ public class DialogueTrigger : MonoBehaviour {
 
     private GameManager gameManager;
     private GameObject cameraObject;
+
+    //UI Elements
+    public Text interactText;
 
     void Start() {
         gameManager = FindObjectOfType<GameManager>();
@@ -63,6 +67,8 @@ public class DialogueTrigger : MonoBehaviour {
 
 
         if (canTalk && Input.GetKeyDown(KeyCode.E)) {
+
+            interactText.enabled = false;
 
             FindObjectOfType<DialogueManager>().setIsQuestGiver(isQuestGiver);
             FindObjectOfType<DialogueManager>().setQuestID(questID);
@@ -113,9 +119,23 @@ public class DialogueTrigger : MonoBehaviour {
         }
     }
 
+    private void OnTriggerStay(Collider other) {
+        if(other.gameObject.tag == "Player") {
+            if(!isTalking) {
+                interactText.enabled = true;
+                interactText.text = "Press 'E' to talk!";
+            } else {
+                interactText.enabled = false;
+                interactText.text = "";
+            }
+        }
+    }
+
     private void OnTriggerExit(Collider other) {
         if (other.gameObject.tag == "Player") {
             canTalk = false;
+            interactText.enabled = false;
+            interactText.text = "";
         }
     }
 }
