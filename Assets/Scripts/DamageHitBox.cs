@@ -27,7 +27,7 @@ public class DamageHitBox : MonoBehaviour {
             }
             //----------------------------------------------------------------------------------
             // These are 'work arounds' for now. Delete after reworking enemy class.
-            else if (otherObject.transform.tag == "Flying_Enemy")
+            else if (otherObject.transform.tag == "FlyingEnemy")
             {
                 otherObject.GetComponent<Flying_Enemy>().takeDamage(damage);
                 Destroy(gameObject);
