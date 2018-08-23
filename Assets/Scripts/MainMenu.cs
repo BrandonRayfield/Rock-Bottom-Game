@@ -79,8 +79,13 @@ public class MainMenu : MonoBehaviour {
     }
 
     public void Load_Boss_Game() {
-		SceneManager.LoadScene(5);
-	}
+        SceneManager.LoadScene(5);
+    }
+
+    public void Load_Country_Game2() {
+        SceneManager.LoadScene(6);
+    }
+
     public void ExitGame() {
         Application.Quit();
     }
