@@ -12,15 +12,39 @@ public class DialogueTrigger : MonoBehaviour {
     public bool isTalking;
     public int questID;
     public bool isQuestGiver;
+
+    // Completed Quest Objects
+    public bool isRewardGiver;
+    public GameObject rewardObject;
+    public float rewardHeightPosition = 1.0f;
+    public bool isProgressor;
+    public GameObject progressObject;
+    private Animator progressObjectAnimator;
+
+
     private bool acceptedQuest;
     private bool finishedQuest;
+    private bool isUnlocked;
+    private bool isRewarded;
 
     private int currentNpcID;
 
     private GameManager gameManager;
+    private GameObject cameraObject;
 
     void Start() {
         gameManager = FindObjectOfType<GameManager>();
+
+        if(isProgressor) {
+            progressObjectAnimator = progressObject.GetComponent<Animator>();
+        }
+
+        try {
+            cameraObject = GameObject.Find("Camera");
+        } catch {
+            cameraObject = null;
+        }
+
     }
 
     public void Update() {
@@ -43,15 +67,26 @@ public class DialogueTrigger : MonoBehaviour {
             FindObjectOfType<DialogueManager>().setIsQuestGiver(isQuestGiver);
             FindObjectOfType<DialogueManager>().setQuestID(questID);
 
-            if (isQuestGiver) {
-                
-            }
-
             if(!isTalking) {
                 if(isQuestGiver && acceptedQuest && !finishedQuest) {
                     FindObjectOfType<DialogueManager>().StartDialogue(dialogueDuringQuest);
                 } else if (isQuestGiver && acceptedQuest && finishedQuest) {
                     FindObjectOfType<DialogueManager>().StartDialogue(dialogueAfterQuest);
+
+                    // If the NPC is supposed to provide the player with a reward for completing the quest, spawn reward item
+                    if(isRewardGiver && !isRewarded) {
+                        Vector3 spawnLocation = new Vector3(transform.position.x, transform.position.y + rewardHeightPosition, transform.position.z);
+                        Instantiate(rewardObject, spawnLocation, transform.rotation);
+                        isRewarded = true;
+                    }
+
+                    // If the NPC is supposed to unlock the next area for the player, open object
+                    if (isProgressor && !isUnlocked) {
+                        progressObjectAnimator.Play("doorOpening");
+                        cameraObject.GetComponent<CameraScript>().SetFocusPoint(progressObject);
+                        isUnlocked = true;
+                    }
+
                 } else {
                     FindObjectOfType<DialogueManager>().StartDialogue(dialogue);
                 }

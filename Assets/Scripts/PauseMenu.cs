@@ -151,4 +151,13 @@ public class PauseMenu : MonoBehaviour {
         Debug.Log("Quitting Game...");
         Application.Quit();
     }
+
+    public void setGuitarWeapon(GameObject newGuitar) {
+        guitarObject = newGuitar;
+    }
+
+    public void setHarmonicaWeapon(GameObject newHarmonica) {
+        harmonicaObject = newHarmonica;
+    }
+
 }

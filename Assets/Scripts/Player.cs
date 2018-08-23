@@ -11,12 +11,23 @@ public class Player : MonoBehaviour {
     public GameObject cameraObject;
     public GameObject playerModel;
 
-    //Guitar Objects
+    // Guitar Objects
+    public GameObject banjoObject;
     public GameObject guitarObject;
-    public GameObject harmonicaObject;
-    //public GameObject guitarFront;
-    //public GameObject guitarSwing;
+    public GameObject currentGuitarObject;
 
+    // Wind Objects
+    public GameObject harmonicaObject;
+    public GameObject megaphoneObject;
+    public GameObject currentHarmonicaObject;
+
+    // Instument Unlocks
+    public GameObject harmonicaSelectImage;
+    public bool harmonicaUnlocked;
+    public bool guitarUnlocked;
+    public bool megaphoneUnlocked;
+
+    // Skeleton Objects used for repositioning instruments
     public GameObject guitarParentSpine;
     public GameObject guitarParentHand;
 
@@ -156,6 +167,18 @@ public class Player : MonoBehaviour {
 
         livesText.text = "Lives: " + livesLeft;
 
+        //Sets current weapon
+        if (!guitarUnlocked && !megaphoneUnlocked) {
+            currentGuitarObject = banjoObject;
+            currentHarmonicaObject = harmonicaObject;
+            gameObject.GetComponent<PauseMenu>().setGuitarWeapon(currentGuitarObject);
+            gameObject.GetComponent<PauseMenu>().setHarmonicaWeapon(currentHarmonicaObject);
+        }
+
+        if(!harmonicaUnlocked) {
+            harmonicaSelectImage.SetActive(false);
+        }
+
         canMove = true;
         canJump = false;
         canDoubleJump = false;
@@ -245,11 +268,21 @@ public class Player : MonoBehaviour {
 
     private void Controls() {
 
+        if (!IsGrounded()) {
+            animator.Play("Jump");
+            animator.SetBool("isJumping", true);
+        } else {
+            animator.SetBool("isJumping", false);
+        }
+
         if (canMove) {
             //Jumping
             if(canJump) {
                 if (Input.GetKeyDown("space") && IsGrounded() && Time.time > jumpTime) {
-                    rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Force);
+                    Vector3 velocity = rb.velocity;
+                    velocity.y = jumpForce * Time.deltaTime;
+                    rb.velocity = velocity;
+                    //rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Force);
                     Instantiate(jumpSound, transform.position, transform.rotation);
                     canDoubleJump = true;
                     jumpTime = Time.time + jumpCoolDown;
@@ -260,7 +293,10 @@ public class Player : MonoBehaviour {
                         animator.SetBool("isJumping", false);
                         animator.Play("Jump");
                         animator.SetBool("isJumping", true);
-                        rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Force);
+                        Vector3 velocity = rb.velocity;
+                        velocity.y = jumpForce * Time.deltaTime;
+                        rb.velocity = velocity;
+                        //rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Force);
                         Instantiate(jumpSound, transform.position, transform.rotation);
                         canDoubleJump = false;
                     }
@@ -268,14 +304,6 @@ public class Player : MonoBehaviour {
 
             }
             
-            if (!IsGrounded()) {
-                animator.Play("Jump");
-                animator.SetBool("isJumping", true);
-            }
-            else {
-                animator.SetBool("isJumping", false);
-            }
-
             if (Input.GetKey("s") && canPhase) {
                 platformCollider.enabled = false;
             }
@@ -350,6 +378,10 @@ public class Player : MonoBehaviour {
         return Physics.Raycast (transform.position, -Vector3.up, distToGround + 0.1f);
 	}
 
+    public void Damage() {
+        currentGuitarObject.GetComponent<Weapon>().CallDamage();
+    }
+
     public void takeDamage(float damage) {
         if (Time.time >= damageTimer && !invulnerable) {
             health -= damage;
@@ -407,6 +439,17 @@ public class Player : MonoBehaviour {
                 livesLeft = livesLeft + itemValue;
                 livesText.text = "Lives: " + livesLeft;
 
+            } else if (itemID == 600) { // Player finds and unlocks Harmonica
+                setHarmonicaUnlocked(true);
+                unlockHarmonica();
+
+            } else if (itemID == 601) { // Player finds and unlocks Guitar
+                setGuitarUnlocked(true);
+                unlockGuitar();
+
+            } else if (itemID == 602) { // Player finds and unlocks Megaphone
+                setMegaphoneUnlocked(true);
+                unlockMegaphone();
             } else { // Player picks up quest item. itemID should be the same as the questID
                 GameManager.instance.AddCounter(itemID, itemValue);
                 Instantiate(shardSound, transform.position, transform.rotation);
@@ -476,6 +519,12 @@ public class Player : MonoBehaviour {
         if (other.transform.tag == "CrusherFloor") {
             touchBottomCrush = false;
         }
+
+        if (other.transform.tag == "Rope") {
+            canSwing = false;
+            ropeObject = null;
+        }
+
     }
 
     public void gainHealth(int healthRecovered) {
@@ -488,22 +537,43 @@ public class Player : MonoBehaviour {
         healthBar.value = (health / maxHealth);
     }
 
+    private void unlockHarmonica() {
+        harmonicaSelectImage.SetActive(true);
+        currentHarmonicaObject = harmonicaObject;
+        gameObject.GetComponent<PauseMenu>().setHarmonicaWeapon(currentHarmonicaObject);
+        gameObject.GetComponent<PauseMenu>().selectHarmonica();
+    }
+
+    private void unlockGuitar() {
+        currentGuitarObject.SetActive(false);
+        currentGuitarObject = guitarObject;
+        gameObject.GetComponent<PauseMenu>().setGuitarWeapon(currentGuitarObject);
+        gameObject.GetComponent<PauseMenu>().selectGuitar();
+    }
+
+    private void unlockMegaphone() {
+        currentHarmonicaObject.SetActive(false);
+        currentHarmonicaObject = megaphoneObject;
+        gameObject.GetComponent<PauseMenu>().setHarmonicaWeapon(currentHarmonicaObject);
+        gameObject.GetComponent<PauseMenu>().selectHarmonica();
+    }
+
     //---------------------------------------------------------------------------------------------------------------------
     // These are used in animation events, make sure to keep them.
     public void IdleStance() {
-        guitarObject.GetComponent<Weapon>().SetIdleStance(0);
-        harmonicaObject.GetComponent<Weapon>().SetIdleStance(0);
+        currentGuitarObject.GetComponent<Weapon>().SetIdleStance(0);
+        currentHarmonicaObject.GetComponent<Weapon>().SetIdleStance(0);
     }
 
     public void PlayGuitarStance() {
-        guitarObject.GetComponent<Weapon>().SetIdleStance(1);
-        harmonicaObject.GetComponent<Weapon>().SetIdleStance(1);
+        currentGuitarObject.GetComponent<Weapon>().SetIdleStance(1);
+        currentHarmonicaObject.GetComponent<Weapon>().SetIdleStance(1);
 
     }
 
     public void AttackStance() {
-        guitarObject.GetComponent<Weapon>().SetIdleStance(2);
-        harmonicaObject.GetComponent<Weapon>().SetIdleStance(2);
+        currentGuitarObject.GetComponent<Weapon>().SetIdleStance(2);
+        currentHarmonicaObject.GetComponent<Weapon>().SetIdleStance(2);
     }
 
     //---------------------------------------------------------------------------------------------------------------------
@@ -555,4 +625,30 @@ public class Player : MonoBehaviour {
         canSwing = letSwing;
     }
 
+    //---------------------------------------------------------------------------------------------------------------------
+    // Getters and Setters for Instuments
+
+    public void setHarmonicaUnlocked(bool hasUnlocked) {
+        harmonicaUnlocked = hasUnlocked;
+    }
+
+    public void setGuitarUnlocked(bool hasUnlocked) {
+        guitarUnlocked = hasUnlocked;
+    }
+
+    public void setMegaphoneUnlocked(bool hasUnlocked) {
+        megaphoneUnlocked = hasUnlocked;
+    }
+
+    public bool getHarmonicaUnlocked() {
+        return harmonicaUnlocked;
+    }
+
+    public bool getGuitarUnlocked() {
+        return guitarUnlocked;
+    }
+
+    public bool getMegaphoneUnlocked() {
+        return megaphoneUnlocked;
+    }
 }
