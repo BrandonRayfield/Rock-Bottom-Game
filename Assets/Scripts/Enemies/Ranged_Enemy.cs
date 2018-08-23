@@ -140,6 +140,7 @@ public class Ranged_Enemy : MonoBehaviour {
             dead = true;
             Instantiate(deathSound, transform.position, transform.rotation);
             this.transform.tag = "Untagged";
+            //gameObject.GetComponent<Collider>().enabled = false;
         }
     }
 
