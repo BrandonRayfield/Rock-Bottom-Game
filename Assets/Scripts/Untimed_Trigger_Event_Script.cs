@@ -28,6 +28,7 @@ public class Untimed_Trigger_Event_Script : MonoBehaviour {
     // Animation Variables
     private Animator playerAnimator;
     private Animator lockedObjectAnimator;
+	public string animationName; 
 
     // Currency Variables
     public int costAmount;
@@ -92,7 +93,7 @@ public class Untimed_Trigger_Event_Script : MonoBehaviour {
             time += Time.deltaTime;
             if (time >= songLength) {
                 cameraObject.GetComponent<CameraScript>().SetFocusPoint(lockedObject);
-                lockedObjectAnimator.Play("doorOpening");
+				lockedObjectAnimator.Play(animationName);
                 Instantiate(doorSound, transform.position, transform.rotation);
                 time = 0;
                 padTriggered = false;
