@@ -22,7 +22,10 @@ public class DamageHitBox : MonoBehaviour {
 
         if (player) {
             if (otherObject.transform.tag == "Enemy" && !hasDamaged) {
-                otherObject.GetComponent<Enemy>().takeDamage(damage);
+                if (otherObject.GetComponent<Enemy>() != null)
+                    otherObject.GetComponent<Enemy>().takeDamage(damage);
+                else if (otherObject.GetComponent<Chaser>() != null)
+                    otherObject.GetComponent<Chaser>().takeDamage(damage);
                 hasDamaged = true;
             }
             //----------------------------------------------------------------------------------

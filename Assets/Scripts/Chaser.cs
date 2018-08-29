@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Chaser : MonoBehaviour {
 
@@ -14,6 +15,7 @@ public class Chaser : MonoBehaviour {
 
     //properties
     private Rigidbody rb;
+    public EnemyGeneric enemygeneric;
 
     //Targeting
     public bool playerSeen = false;
@@ -24,20 +26,36 @@ public class Chaser : MonoBehaviour {
     public Vector3 damageLocation;
 
     //Health Bar Objects
+    public int health = 100;
     public GameObject EnemyHealthBar;
     private Transform healthBarTarget;
-    private GameObject EnemyHealth;
-    private bool hasBeenDamaged;
-    private float healthBarDisappearTime = 3.0f;
+    public GameObject EnemyHealth;
     private float currentHealthDisTime;
+    private bool dead = false;
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody>();
         player  = GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<Player>();
-	}
+
+        enemygeneric = GetComponent<EnemyGeneric>();
+        enemygeneric.health = 100;
+
+        //health bar
+        EnemyHealth = Instantiate(EnemyHealthBar);
+        EnemyHealth.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
+
+        EnemyHealth.SetActive(false);
+    }
+
+    private void Awake() {
+        healthBarTarget = gameObject.transform;
+    }
 	
 	// Update is called once per frame
 	void Update () {
+        //Health bar update
+        EnemyHealth.transform.position = Camera.main.WorldToScreenPoint(new Vector3(healthBarTarget.position.x, healthBarTarget.position.y + 1, healthBarTarget.position.z));
+
         //Check if player is visible
         if (playerSeen && direction != (int)Mathf.Sign(player.transform.position.x - transform.position.x) &&
             turnTimer < Time.time) {
@@ -89,7 +107,12 @@ public class Chaser : MonoBehaviour {
 
             //Is there another platform across the pit
         } else if (Physics.Linecast(middle + 3f * Vector3.right * direction,
-            middle + 3f * Vector3.right * direction + 2 * Vector3.down, obstruction)) {
+            middle + 3f * Vector3.right * direction + 3 * Vector3.down, obstruction)) {
+            jump();
+            return true;
+
+        } else if (Physics.Linecast(middle + 2f * Vector3.right * direction + Vector3.up,
+         middle + 2f * Vector3.right * direction + Vector3.down, obstruction)) {
             jump();
             return true;
 
@@ -163,5 +186,24 @@ public class Chaser : MonoBehaviour {
             direction = direction * -1;
         }
 
+    }
+
+    public void takeDamage(float damage) {
+        if (currentHealthDisTime < Time.time) {
+            enemygeneric.health -= damage;
+
+            EnemyHealth.SetActive(true);
+            EnemyHealth.GetComponent<Slider>().value = (enemygeneric.health / enemygeneric.maxHealth);
+
+            currentHealthDisTime = Time.time + 0.5f;
+
+            if (enemygeneric.health <= 0) {
+                dead = true;
+                //Instantiate(deathSound, transform.position, transform.rotation);
+                this.transform.tag = "Untagged";
+                Destroy(EnemyHealth.gameObject);
+                Destroy(this.gameObject);
+            }
+        }
     }
 }

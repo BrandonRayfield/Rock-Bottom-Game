@@ -29,7 +29,7 @@ public class Projectile_Script : MonoBehaviour {
 
         //----------------------------------------------------------------------------------
         // These are 'work arounds' for now. Delete after reworking enemy class.
-        else if (isFriendly && other.transform.tag == "Flying_Enemy") {
+        else if (isFriendly && other.transform.tag == "FlyingEnemy") {
             other.GetComponent<Flying_Enemy>().takeDamage(damage);
             //Create explosion effect?
             Destroy(gameObject);

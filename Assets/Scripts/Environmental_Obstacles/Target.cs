@@ -17,12 +17,21 @@ public class Target : MonoBehaviour {
 
     private int questID;
 
+    public Player player;
+
     // Use this for initialization
     void Start () {
         objectRender = targetObject.GetComponent<Renderer>();
         objectRender.material.color = Color.red;
         if (isQuestObject) {
             questID = targetManager.GetComponent<Target_Manager>().getQuestID();
+        }
+
+        try {
+            player = GameObject.Find("Player").GetComponent<Player>();
+        }
+        catch {
+            player = null;
         }
     }
 	
@@ -32,7 +41,8 @@ public class Target : MonoBehaviour {
 	}
 
     private void OnTriggerEnter(Collider other) {
-        if (other.gameObject.tag == "projectile") {
+        
+        if (other.gameObject.tag == "projectile" && Vector3.Distance(player.transform.position, transform.position) < 12f){
             if (!isTriggered) {
                 isTriggered = true;
                 if(isQuestObject) {

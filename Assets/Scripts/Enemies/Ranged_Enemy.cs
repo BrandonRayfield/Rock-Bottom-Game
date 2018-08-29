@@ -105,7 +105,8 @@ public class Ranged_Enemy : MonoBehaviour {
                     bullet.GetComponent<Projectile_Script>().SetDamage(damage);
                     bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.right * bulletSpeed);
 
-                    Instantiate(attackSound, transform.position, transform.rotation);
+                    if (Vector3.Distance(playerObject.transform.position, transform.position) < 12f)
+                        Instantiate(attackSound, transform.position, transform.rotation);
 
                     currentTime = Time.time + fireRate;
                 }
