@@ -22,8 +22,16 @@ public class Chaser : MonoBehaviour {
 
     //Attacking
     public Vector3 damageLocation;
-	// Use this for initialization
-	void Start () {
+
+    //Health Bar Objects
+    public GameObject EnemyHealthBar;
+    private Transform healthBarTarget;
+    private GameObject EnemyHealth;
+    private bool hasBeenDamaged;
+    private float healthBarDisappearTime = 3.0f;
+    private float currentHealthDisTime;
+    // Use this for initialization
+    void Start () {
         rb = GetComponent<Rigidbody>();
         player  = GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<Player>();
 	}
@@ -105,7 +113,7 @@ public class Chaser : MonoBehaviour {
 
     private void jump() {
         if (IsGrounded()) {
-            rb.AddForce(Vector3.up * 75);
+            rb.AddForce(Vector3.up * 90);
             isJumping = true;
         }
     }
@@ -145,5 +153,15 @@ public class Chaser : MonoBehaviour {
             searchTimer = Time.time + 0.25f;
         }
         
+    }
+
+    public void OnTriggerEnter(Collider other) {
+        if(other.tag == "Falloff") {
+            Destroy(this.gameObject);
+        } else if (other.tag == "Enemy") {
+            transform.Rotate(new Vector3(0f, 180f, 0f));
+            direction = direction * -1;
+        }
+
     }
 }
