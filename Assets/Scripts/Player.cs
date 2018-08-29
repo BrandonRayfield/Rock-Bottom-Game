@@ -103,8 +103,8 @@ public class Player : MonoBehaviour {
     private float slowDuration = 2.0f;
 
     // Obstacle Variables
-    private bool touchTopCrush;
-    private bool touchBottomCrush;
+    public bool touchTopCrush;
+    public bool touchBottomCrush;
 
     //UI Variables
     public GameObject goldKeyUI;
@@ -280,13 +280,13 @@ public class Player : MonoBehaviour {
                     gameResult.enabled = false;
                     dead = false;
                     if (spawnPoint == null) {
-                        gameObject.transform.position = startPoint.transform.position;
+                        gameObject.transform.position = new Vector3(startPoint.transform.position.x, startPoint.transform.position.y, gameObject.transform.position.z);
                         cameraObject.transform.position = startPoint.transform.position;
                         health = maxHealth;
                         time = 3f;
 
                     } else {
-                        gameObject.transform.position = spawnPoint.transform.position;
+                        gameObject.transform.position = new Vector3 (spawnPoint.transform.position.x, spawnPoint.transform.position.y, gameObject.transform.position.z);
                         cameraObject.transform.position = spawnPoint.transform.position;
                         health = maxHealth;
                         time = 3f;
