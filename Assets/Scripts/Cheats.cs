@@ -29,67 +29,51 @@ public class Cheats : MonoBehaviour {
         if(isAdmin) {
             if (Input.GetKey(KeyCode.F1)) {
                 currentCheckpoint = 0;
-                if (checkpoint.Length > currentCheckpoint) {
-                    gameObject.transform.position = checkpoint[currentCheckpoint].transform.position;
-                    cameraObject.transform.position = checkpoint[currentCheckpoint].transform.position;
-                }
+                teleportPlayer(currentCheckpoint);
             }
 
             if (Input.GetKey(KeyCode.F2)) {
                 currentCheckpoint = 1;
-                if (checkpoint.Length > currentCheckpoint) {
-                    gameObject.transform.position = checkpoint[currentCheckpoint].transform.position;
-                    cameraObject.transform.position = checkpoint[currentCheckpoint].transform.position;
-                }
+                teleportPlayer(currentCheckpoint);
             }
 
             if (Input.GetKey(KeyCode.F3)) {
                 currentCheckpoint = 2;
-                if (checkpoint.Length > currentCheckpoint) {
-                    gameObject.transform.position = checkpoint[currentCheckpoint].transform.position;
-                    cameraObject.transform.position = checkpoint[currentCheckpoint].transform.position;
-                }
+                teleportPlayer(currentCheckpoint);
             }
 
             if (Input.GetKey(KeyCode.F4)) {
                 currentCheckpoint = 3;
-                if (checkpoint.Length > currentCheckpoint) {
-                    gameObject.transform.position = checkpoint[currentCheckpoint].transform.position;
-                    cameraObject.transform.position = checkpoint[currentCheckpoint].transform.position;
-                }
+                teleportPlayer(currentCheckpoint);
             }
 
             if (Input.GetKey(KeyCode.F5)) {
                 currentCheckpoint = 4;
-                if (checkpoint.Length > currentCheckpoint) {
-                    gameObject.transform.position = checkpoint[currentCheckpoint].transform.position;
-                    cameraObject.transform.position = checkpoint[currentCheckpoint].transform.position;
-                }
+                teleportPlayer(currentCheckpoint);
             }
 
             if (Input.GetKey(KeyCode.F6)) {
                 currentCheckpoint = 5;
-                if (checkpoint.Length > currentCheckpoint) {
-                    gameObject.transform.position = checkpoint[currentCheckpoint].transform.position;
-                    cameraObject.transform.position = checkpoint[currentCheckpoint].transform.position;
-                }
+                teleportPlayer(currentCheckpoint);
             }
 
             if (Input.GetKey(KeyCode.F7)) {
                 currentCheckpoint = 6;
-                if (checkpoint.Length > currentCheckpoint) {
-                    gameObject.transform.position = checkpoint[currentCheckpoint].transform.position;
-                    cameraObject.transform.position = checkpoint[currentCheckpoint].transform.position;
-                }
+                teleportPlayer(currentCheckpoint);
             }
 
             if (Input.GetKey(KeyCode.F8)) {
                 currentCheckpoint = 7;
-                if (checkpoint.Length > currentCheckpoint) {
-                    gameObject.transform.position = checkpoint[currentCheckpoint].transform.position;
-                    cameraObject.transform.position = checkpoint[currentCheckpoint].transform.position;
-                }
+                teleportPlayer(currentCheckpoint);
             }
         }
-    }      
+    }
+
+    private void teleportPlayer(int newCheckpoint) {
+        if (checkpoint.Length > newCheckpoint) {
+            gameObject.transform.position = new Vector3(checkpoint[newCheckpoint].transform.position.x, checkpoint[newCheckpoint].transform.position.y, gameObject.transform.position.z);
+            cameraObject.transform.position = checkpoint[newCheckpoint].transform.position;
+        }
+    }
+          
 }
