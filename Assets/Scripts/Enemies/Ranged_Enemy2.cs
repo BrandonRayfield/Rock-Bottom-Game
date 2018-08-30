@@ -18,6 +18,15 @@ public class Ranged_Enemy2 : MonoBehaviour {
     public float fireRate;
     public float currentTime;
 
+    // Move Variables
+    public bool isMover;
+    public bool isRandom;
+    private bool hasShot;
+    private int currentPosition;
+    private int newPosition;
+    public GameObject location0;
+    public GameObject location1;
+
     // Player Object
     private GameObject playerObject;
 
@@ -47,6 +56,12 @@ public class Ranged_Enemy2 : MonoBehaviour {
     // Use this for initialization
     void Start() {
         currentTime = Time.time + fireRate;
+
+        // Setting Movement variables
+        if(isMover) {
+            currentPosition = 1;
+            gameObject.transform.position = location0.transform.position;
+        }
 
         // Enemy Generic Setup (will need to rework this)
         enemygeneric = GetComponent<EnemyGeneric>();
@@ -85,6 +100,29 @@ public class Ranged_Enemy2 : MonoBehaviour {
         //Updating position of enemy healthbar
         EnemyHealth.transform.position = Camera.main.WorldToScreenPoint(new Vector3(healthBarTarget.position.x, healthBarTarget.position.y + 1, healthBarTarget.position.z));
 
+        if(isMover && hasShot) {
+            if(currentPosition == 0) {
+                gameObject.transform.position = location0.transform.position;
+
+                if (isRandom) {
+                    currentPosition = Random.Range(0, 2);
+                } else {
+                    currentPosition = 1;
+                }
+
+                hasShot = false;
+            } else if(currentPosition == 1) {
+                gameObject.transform.position = location1.transform.position;
+                if (isRandom) {
+                    currentPosition = Random.Range(0, 2);
+                } else {
+                    currentPosition = 0;
+                }
+                hasShot = false;
+            }
+        }
+
+
         if (!dead) {
             //shootLocation.transform.LookAt(playerObject.transform);
             //shootLocation.transform.right = (playerObject.transform.position - transform.position).normalized;
@@ -99,6 +137,8 @@ public class Ranged_Enemy2 : MonoBehaviour {
                     Instantiate(attackSound, transform.position, transform.rotation);
 
                 currentTime = Time.time + fireRate;
+
+                hasShot = true;
 
             }
         }
