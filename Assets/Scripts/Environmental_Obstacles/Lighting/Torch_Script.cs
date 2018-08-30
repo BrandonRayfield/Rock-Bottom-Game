@@ -62,8 +62,12 @@ public class Torch_Script : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other) {
         if(other.gameObject.tag == "projectile") {
+            Debug.Log("Torch Lit");
             LightTorch();
             Destroy(other.gameObject);
+        } else if (other.gameObject.tag == "Ability2") {
+            Debug.Log("Torch Lit");
+            LightTorch();
         }
     }
 
