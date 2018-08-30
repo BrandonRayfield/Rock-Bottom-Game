@@ -9,7 +9,7 @@ public class Chaser : MonoBehaviour {
     public float moveSpeed;
     public int direction = 1;
     private float turnTimer = 0;
-    private bool isJumping = false;
+    public bool isJumping = false;
 
     private LayerMask obstruction = 1 << 9;
 
@@ -66,6 +66,10 @@ public class Chaser : MonoBehaviour {
 
         }
 
+        if (platform()) {
+            jump();
+        }
+
         if ((noDrop() && !blocked()) || isJumping) {
             transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
             //print("ITS WORKING");
@@ -73,11 +77,10 @@ public class Chaser : MonoBehaviour {
             transform.Rotate(new Vector3(0f, 180f, 0f));
             direction = direction * -1;
         }
-        if (isJumping && IsGrounded()) isJumping = false;
-
-        if (platform()) {
-            jump();
+        if (IsGrounded()) {
+            isJumping = false;
         }
+        
 
 
         
