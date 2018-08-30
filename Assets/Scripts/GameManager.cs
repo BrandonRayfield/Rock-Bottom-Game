@@ -45,20 +45,14 @@ public class GameManager : MonoBehaviour {
             if (quest.isCollectQuest) {
                 if(quest.totalAmount == 0) {
                     quest.totalAmount = GetAmountTotal(quest.objectTag);
-                    quest.currentAmount = quest.totalAmount - GetAmountTotal(quest.objectTag);
-                } else {
-                    quest.currentAmount = 0;
                 }
-                
+
                 quest.previousAmount = quest.currentAmount;
             } else if (quest.isKillQuest) {
                 if (quest.totalAmount == 0) {
                     quest.totalAmount = GetAmountTotal(quest.objectTag);
-                    quest.currentAmount = quest.totalAmount - GetAmountTotal(quest.objectTag);
-                } else {
-                    quest.currentAmount = quest.totalAmount - quest.currentAmount;
                 }
-                
+
                 quest.previousAmount = quest.currentAmount;
             } else if (quest.isDestroyQuest) {
                 //quest.targetObject = GameObject.FindGameObjectWithTag(quest.objectTag);
@@ -90,6 +84,7 @@ public class GameManager : MonoBehaviour {
                 //quest.currentAmount = quest.totalAmount - GetAmountTotal(quest.objectTag);
             } else if (quest.isKillQuest) {
                 quest.currentAmount = quest.totalAmount - GetAmountTotal(quest.objectTag);
+
             } else if (quest.isDestroyQuest) {
                 quest.isComplete = isDestroyed(quest.targetObject, quest);
             }
