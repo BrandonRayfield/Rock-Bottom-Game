@@ -9,6 +9,7 @@ public class Boss : MonoBehaviour {
 
     public state current_state = state.idle;
 
+    Animator animator;
     //movement variables
     public float speed;
     private Rigidbody rb;
@@ -25,17 +26,21 @@ public class Boss : MonoBehaviour {
     //Crush variables
     private Vector3 crush_location;
     private bool drop = false;
+    public Quaternion crush_rotation;
+    public GameObject crush_effect;
 
     //Smash variables
     public GameObject smash_projectile;
 	// Use this for initialization
 	void Start () {
-
-	}
+        rb = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
+        direction = (int)Mathf.Sign((player.transform.position.x - transform.position.x));
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        rb = GetComponent<Rigidbody>();
+
         switch (current_state) {
             case state.charge:
                 charge();
@@ -51,9 +56,10 @@ public class Boss : MonoBehaviour {
                 break;
         }
 
+        
         if (cycle_timer < Time.time) cycle();
 
-
+        
        
 
     }
@@ -73,6 +79,7 @@ public class Boss : MonoBehaviour {
         switch (new_state) {
             case 1:
                 //transform.Rotate(Vector3.forward * 55 * -direction);
+                animator.Play("Charge");
                 current_state = state.charge;
                 break;
             case 2:
@@ -80,6 +87,7 @@ public class Boss : MonoBehaviour {
                 current_state = state.crush;
                 break;
             case 3:
+                animator.Play("Roar");
                 current_state = state.smash;
                 break;
             case 4:
@@ -91,7 +99,11 @@ public class Boss : MonoBehaviour {
                 break;
         }
         //change direction
-        direction = (int)Mathf.Sign((player.transform.position.x - transform.position.x));
+        if (direction != (int)Mathf.Sign(player.transform.position.x - transform.position.x)) {
+            direction = (int)Mathf.Sign((player.transform.position.x - transform.position.x));
+            transform.Rotate(Vector3.up, 180f);
+        }
+
         //reset timer
         cycle_timer = Time.time + 3f;
     }
@@ -103,6 +115,13 @@ public class Boss : MonoBehaviour {
     public void OnTriggerEnter(Collider other) {
         if (current_state == state.charge && other.transform.tag == "Wall") {
             cycle();
+            cycle_timer = Time.time + 15f;
+            animator.Play("Idle");
+        }
+        if (current_state == state.crush && other.transform.tag == "Wall") {
+            GameObject projectile = Instantiate(crush_effect, transform.position + new Vector3(direction, 0.5f, 0), crush_rotation);
+            cycle();
+            cycle_timer = Time.time + 15f;
         }
     }
 
@@ -129,10 +148,12 @@ public class Boss : MonoBehaviour {
     public void crush() {
         if (crush_location == Vector3.zero) {
             crush_location = player.transform.position + new Vector3(0f, 8f, 0f);
+            animator.Play("Smash");
+            
         }
         if (!drop) {
             rb.velocity = Vector3.Normalize(crush_location - transform.position) * speed * 1.5f * Time.deltaTime;
-            if (Vector3.Distance(crush_location, transform.position) <= 2) drop = true;
+            if (Vector3.Distance(crush_location, transform.position) <= 0.2f) drop = true;
         } else {
             rb.velocity = Vector3.down * speed * 4 * Time.deltaTime;
         }
@@ -140,10 +161,12 @@ public class Boss : MonoBehaviour {
 
     public void smash() {
         if (!drop) {
-            GameObject projectile = Instantiate(smash_projectile, transform.position + new Vector3(direction,-0.5f,0), transform.rotation);
+            GameObject projectile = Instantiate(smash_projectile, transform.position + new Vector3(direction, 0.25f, 0f), crush_rotation);
             Rigidbody projectile_rb = projectile.GetComponent<Rigidbody>();
             projectile_rb.velocity = new Vector3(direction * speed * Time.deltaTime, 0f, 0f);
             projectile_rb.useGravity = false;
+
+            
 
             drop = true;
         }

@@ -24,6 +24,9 @@ public class Chaser : MonoBehaviour {
 
     //Attacking
     public Vector3 damageLocation;
+    public GameObject damageHitBox;
+    public float attackRange;
+    private float attackTimer = 0;
 
     //Health Bar Objects
     public int health = 100;
@@ -68,6 +71,22 @@ public class Chaser : MonoBehaviour {
 
         if (platform()) {
             jump();
+        }
+
+        if (playerSeen && Vector3.Distance(transform.position, player.transform.position) < attackRange 
+            && IsGrounded() && attackTimer < Time.time) {
+            Vector3 location = (player.transform.position + Vector3.up) - transform.position;
+            location = Vector3.Normalize(location);
+                rb.AddForce(location * 90);
+                isJumping = true;
+            GameObject damageBox = Instantiate(damageHitBox, transform.position, transform.rotation);
+            damageBox.transform.parent = transform;
+
+            /*attackTimer = Time.time + 2f;
+            playerSeen = false;
+            direction = (int)Mathf.Sign(transform.position.x - player.transform.position.x);
+            Quaternion rotation = transform.rotation;
+            rotation.y = 90 * (int)Mathf.Sign(player.transform.position.x - transform.position.x);*/
         }
 
         if ((noDrop() && !blocked()) || isJumping) {
@@ -143,6 +162,7 @@ public class Chaser : MonoBehaviour {
             isJumping = true;
         }
     }
+
     //platform to jump up to
     private bool platform() {
         Vector3 middle = transform.position + Vector3.up * 0.25f;
@@ -167,6 +187,7 @@ public class Chaser : MonoBehaviour {
     }
 
     private void search() {
+
         if (!Physics.Linecast(transform.position + 0.25f * Vector3.up, player.transform.position, obstruction) &&
             Vector3.Distance(transform.position + 0.25f * Vector3.up, player.transform.position) <= 8f) {
 
@@ -178,7 +199,8 @@ public class Chaser : MonoBehaviour {
             playerSeen = false;
             searchTimer = Time.time + 0.25f;
         }
-        
+
+        //if (attackTimer > Time.time) playerSeen = false;
     }
 
     public void OnTriggerEnter(Collider other) {
