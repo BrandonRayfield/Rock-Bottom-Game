@@ -7,7 +7,7 @@ public class Target_Manager : MonoBehaviour {
 
 
     public GameObject[] targets;
-    public bool isQuest;
+    public bool isQuest, isNPCQuest;
     public int questID;
     private int targetsLeft;
     private int totalTargets;
@@ -76,7 +76,7 @@ public class Target_Manager : MonoBehaviour {
             hasUpdated = false;
         }
 
-        if(isComplete) {
+        if(!isNPCQuest && isComplete) {
             GameManager.instance.CompletedQuest(questID);
             lockedObjectAnimator.Play("doorOpening");
             if (newFocus) {
