@@ -17,9 +17,17 @@ public class Avalanche_Script : MonoBehaviour {
     private float xPosition;
     private float newRandomHeight;
 
+    // Guitar Abiltity 2 Variables 
+    private bool disabled;
+    private bool canTrigger;
+    private float amountFalling;
+    private float resetTime = 8.0f;
+
     // Use this for initialization
     void Start () {
         baseSpawnHeight = gameObject.transform.position.y;
+        amountFalling = spawnAreaRange * 2;
+        canTrigger = true;
     }
 	
 	// Update is called once per frame
@@ -28,7 +36,7 @@ public class Avalanche_Script : MonoBehaviour {
 
             for(int i = 0; i < amountSpawned; i++) {
                 randomPosition = Random.Range(-spawnAreaRange, spawnAreaRange);
-                randomHeight = Random.Range(0, 10);
+                //randomHeight = Random.Range(0, 10);
 
                 xPosition = gameObject.transform.position.x + randomPosition;
                 //newRandomHeight = baseSpawnHeight + randomHeight;
@@ -39,5 +47,34 @@ public class Avalanche_Script : MonoBehaviour {
 
             objectSpawnTime = Time.time + objectSpawnRate; 
         }
-	}
+
+        if(disabled) {
+            for (int i = 0; i < amountFalling; i++) {
+
+                xPosition = gameObject.transform.position.x + (-spawnAreaRange + i);
+                //newRandomHeight = baseSpawnHeight + randomHeight;
+                newRandomHeight = baseSpawnHeight;
+
+                if(i % 2 == 0) {
+                    Instantiate(fallingObject, new Vector3(xPosition, newRandomHeight, 0), Quaternion.identity);
+                }
+
+            }
+            objectSpawnTime = Time.time + resetTime;
+            disabled = false;
+            Invoke("setCanTriggerTrue", resetTime);
+        }
+    }
+
+    private void setCanTriggerTrue() {
+        canTrigger = true;
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        if(canTrigger && other.gameObject.tag == "Ability2") {
+            disabled = true;
+            canTrigger = false;
+        }
+    }
+
 }
