@@ -27,6 +27,8 @@ public class Chaser : MonoBehaviour {
     public GameObject damageHitBox;
     public float attackRange;
     private float attackTimer = 0;
+    private bool attacked = false;
+    private float stupidAttackLandingTimer = 0;
 
     //Health Bar Objects
     public int health = 100;
@@ -82,11 +84,9 @@ public class Chaser : MonoBehaviour {
             GameObject damageBox = Instantiate(damageHitBox, transform.position, transform.rotation);
             damageBox.transform.parent = transform;
 
-            /*attackTimer = Time.time + 2f;
-            playerSeen = false;
-            direction = (int)Mathf.Sign(transform.position.x - player.transform.position.x);
-            Quaternion rotation = transform.rotation;
-            rotation.y = 90 * (int)Mathf.Sign(player.transform.position.x - transform.position.x);*/
+            attacked = true;
+            stupidAttackLandingTimer = Time.time + 0.1f;
+            
         }
 
         if ((noDrop() && !blocked()) || isJumping) {
@@ -209,6 +209,14 @@ public class Chaser : MonoBehaviour {
         } else if (other.tag == "Enemy") {
             transform.Rotate(new Vector3(0f, 180f, 0f));
             direction = direction * -1;
+        } else if (other.tag == "Wall" && stupidAttackLandingTimer < Time.time) {
+            attacked = false;
+            //Stop from attacking the player
+            //update timers
+            attackTimer = Time.time + 2f;
+            searchTimer = Time.time + 2f;
+            //stop chasing
+            playerSeen = false;
         }
 
     }
