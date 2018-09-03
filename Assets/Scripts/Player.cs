@@ -323,7 +323,7 @@ public class Player : MonoBehaviour {
                     //rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Force);
                     Instantiate(jumpSound, transform.position, transform.rotation);
                     canDoubleJump = true;
-                    jumpTime = Time.time + jumpCoolDown;
+                    //jumpTime = Time.time + jumpCoolDown;
                 }
 
                 if(unlockedDoubleJump) {

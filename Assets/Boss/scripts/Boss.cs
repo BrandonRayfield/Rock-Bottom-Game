@@ -46,7 +46,7 @@ public class Boss : MonoBehaviour {
                 charge();
                 break;
             case state.summon:
-                //summon();
+                summon();
                 break;
             case state.crush:
                 crush();

@@ -56,6 +56,7 @@ public class ThunderCollider : MonoBehaviour {
             print("collision.lightning detected");
             //Add the enemy to the list
             enterRange(other.GetComponent<EnemyGeneric>());
+            checkDuplicates();
         }
     }
 
@@ -95,6 +96,16 @@ public class ThunderCollider : MonoBehaviour {
         for (int i = 0; i < InRange.Count; i++) {
 
             if (InRange[i].health <= 0) InRange.Remove(InRange[i]);
+        }
+    }
+
+    public void checkDuplicates() {
+        for (int i = 0; i < InRange.Count; i++) {
+
+            for (int j = 0; j < InRange.Count; j++) {
+
+                if (InRange[i].gameObject == InRange[j].gameObject && i != j) InRange.Remove(InRange[j]);
+            }
         }
     }
 }
