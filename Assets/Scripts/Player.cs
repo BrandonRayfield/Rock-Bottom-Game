@@ -231,7 +231,9 @@ public class Player : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-
+        if (!dead && !isCutscene) {
+            Controls();
+        }
         if (canSwing && Input.GetKey(KeyCode.E)) {
 
             //gameObject.transform.parent = ropeObject.transform;
@@ -267,7 +269,7 @@ public class Player : MonoBehaviour {
 
     private void FixedUpdate() {
         if (!dead && !isCutscene) {
-            Controls();
+            //Controls();
         } else if (dead) {
             animator.Play("Dead");
 

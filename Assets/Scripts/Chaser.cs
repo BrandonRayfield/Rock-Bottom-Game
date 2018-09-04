@@ -79,12 +79,16 @@ public class Chaser : MonoBehaviour {
             && IsGrounded() && attackTimer < Time.time) {
             Vector3 location = (player.transform.position + Vector3.up) - transform.position;
             location = Vector3.Normalize(location);
-                rb.AddForce(location * 90);
+                rb.AddForce(location * 300);
                 isJumping = true;
             GameObject damageBox = Instantiate(damageHitBox, transform.position, transform.rotation);
             damageBox.transform.parent = transform;
 
-            attacked = true;
+            playerSeen = false;
+            searchTimer = Time.time + 1f;
+
+
+            //attacked = true;
             stupidAttackLandingTimer = Time.time + 0.1f;
             
         }
@@ -105,7 +109,7 @@ public class Chaser : MonoBehaviour {
         
 
         //Timer updates
-        searchTimer -= Time.deltaTime;
+        //searchTimer -= Time.deltaTime;
         if (searchTimer <= Time.time) {
             playerSeen = false;
             search();
@@ -209,15 +213,7 @@ public class Chaser : MonoBehaviour {
         } else if (other.tag == "Enemy") {
             transform.Rotate(new Vector3(0f, 180f, 0f));
             direction = direction * -1;
-        } else if (other.tag == "Wall" && stupidAttackLandingTimer < Time.time) {
-            attacked = false;
-            //Stop from attacking the player
-            //update timers
-            attackTimer = Time.time + 2f;
-            searchTimer = Time.time + 2f;
-            //stop chasing
-            playerSeen = false;
-        }
+        } 
 
     }
 

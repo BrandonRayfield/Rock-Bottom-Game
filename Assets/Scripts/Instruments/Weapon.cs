@@ -97,7 +97,7 @@ public abstract class Weapon : MonoBehaviour {
         GameObject hitBox = Instantiate(damageHitBox, damageLocation.transform.position,
             Quaternion.Euler(new Vector3(0, 0, angle)), damageLocation.transform);
         hitBox.GetComponent<DamageHitBox>().damage = weaponDamage;
-        hitBox.GetComponent<DamageHitBox>().moveForward(0.8f);
+        hitBox.GetComponent<DamageHitBox>().moveForward(1f);
 
     }
 
