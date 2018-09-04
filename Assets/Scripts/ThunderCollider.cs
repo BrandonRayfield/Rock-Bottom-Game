@@ -51,7 +51,7 @@ public class ThunderCollider : MonoBehaviour {
     }
     public void OnTriggerEnter(Collider other) {
         //If it's an enemy
-        if (other.tag == "Enemy" || other.tag == "FlyingEnemy") {
+        if (other.tag == "Enemy" || other.tag == "FlyingEnemy" || other.tag == "Chaser") {
             //Check
             print("collision.lightning detected");
             //Add the enemy to the list
@@ -63,7 +63,7 @@ public class ThunderCollider : MonoBehaviour {
 
     public void OnTriggerExit(Collider other) {
         //If it's an enemy
-        if (other.tag == "Enemy" || other.tag == "FlyingEnemy") {
+        if (other.tag == "Enemy" || other.tag == "FlyingEnemy" || other.tag == "Chaser") {
             //Check
             Debug.Log("collision.lightning detected");
             //Add the enemy to the list
