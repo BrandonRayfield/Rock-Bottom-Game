@@ -19,6 +19,8 @@ public class LevelExit : MonoBehaviour {
     public Text interactText;
     public Text gameResult;
 
+	public int sceneNumber;
+
     void Start() {
         try {
             playerObject = GameObject.Find("Player");
@@ -37,7 +39,7 @@ public class LevelExit : MonoBehaviour {
 
             if (time > restartTime) {
                 gameResult.enabled = false;
-                SceneManager.LoadScene(0);
+				SceneManager.LoadScene(sceneNumber);
             }
         }
 
