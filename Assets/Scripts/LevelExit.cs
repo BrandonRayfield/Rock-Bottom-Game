@@ -19,7 +19,10 @@ public class LevelExit : MonoBehaviour {
     public Text interactText;
     public Text gameResult;
 
-	public int sceneNumber;
+    // Fade Variables
+    public Image fadeImage;
+
+    public int sceneNumber;
 
     void Start() {
         try {
@@ -38,8 +41,7 @@ public class LevelExit : MonoBehaviour {
             time += Time.deltaTime;
 
             if (time > restartTime) {
-                gameResult.enabled = false;
-				SceneManager.LoadScene(sceneNumber);
+                fadeImage.GetComponent<Fade_Script>().LoadNewLevel(sceneNumber);
             }
         }
 
