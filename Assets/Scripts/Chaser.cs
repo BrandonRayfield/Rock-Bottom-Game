@@ -9,7 +9,7 @@ public class Chaser : MonoBehaviour {
     public float moveSpeed;
     public int direction = 1;
     private float turnTimer = 0;
-    private bool isJumping = false;
+    public bool isJumping = false;
 
     private LayerMask obstruction = 1 << 9;
 
@@ -24,6 +24,11 @@ public class Chaser : MonoBehaviour {
 
     //Attacking
     public Vector3 damageLocation;
+    public GameObject damageHitBox;
+    public float attackRange;
+    private float attackTimer = 0;
+    private bool attacked = false;
+    private float stupidAttackLandingTimer = 0;
 
     //Health Bar Objects
     public int health = 100;
@@ -66,6 +71,28 @@ public class Chaser : MonoBehaviour {
 
         }
 
+        if (platform()) {
+            jump();
+        }
+
+        if (playerSeen && Vector3.Distance(transform.position, player.transform.position) < attackRange 
+            && IsGrounded() && attackTimer < Time.time) {
+            Vector3 location = (player.transform.position + Vector3.up) - transform.position;
+            location = Vector3.Normalize(location);
+                rb.AddForce(location * 300);
+                isJumping = true;
+            GameObject damageBox = Instantiate(damageHitBox, transform.position, transform.rotation);
+            damageBox.transform.parent = transform;
+
+            playerSeen = false;
+            searchTimer = Time.time + 1f;
+
+
+            //attacked = true;
+            stupidAttackLandingTimer = Time.time + 0.1f;
+            
+        }
+
         if ((noDrop() && !blocked()) || isJumping) {
             transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
             //print("ITS WORKING");
@@ -73,17 +100,16 @@ public class Chaser : MonoBehaviour {
             transform.Rotate(new Vector3(0f, 180f, 0f));
             direction = direction * -1;
         }
-        if (isJumping && IsGrounded()) isJumping = false;
-
-        if (platform()) {
-            jump();
+        if (IsGrounded()) {
+            isJumping = false;
         }
+        
 
 
         
 
         //Timer updates
-        searchTimer -= Time.deltaTime;
+        //searchTimer -= Time.deltaTime;
         if (searchTimer <= Time.time) {
             playerSeen = false;
             search();
@@ -140,6 +166,7 @@ public class Chaser : MonoBehaviour {
             isJumping = true;
         }
     }
+
     //platform to jump up to
     private bool platform() {
         Vector3 middle = transform.position + Vector3.up * 0.25f;
@@ -164,6 +191,7 @@ public class Chaser : MonoBehaviour {
     }
 
     private void search() {
+
         if (!Physics.Linecast(transform.position + 0.25f * Vector3.up, player.transform.position, obstruction) &&
             Vector3.Distance(transform.position + 0.25f * Vector3.up, player.transform.position) <= 8f) {
 
@@ -175,7 +203,8 @@ public class Chaser : MonoBehaviour {
             playerSeen = false;
             searchTimer = Time.time + 0.25f;
         }
-        
+
+        //if (attackTimer > Time.time) playerSeen = false;
     }
 
     public void OnTriggerEnter(Collider other) {
@@ -184,7 +213,7 @@ public class Chaser : MonoBehaviour {
         } else if (other.tag == "Enemy") {
             transform.Rotate(new Vector3(0f, 180f, 0f));
             direction = direction * -1;
-        }
+        } 
 
     }
 

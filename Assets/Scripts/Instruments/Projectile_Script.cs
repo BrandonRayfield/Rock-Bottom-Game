@@ -41,6 +41,10 @@ public class Projectile_Script : MonoBehaviour {
             other.GetComponent<Ranged_Enemy2>().takeDamage(damage);
             //Create explosion effect?
             Destroy(gameObject);
+        } else if (isFriendly && other.transform.tag == "Chaser") {
+            other.GetComponent<Chaser>().takeDamage(damage);
+            //Create explosion effect?
+            Destroy(gameObject);
         }
         //----------------------------------------------------------------------------------
 

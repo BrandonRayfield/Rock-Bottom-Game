@@ -54,6 +54,10 @@ public class Player : MonoBehaviour {
     private int walkSpeed = 10;
     private int runSpeed = 20;
 
+    private int newMovementSpeed;
+    private int newWalkSpeed = 4;
+    private int newRunSpeed = 8;
+
     //Running
     private bool isRunning;
 
@@ -103,8 +107,8 @@ public class Player : MonoBehaviour {
     private float slowDuration = 2.0f;
 
     // Obstacle Variables
-    private bool touchTopCrush;
-    private bool touchBottomCrush;
+    public bool touchTopCrush;
+    public bool touchBottomCrush;
 
     //UI Variables
     public GameObject goldKeyUI;
@@ -227,7 +231,9 @@ public class Player : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-
+        if (!dead && !isCutscene) {
+            Controls();
+        }
         if (canSwing && Input.GetKey(KeyCode.E)) {
 
             //gameObject.transform.parent = ropeObject.transform;
@@ -257,10 +263,14 @@ public class Player : MonoBehaviour {
             touchBottomCrush = false;
         }
 
-		if (!dead && !isCutscene) {
-            Controls();
-        }
-		else if (dead) {
+        //Update UI Components
+        healthBar.value = health / 100;
+    }
+
+    private void FixedUpdate() {
+        if (!dead && !isCutscene) {
+            //Controls();
+        } else if (dead) {
             animator.Play("Dead");
 
             time -= Time.deltaTime;
@@ -280,13 +290,13 @@ public class Player : MonoBehaviour {
                     gameResult.enabled = false;
                     dead = false;
                     if (spawnPoint == null) {
-                        gameObject.transform.position = startPoint.transform.position;
+                        gameObject.transform.position = new Vector3(startPoint.transform.position.x, startPoint.transform.position.y, gameObject.transform.position.z);
                         cameraObject.transform.position = startPoint.transform.position;
                         health = maxHealth;
                         time = 3f;
 
                     } else {
-                        gameObject.transform.position = spawnPoint.transform.position;
+                        gameObject.transform.position = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y, gameObject.transform.position.z);
                         cameraObject.transform.position = spawnPoint.transform.position;
                         health = maxHealth;
                         time = 3f;
@@ -294,10 +304,6 @@ public class Player : MonoBehaviour {
                 }
             }
         }
-
-
-        //Update UI Components
-        healthBar.value = health / 100;
     }
 
     private void Controls() {
@@ -319,7 +325,7 @@ public class Player : MonoBehaviour {
                     //rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Force);
                     Instantiate(jumpSound, transform.position, transform.rotation);
                     canDoubleJump = true;
-                    jumpTime = Time.time + jumpCoolDown;
+                    //jumpTime = Time.time + jumpCoolDown;
                 }
 
                 if(unlockedDoubleJump) {
@@ -387,9 +393,11 @@ public class Player : MonoBehaviour {
         if (IsGrounded ()) {
             if (isRunning) {
                 movementSpeed = runSpeed / slowDebuff;
+                newMovementSpeed = newRunSpeed;
                 animator.Play("Run");
             } else {
                 movementSpeed = walkSpeed / slowDebuff;
+                newMovementSpeed = newWalkSpeed;
                 animator.Play("Walk");
                 animator.SetBool("isWalking", true);
             }
@@ -402,10 +410,13 @@ public class Player : MonoBehaviour {
         newRotation.eulerAngles = new Vector3 (newRotation.eulerAngles.x, direction * 90, newRotation.eulerAngles.z); 
 		transform.rotation = newRotation;
 
+        // Testing new movement system... Might be too late to change now that levels have been designed with previous values.
+        //Vector3 newVelocity = rb.velocity;
+        //newVelocity.x = newMovementSpeed * direction;
+        //rb.velocity = newVelocity;
 
-
-            rb.AddForce(new Vector3(-rb.velocity.x, 0, 0), ForceMode.Force);
-			rb.AddForce (new Vector3 (direction * movementSpeed, 0, 0), ForceMode.Force);
+        rb.AddForce(new Vector3(-rb.velocity.x, 0, 0), ForceMode.Force);
+        rb.AddForce (new Vector3 (direction * movementSpeed, 0, 0), ForceMode.Force);
 	}
 
 	private bool IsGrounded(){

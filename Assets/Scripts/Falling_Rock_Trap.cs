@@ -13,9 +13,18 @@ public class Falling_Rock_Trap : MonoBehaviour {
     public GameObject rockObject;
     public GameObject rockModel;
 
+    public Vector3 com;
+    public Rigidbody rb;
+
+    public void Start() {
+        //com = new Vector3 (rockModel.transform.position.x, rockModel.transform.position.y - 0.3f, rockModel.transform.position.z);
+
+        rb = rockObject.GetComponent<Rigidbody>();
+        rb.centerOfMass = com;
+    }
 
     private void OnTriggerEnter(Collider other) {
-        if (other.gameObject.tag == "Player") {
+        if (!hitObject && other.gameObject.tag == "Player") {
             other.gameObject.GetComponent<Player>().takeDamage(damage);
             rockObject.SetActive(false);
             hitObject = true;

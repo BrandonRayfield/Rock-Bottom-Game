@@ -69,4 +69,12 @@ public class Megaphone_Script : Weapon {
         createdShield.transform.position += new Vector3(0f, 1f, 0.1f);
         playerObject.GetComponent<Player>().invulnerable = true;
     }
+
+    protected override void SpecialAttack2() {
+        createdShield = Instantiate(shield, transform.parent.transform.position, transform.parent.transform.rotation);
+
+        createdShield.transform.parent = gameObject.transform.parent;
+        createdShield.transform.position += new Vector3(0f, 1f, 0.1f);
+        playerObject.GetComponent<Player>().invulnerable = true;
+    }
 }

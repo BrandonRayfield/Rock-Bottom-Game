@@ -51,18 +51,19 @@ public class ThunderCollider : MonoBehaviour {
     }
     public void OnTriggerEnter(Collider other) {
         //If it's an enemy
-        if (other.tag == "Enemy" || other.tag == "FlyingEnemy") {
+        if (other.tag == "Enemy" || other.tag == "FlyingEnemy" || other.tag == "Chaser") {
             //Check
             print("collision.lightning detected");
             //Add the enemy to the list
             enterRange(other.GetComponent<EnemyGeneric>());
+            checkDuplicates();
         }
     }
 
 
     public void OnTriggerExit(Collider other) {
         //If it's an enemy
-        if (other.tag == "Enemy" || other.tag == "FlyingEnemy") {
+        if (other.tag == "Enemy" || other.tag == "FlyingEnemy" || other.tag == "Chaser") {
             //Check
             Debug.Log("collision.lightning detected");
             //Add the enemy to the list
@@ -95,6 +96,16 @@ public class ThunderCollider : MonoBehaviour {
         for (int i = 0; i < InRange.Count; i++) {
 
             if (InRange[i].health <= 0) InRange.Remove(InRange[i]);
+        }
+    }
+
+    public void checkDuplicates() {
+        for (int i = 0; i < InRange.Count; i++) {
+
+            for (int j = 0; j < InRange.Count; j++) {
+
+                if (InRange[i].gameObject == InRange[j].gameObject && i != j) InRange.Remove(InRange[j]);
+            }
         }
     }
 }

@@ -46,7 +46,7 @@ public class Falling_Trap : MonoBehaviour {
 	}
 
     private void OnTriggerStay(Collider other) {
-        if (other.gameObject.tag == "Player") {
+        if (other.gameObject.tag == "Player" || other.gameObject.tag == "Ability2") {
             fallingObject.gameObject.GetComponent<Rigidbody>().useGravity = true;
             fallingObject.gameObject.GetComponent<Rigidbody>().isKinematic = false;
         }

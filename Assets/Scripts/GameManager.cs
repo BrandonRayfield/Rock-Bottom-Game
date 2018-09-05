@@ -45,20 +45,14 @@ public class GameManager : MonoBehaviour {
             if (quest.isCollectQuest) {
                 if(quest.totalAmount == 0) {
                     quest.totalAmount = GetAmountTotal(quest.objectTag);
-                    quest.currentAmount = quest.totalAmount - GetAmountTotal(quest.objectTag);
-                } else {
-                    quest.currentAmount = 0;
                 }
-                
+
                 quest.previousAmount = quest.currentAmount;
             } else if (quest.isKillQuest) {
                 if (quest.totalAmount == 0) {
                     quest.totalAmount = GetAmountTotal(quest.objectTag);
-                    quest.currentAmount = quest.totalAmount - GetAmountTotal(quest.objectTag);
-                } else {
-                    quest.currentAmount = quest.totalAmount - quest.currentAmount;
                 }
-                
+
                 quest.previousAmount = quest.currentAmount;
             } else if (quest.isDestroyQuest) {
                 //quest.targetObject = GameObject.FindGameObjectWithTag(quest.objectTag);
@@ -69,7 +63,8 @@ public class GameManager : MonoBehaviour {
         Physics.IgnoreLayerCollision(8, 10);
         Physics.IgnoreLayerCollision(8, 11);
         Physics.IgnoreLayerCollision(11, 11);
-        Physics.IgnoreLayerCollision(11, 12);
+        Physics.IgnoreLayerCollision(10, 13);
+        Physics.IgnoreLayerCollision(12, 13);
     }
 	
 	// Update is called once per frame
@@ -90,6 +85,7 @@ public class GameManager : MonoBehaviour {
                 //quest.currentAmount = quest.totalAmount - GetAmountTotal(quest.objectTag);
             } else if (quest.isKillQuest) {
                 quest.currentAmount = quest.totalAmount - GetAmountTotal(quest.objectTag);
+
             } else if (quest.isDestroyQuest) {
                 quest.isComplete = isDestroyed(quest.targetObject, quest);
             }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Guitar_Script : Weapon {
 
-    //Magic Variables
+    // Special Attack 1 Variables
     public GameObject lightningControl;
     public GameObject lightningHitbox;
     public GameObject lightningParticles;
@@ -13,6 +13,11 @@ public class Guitar_Script : Weapon {
     public float channelTime = 1.0f; // How long it takes for attack to charge before actually activating
     public Vector3 target;
     private Vector3 nullTarget = new Vector3(0, 0, 0);
+
+    // Special Attack 2 Variables
+    public GameObject forceObject;
+    public float growTime;
+    private float currentGrowTime;
 
     protected override void SpecialAttack1() {
         target = lightningControl.GetComponent<ThunderCollider>().findClosest();
@@ -36,6 +41,17 @@ public class Guitar_Script : Weapon {
         }
     }
 
+    protected override void SpecialAttack2() {
+        currentDirection = playerObject.GetComponent<Player>().getPlayerDirection();
+        playerModel.transform.localEulerAngles = new Vector3(0, currentDirection * 90, 0);
+        animator.Play("Guitar Playing");
+        guitarStance = 1;
+        Instantiate(forceObject, transform.position, new Quaternion(0,0,0,0));
+        Instantiate(magicSound1, transform.position, transform.rotation);
+        Invoke("channelAbility2", channelTime);
+        magicTimer2 = Time.time + magicRate2;
+    }
+
     private void channelAbility() {
         target = lightningControl.GetComponent<ThunderCollider>().findClosest();
         //target.y += 8.5f;
@@ -44,6 +60,11 @@ public class Guitar_Script : Weapon {
         playerModel.transform.localEulerAngles = new Vector3(0, 0, 0);
         guitarStance = 0;
         //currentChannelTime = Time.time + channelTime;
+    }
+
+    private void channelAbility2() {
+        playerModel.transform.localEulerAngles = new Vector3(0, 0, 0);
+        guitarStance = 0;
     }
 
     public void lightningAttack(Vector3 target) {
