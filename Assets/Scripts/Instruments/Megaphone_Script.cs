@@ -13,6 +13,9 @@ public class Megaphone_Script : Weapon {
     public GameObject shield;
     private GameObject createdShield;
 
+    // Special Attack 2 Variables
+    public GameObject lightningControl;
+
 
     protected override void Damage() {
         Vector3 mousePos;
@@ -71,10 +74,14 @@ public class Megaphone_Script : Weapon {
     }
 
     protected override void SpecialAttack2() {
-        createdShield = Instantiate(shield, transform.parent.transform.position, transform.parent.transform.rotation);
+        List<EnemyGeneric> enemies = lightningControl.GetComponent<ThunderCollider>().InRange;
 
-        createdShield.transform.parent = gameObject.transform.parent;
+        for (int i = 0; i < enemies.Count; i++) {
+            enemies[i].GetComponent<EnemyGeneric>().CopyrightNeutralBoop(playerObject.transform.position);
+        }
+
+        /*createdShield.transform.parent = gameObject.transform.parent;
         createdShield.transform.position += new Vector3(0f, 1f, 0.1f);
-        playerObject.GetComponent<Player>().invulnerable = true;
+        playerObject.GetComponent<Player>().invulnerable = true;*/
     }
 }

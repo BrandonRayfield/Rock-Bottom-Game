@@ -21,7 +21,6 @@ public class EnemyGeneric : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (Input.GetKeyDown(KeyCode.F6)) {
-            print("check");
             CopyrightNeutralBoop(GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<Player>().transform.position);
         }
     }
