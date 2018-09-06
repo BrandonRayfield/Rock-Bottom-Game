@@ -12,6 +12,8 @@ public class Target_Manager : MonoBehaviour {
     private int targetsLeft;
     private int totalTargets;
 
+    public string animationName = "Door_Opening";
+
     public GameObject lockedObject;
     private Animator lockedObjectAnimator;
     private GameObject cameraObject;
@@ -78,7 +80,7 @@ public class Target_Manager : MonoBehaviour {
 
         if(!isNPCQuest && isComplete) {
             GameManager.instance.CompletedQuest(questID);
-            lockedObjectAnimator.Play("doorOpening");
+            lockedObjectAnimator.Play(animationName);
             if (newFocus) {
                 cameraObject.GetComponent<CameraScript>().SetFocusPoint(lockedObject);
                 newFocus = false;
