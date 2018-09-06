@@ -23,6 +23,10 @@ public class DialogueManager : MonoBehaviour {
 
     private int currentNpcID;
 
+    // Automatic Trigger Variables
+    private bool isAutomatic;
+    private bool autoComplete;
+
     // GameManager Object for quests
     private GameManager gameManager;
 
@@ -57,6 +61,11 @@ public class DialogueManager : MonoBehaviour {
 
     public void DisplayNextSentence() {
         if (finishedTalking && sentences.Count == 0) {
+
+            if (isAutomatic) {
+                autoComplete = true;
+            }
+
             EndDialogue();
             return;
         }
@@ -129,6 +138,14 @@ public class DialogueManager : MonoBehaviour {
 
     public int getCurrentNpcID() {
         return currentNpcID;
+    }
+
+    public void setIsAutomatic(bool automatic) {
+        isAutomatic = automatic;
+    }
+
+    public bool getIsAutoComplete() {
+        return autoComplete;
     }
 
 }
