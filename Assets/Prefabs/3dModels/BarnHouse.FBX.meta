@@ -42,6 +42,9 @@ ModelImporter:
     2100000: 'Material #79'
     2100002: 'Material #91'
     2100004: 'Material #67'
+    2100006: 02 - Default
+    2100008: 03 - Default
+    2100010: 01 - Default
     2300000: Box001
     2300002: Box002
     2300004: Box003
@@ -93,7 +96,22 @@ ModelImporter:
     4300028: Box003
     4300030: Box001
     4300032: Box002
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: barnwood
+    second: {fileID: 2800000, guid: f13a94cd20fa36448b27af1c4204c65b, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: glass
+    second: {fileID: 2800000, guid: fcc636da27ee96148961fa521e2a9f2a, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: whitewood
+    second: {fileID: 2800000, guid: 60fd1ac524b46454eb77475a31067c2a, type: 3}
   materials:
     importMaterials: 1
     materialName: 0

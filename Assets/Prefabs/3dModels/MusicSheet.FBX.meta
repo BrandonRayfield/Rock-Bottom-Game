@@ -9,7 +9,12 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: Line001
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: musicSheet
+    second: {fileID: 2800000, guid: 9227b51487290ea42aa0d6a9422bc411, type: 3}
   materials:
     importMaterials: 1
     materialName: 0

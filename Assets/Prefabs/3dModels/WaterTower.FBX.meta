@@ -41,6 +41,8 @@ ModelImporter:
     100070: Torus001
     100072: Torus002
     100074: //RootNode
+    100076: Group005
+    100078: Group006
     400000: Box001
     400002: Box002
     400004: Box003
@@ -79,8 +81,12 @@ ModelImporter:
     400070: Torus001
     400072: Torus002
     400074: //RootNode
+    400076: Group005
+    400078: Group006
     2100000: 'Material #3'
     2100002: 'Material #2'
+    2100004: 02 - Default
+    2100006: 01 - Default
     2300000: Box001
     2300002: Box002
     2300004: Box003
@@ -180,7 +186,17 @@ ModelImporter:
     4300060: Cylinder013
     4300062: Box010
     4300064: Box015
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: steel
+    second: {fileID: 2800000, guid: 5af4a86fbbe912f44bac9c7503ec0749, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: woodenpannelling
+    second: {fileID: 2800000, guid: 0ce25ac408997ea4fafb606dfb7f19c5, type: 3}
   materials:
     importMaterials: 1
     materialName: 0

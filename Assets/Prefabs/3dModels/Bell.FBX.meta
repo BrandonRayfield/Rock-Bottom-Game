@@ -26,6 +26,7 @@ ModelImporter:
     400018: Sphere001
     400020: Tube002
     2100000: 'Material #26'
+    2100002: 01 - Default
     2300000: Cone001
     2300002: Cone002
     2300004: Cone003
@@ -56,7 +57,12 @@ ModelImporter:
     4300014: Cone003
     4300016: Cone004
     4300018: Line001
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: dwdw
+    second: {fileID: 2800000, guid: 44dd17f1e3ec2294fa97348dd9688c8e, type: 3}
   materials:
     importMaterials: 1
     materialName: 0

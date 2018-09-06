@@ -19,6 +19,8 @@ ModelImporter:
     100026: Cylinder011
     100028: Cylinder012
     100030: //RootNode
+    100032: Group001
+    100034: Group002
     400000: Box001
     400002: Box002
     400004: Box003
@@ -35,8 +37,12 @@ ModelImporter:
     400026: Cylinder011
     400028: Cylinder012
     400030: //RootNode
+    400032: Group001
+    400034: Group002
     2100000: 'Material #2'
     2100002: 'Material #3'
+    2100004: 01 - Default
+    2100006: 02 - Default
     2300000: Box001
     2300002: Box002
     2300004: Box003
@@ -82,7 +88,17 @@ ModelImporter:
     4300024: Cylinder012
     4300026: Box002
     4300028: Box003
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: steel
+    second: {fileID: 2800000, guid: 105418b352ed766498d3bd422ddbfff4, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: woodoodd
+    second: {fileID: 2800000, guid: d7a72bba4b6b8cf45a3cf63288bb7a64, type: 3}
   materials:
     importMaterials: 1
     materialName: 0

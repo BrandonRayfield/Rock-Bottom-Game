@@ -39,6 +39,8 @@ ModelImporter:
     400032: Tube008
     2100000: 'Material #25'
     2100002: 'Material #26'
+    2100004: 02 - Default
+    2100006: 03 - Default
     2300000: Box001
     2300002: Box002
     2300004: Box003
@@ -75,7 +77,12 @@ ModelImporter:
     4300018: Box004
     4300020: Tube007
     4300022: Tube008
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: hay
+    second: {fileID: 2800000, guid: dc00dd083074d9648bbb981ed300dfa3, type: 3}
   materials:
     importMaterials: 1
     materialName: 0

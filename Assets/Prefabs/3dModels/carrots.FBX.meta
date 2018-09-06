@@ -41,6 +41,27 @@ ModelImporter:
     100070: Group012
     100072: Group013
     100074: Group014
+    100076: Box001
+    100078: Box014
+    100080: Box015
+    100082: Box016
+    100084: Box017
+    100086: Box018
+    100088: Box019
+    100090: Box020
+    100092: Box021
+    100094: Box022
+    100096: Box023
+    100098: Box024
+    100100: Box025
+    100102: Box026
+    100104: Box027
+    100106: Box028
+    100108: Box029
+    100110: GeoSphere003
+    100112: GeoSphere004
+    100114: GeoSphere005
+    100116: GeoSphere006
     400000: Box002
     400002: Box003
     400004: Box004
@@ -79,9 +100,34 @@ ModelImporter:
     400070: Group012
     400072: Group013
     400074: Group014
+    400076: Box001
+    400078: Box014
+    400080: Box015
+    400082: Box016
+    400084: Box017
+    400086: Box018
+    400088: Box019
+    400090: Box020
+    400092: Box021
+    400094: Box022
+    400096: Box023
+    400098: Box024
+    400100: Box025
+    400102: Box026
+    400104: Box027
+    400106: Box028
+    400108: Box029
+    400110: GeoSphere003
+    400112: GeoSphere004
+    400114: GeoSphere005
+    400116: GeoSphere006
     2100000: 'Material #27'
     2100002: 'Material #25'
     2100004: 'Material #26'
+    2100006: 03 - Default
+    2100008: 02 - Default
+    2100010: 01 - Default
+    2100012: 07 - Default
     2300000: Box002
     2300002: Box003
     2300004: Box004
@@ -113,6 +159,27 @@ ModelImporter:
     2300056: Cone004
     2300058: Cone005
     2300060: Cone006
+    2300062: Box001
+    2300064: Box014
+    2300066: Box015
+    2300068: Box016
+    2300070: Box017
+    2300072: Box018
+    2300074: Box019
+    2300076: Box020
+    2300078: Box021
+    2300080: Box022
+    2300082: Box023
+    2300084: Box024
+    2300086: Box025
+    2300088: Box026
+    2300090: Box027
+    2300092: Box028
+    2300094: Box029
+    2300096: GeoSphere003
+    2300098: GeoSphere004
+    2300100: GeoSphere005
+    2300102: GeoSphere006
     3300000: Box002
     3300002: Box003
     3300004: Box004
@@ -144,6 +211,27 @@ ModelImporter:
     3300056: Cone004
     3300058: Cone005
     3300060: Cone006
+    3300062: Box001
+    3300064: Box014
+    3300066: Box015
+    3300068: Box016
+    3300070: Box017
+    3300072: Box018
+    3300074: Box019
+    3300076: Box020
+    3300078: Box021
+    3300080: Box022
+    3300082: Box023
+    3300084: Box024
+    3300086: Box025
+    3300088: Box026
+    3300090: Box027
+    3300092: Box028
+    3300094: Box029
+    3300096: GeoSphere003
+    3300098: GeoSphere004
+    3300100: GeoSphere005
+    3300102: GeoSphere006
     4300000: Box030
     4300002: Cone001
     4300004: Box005
@@ -175,7 +263,43 @@ ModelImporter:
     4300056: Box049
     4300058: Box050
     4300060: Cone006
-  externalObjects: {}
+    4300062: Box001
+    4300064: GeoSphere003
+    4300066: Box015
+    4300068: Box017
+    4300070: Box016
+    4300072: Box014
+    4300074: Box018
+    4300076: Box019
+    4300078: Box020
+    4300080: Box021
+    4300082: GeoSphere004
+    4300084: Box022
+    4300086: Box023
+    4300088: Box024
+    4300090: Box025
+    4300092: GeoSphere005
+    4300094: Box026
+    4300096: Box027
+    4300098: Box028
+    4300100: Box029
+    4300102: GeoSphere006
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: carrot
+    second: {fileID: 2800000, guid: 41476f617118fe145af24f36069f7884, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: dirt
+    second: {fileID: 2800000, guid: e6c4811d8ff40d94ba04a5581a0c3c53, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: leaves_texture1469
+    second: {fileID: 2800000, guid: 3d53193404b93104e8a59bc722948ab3, type: 3}
   materials:
     importMaterials: 1
     materialName: 0
