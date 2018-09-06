@@ -30,6 +30,7 @@ public class Flying_Enemy : MonoBehaviour {
     private float swoop_c;
     public float targetRadius;
     public float rotationSpeed;
+    public bool activated = false;
 
     //health
     public int health = 100;
@@ -49,13 +50,13 @@ public class Flying_Enemy : MonoBehaviour {
 
         rb = GetComponent<Rigidbody>();
 
-        Movement();
+        //Movement();
 
         enemygeneric = GetComponent<EnemyGeneric>();
         enemygeneric.health = 100;
 
-        swoop_target = new Vector3(Random.Range(-4, 4) + transform.position.x,
-                Random.Range(-4, 4) + transform.position.y, 0f);
+        //swoop_target = new Vector3(Random.Range(-4, 4) + transform.position.x,
+        //        Random.Range(-4, 4) + transform.position.y, 0f);
 
         //health bar
         EnemyHealth = Instantiate(EnemyHealthBar);
@@ -70,9 +71,12 @@ public class Flying_Enemy : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-       // Search();
-
-        Movement();
+        // Search();
+        if (activated) {
+            Movement();
+        } else {
+            Search();
+        }
 
         EnemyHealth.transform.position = Camera.main.WorldToScreenPoint(new Vector3(healthBarTarget.position.x, healthBarTarget.position.y + 1, healthBarTarget.position.z));
     }
@@ -82,19 +86,11 @@ public class Flying_Enemy : MonoBehaviour {
         direction.z = 0;
         LayerMask mask = 1 << 9;
 
-        if (!Physics.Linecast(transform.position, player.transform.position, mask)) {
+        if (!Physics.Linecast(transform.position, player.transform.position, mask) &&
+            Vector3.Distance(transform.position, player.transform.position) < 7.5f) {
 
-            //Debug.DrawLine(transform.position, player.transform.position, Color.blue);
-            Vector3 angle = player.transform.position - transform.position;
-
-            transform.rotation = Quaternion.Euler(angle);
-
-            if (Time.time > shotTimer) {
-                Projectile attack = Instantiate(shot, transform.position, Quaternion.Euler(direction));
-                attack.player = player;
-
-                shotTimer = Time.time + shotRate;
-            }
+            activated = true;
+            
         } 
     }
 
@@ -106,24 +102,24 @@ public class Flying_Enemy : MonoBehaviour {
             
             if (!Physics.Linecast(transform.position, player.transform.position, mask)) {
                 if (Mathf.Abs(transform.position.y - player.transform.position.y) <= 1f &&
-                    Mathf.Abs(transform.position.y - player.transform.position.y) <= 5f) {
+                    Mathf.Abs(transform.position.x - player.transform.position.x) <= 5f) {
                     swoop_target = player.transform.position + (player.transform.position - transform.position);
                     swoop_target.y = transform.position.y;
                     moveTimer = Time.time + 0.5f;
-                    speed = 500f;
+                    speed = 250f;
                 }
                 else {
                     swoop_target = new Vector3(Random.Range(-4, 4) + player.transform.position.x,
                         player.transform.position.y, 0f);
                     moveTimer = Time.time + 0.5f;
-                    speed = 150f;
+                    speed = 110f;
                 }
 
             } else {
                 swoop_target = new Vector3(Random.Range(-4, 4) + transform.position.x,
                     Random.Range(-4, 4) + transform.position.y, 0f);
                 moveTimer = Time.time + 0.5f;
-                speed = 150f;
+                speed = 110f;
             }
                 
         } else {

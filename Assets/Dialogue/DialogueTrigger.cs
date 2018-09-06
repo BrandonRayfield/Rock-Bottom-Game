@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class DialogueTrigger : MonoBehaviour {
 
+    // Dialogue Variables
     public int NpcID;
     public Dialogue[] dialogue;
     public Dialogue[] dialogueDuringQuest;
@@ -33,6 +34,11 @@ public class DialogueTrigger : MonoBehaviour {
     private GameManager gameManager;
     private GameObject cameraObject;
 
+    // Autotrigger Variables
+    public bool isAutomatic;
+    private bool hasTriggered;
+    private bool autoComplete;
+
     //UI Elements
     public Text interactText;
 
@@ -54,10 +60,10 @@ public class DialogueTrigger : MonoBehaviour {
     public void Update() {
 
         currentNpcID = FindObjectOfType<DialogueManager>().getCurrentNpcID();
+        autoComplete = FindObjectOfType<DialogueManager>().getIsAutoComplete();
 
         if (canTalk) {
             isTalking = FindObjectOfType<DialogueManager>().getIsTalking();
-
         }
 
         if(canTalk && isQuestGiver) {
@@ -65,40 +71,13 @@ public class DialogueTrigger : MonoBehaviour {
             finishedQuest = gameManager.GetComponent<GameManager>().GetIsComplete(questID);
         }
 
+        if (!isAutomatic && canTalk && Input.GetKeyDown(KeyCode.E)) {
+            StartTalking();
+        }
 
-        if (canTalk && Input.GetKeyDown(KeyCode.E)) {
-
-            interactText.enabled = false;
-
-            FindObjectOfType<DialogueManager>().setIsQuestGiver(isQuestGiver);
-            FindObjectOfType<DialogueManager>().setQuestID(questID);
-
-            if(!isTalking) {
-                if(isQuestGiver && acceptedQuest && !finishedQuest) {
-                    FindObjectOfType<DialogueManager>().StartDialogue(dialogueDuringQuest);
-                } else if (isQuestGiver && acceptedQuest && finishedQuest) {
-                    FindObjectOfType<DialogueManager>().StartDialogue(dialogueAfterQuest);
-
-                    // If the NPC is supposed to provide the player with a reward for completing the quest, spawn reward item
-                    if(isRewardGiver && !isRewarded) {
-                        Vector3 spawnLocation = new Vector3(transform.position.x, transform.position.y + rewardHeightPosition, transform.position.z);
-                        Instantiate(rewardObject, spawnLocation, transform.rotation);
-                        isRewarded = true;
-                    }
-
-                    // If the NPC is supposed to unlock the next area for the player, open object
-                    if (isProgressor && !isUnlocked) {
-                        progressObjectAnimator.Play("doorOpening");
-                        cameraObject.GetComponent<CameraScript>().SetFocusPoint(progressObject);
-                        isUnlocked = true;
-                    }
-
-                } else {
-                    FindObjectOfType<DialogueManager>().StartDialogue(dialogue);
-                }
-            } else {
-                FindObjectOfType<DialogueManager>().DisplayNextSentence();
-            }
+        // Used to continue to next sentence, without allowing player to repeat dialogue after completed
+        if(isAutomatic && !autoComplete && Input.GetKeyDown(KeyCode.E)) {
+            StartTalking();
         }
 
         if (currentNpcID == NpcID && !canTalk) {
@@ -112,15 +91,56 @@ public class DialogueTrigger : MonoBehaviour {
         FindObjectOfType<DialogueManager>().StartDialogue(dialogue);
     }
 
+    // Code for triggering the dialogue interaction
+    private void StartTalking() {
+        interactText.enabled = false;
+
+        FindObjectOfType<DialogueManager>().setIsQuestGiver(isQuestGiver);
+        FindObjectOfType<DialogueManager>().setQuestID(questID);
+
+        if (!isTalking) {
+            if (isQuestGiver && acceptedQuest && !finishedQuest) {
+                FindObjectOfType<DialogueManager>().StartDialogue(dialogueDuringQuest);
+            } else if (isQuestGiver && acceptedQuest && finishedQuest) {
+                FindObjectOfType<DialogueManager>().StartDialogue(dialogueAfterQuest);
+
+                // If the NPC is supposed to provide the player with a reward for completing the quest, spawn reward item
+                if (isRewardGiver && !isRewarded) {
+                    Vector3 spawnLocation = new Vector3(transform.position.x, transform.position.y + rewardHeightPosition, transform.position.z);
+                    Instantiate(rewardObject, spawnLocation, transform.rotation);
+                    isRewarded = true;
+                }
+
+                // If the NPC is supposed to unlock the next area for the player, open object
+                if (isProgressor && !isUnlocked) {
+                    progressObjectAnimator.Play("doorOpening");
+                    cameraObject.GetComponent<CameraScript>().SetFocusPoint(progressObject);
+                    isUnlocked = true;
+                }
+
+            } else {
+                FindObjectOfType<DialogueManager>().StartDialogue(dialogue);
+            }
+        } else {
+            FindObjectOfType<DialogueManager>().DisplayNextSentence();
+        }
+    }
+
     private void OnTriggerEnter(Collider other) {
         if (other.gameObject.tag == "Player") {
             FindObjectOfType<DialogueManager>().setCurrentNpcID(NpcID);
+            FindObjectOfType<DialogueManager>().setIsAutomatic(isAutomatic);
             canTalk = true;
+
+            if (isAutomatic && !hasTriggered) {
+                StartTalking();
+                hasTriggered = true;
+            }
         }
     }
 
     private void OnTriggerStay(Collider other) {
-        if(other.gameObject.tag == "Player") {
+        if(!isAutomatic && other.gameObject.tag == "Player") {
             if(!isTalking) {
                 interactText.enabled = true;
                 interactText.text = "Press 'E' to talk!";

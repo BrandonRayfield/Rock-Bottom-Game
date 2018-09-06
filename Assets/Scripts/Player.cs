@@ -232,40 +232,6 @@ public class Player : MonoBehaviour {
     // Update is called once per frame
     void Update() {
 
-        if (canSwing && Input.GetKey(KeyCode.E)) {
-
-            //gameObject.transform.parent = ropeObject.transform;
-            //gameObject.transform.position = ropeObject.transform.position; 
-            ropeObject.GetComponent<Rope_Swing>().setIsSwinging(true);
-        }
-
-        movementSpeed = movementSpeed / slowDebuff;
-
-        if (isSlowed) {
-            slowDebuff = maxSlowDebuff;
-            slowTime += Time.deltaTime;
-            if (slowTime >= slowDuration) {
-                isSlowed = false;
-                slowDebuff = minSlowDebuff;
-                slowTime = 0f;
-            }
-        }
-
-        gameResult2.text = gameResult.text;
-        gameResult2.enabled = gameResult.enabled;
-
-        if (touchTopCrush && touchBottomCrush) {
-            takeDamage(health);
-            Instantiate(squashSound, transform.position, transform.rotation);
-            touchTopCrush = false;
-            touchBottomCrush = false;
-        }
-
-        //Update UI Components
-        healthBar.value = health / 100;
-    }
-
-    private void FixedUpdate() {
         if (!dead && !isCutscene) {
             Controls();
         } else if (dead) {
@@ -302,6 +268,38 @@ public class Player : MonoBehaviour {
                 }
             }
         }
+
+        if (canSwing && Input.GetKey(KeyCode.E)) {
+
+            //gameObject.transform.parent = ropeObject.transform;
+            //gameObject.transform.position = ropeObject.transform.position; 
+            ropeObject.GetComponent<Rope_Swing>().setIsSwinging(true);
+        }
+
+        movementSpeed = movementSpeed / slowDebuff;
+
+        if (isSlowed) {
+            slowDebuff = maxSlowDebuff;
+            slowTime += Time.deltaTime;
+            if (slowTime >= slowDuration) {
+                isSlowed = false;
+                slowDebuff = minSlowDebuff;
+                slowTime = 0f;
+            }
+        }
+
+        gameResult2.text = gameResult.text;
+        gameResult2.enabled = gameResult.enabled;
+
+        if (touchTopCrush && touchBottomCrush) {
+            takeDamage(health);
+            Instantiate(squashSound, transform.position, transform.rotation);
+            touchTopCrush = false;
+            touchBottomCrush = false;
+        }
+
+        //Update UI Components
+        healthBar.value = health / 100;
     }
 
     private void Controls() {
