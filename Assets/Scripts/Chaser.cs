@@ -217,6 +217,18 @@ public class Chaser : MonoBehaviour {
 
     }
 
+    private void OnTriggerStay(Collider other) {
+        if (other.tag == "MovingPlatform") {
+            transform.parent = other.transform;
+        }
+    }
+
+    private void OnTriggerExit(Collider other) {
+        if (other.tag == "MovingPlatform") {
+            transform.parent = null;
+        }
+    }
+
     public void takeDamage(float damage) {
         if (currentHealthDisTime < Time.time) {
             enemygeneric.health -= damage;
