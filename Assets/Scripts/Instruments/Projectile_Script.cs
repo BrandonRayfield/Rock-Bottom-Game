@@ -22,9 +22,10 @@ public class Projectile_Script : MonoBehaviour {
             //Create explosion effect?
             Destroy(gameObject);
         } else if(isFriendly && other.transform.tag == "Enemy") {
-            other.GetComponent<Enemy>().takeDamage(damage);
-            //Create explosion effect?
-            Destroy(gameObject);
+            if (other.GetComponent<Enemy>() != null)
+                other.GetComponent<Enemy>().takeDamage(damage);
+            else if (other.GetComponent<Chaser>() != null)
+                other.GetComponent<Chaser>().takeDamage(damage);
         }
 
         //----------------------------------------------------------------------------------
