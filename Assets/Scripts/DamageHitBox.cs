@@ -26,6 +26,8 @@ public class DamageHitBox : MonoBehaviour {
                     otherObject.GetComponent<Enemy>().takeDamage(damage);
                 else if (otherObject.GetComponent<Chaser>() != null)
                     otherObject.GetComponent<Chaser>().takeDamage(damage);
+                else if (otherObject.GetComponent<Boss>() != null)
+                    otherObject.GetComponent<Boss>().takeDamage(damage);
                 hasDamaged = true;
             }
             //----------------------------------------------------------------------------------

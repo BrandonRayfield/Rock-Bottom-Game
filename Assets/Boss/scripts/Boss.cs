@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Boss : MonoBehaviour {
 
     public enum state { charge, smash, crush, summon, idle};
@@ -29,17 +29,54 @@ public class Boss : MonoBehaviour {
     public Quaternion crush_rotation;
     public GameObject crush_effect;
 
+    //Health Bar Objects
+    public int health = 100;
+    public GameObject EnemyHealthBar;
+    private Transform healthBarTarget;
+    public GameObject EnemyHealth;
+    private float currentHealthDisTime;
+    private bool dead = false;
+    public EnemyGeneric enemygeneric;
+
     //Smash variables
     public GameObject smash_projectile;
-	// Use this for initialization
-	void Start () {
+
+    //NEW VARIABLES
+
+    public GameObject guitarObject;
+
+    private Vector3 guitarStartPosition;
+    private Quaternion guitarStartRotation;
+    private Vector3 guitarStartScale;
+
+    private Vector3 guitarAttackPosition;
+    private Quaternion guitarAttackRotation;
+    private Vector3 guitarAttackScale;
+
+    public GameObject modelSpine;
+    public GameObject weaponObjectSlot;
+    private int guitarStance;
+
+      // Use this for initialization
+    void Start () {
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
+        enemygeneric = GetComponent<EnemyGeneric>();
         direction = (int)Mathf.Sign((player.transform.position.x - transform.position.x));
+
+
+        guitarStartPosition = guitarObject.transform.localPosition;
+        guitarStartRotation = guitarObject.transform.localRotation;
+        guitarStartScale = guitarObject.transform.localScale;
+
+        guitarAttackPosition = new Vector3(0.0f, 0.0f, 0.0f); // This is only a rough position, might need to be tuned a bit in order to line it up correctly with hands
+        guitarAttackRotation = new Quaternion(0.0f, 0.0f, 0.0f, 0.0f); // This is only a rough rotation, might need to be tuned a bit in order to line it up correctly with hands
+        guitarAttackScale = new Vector3(1.0f, 1.0f, 1.0f); // This is only a rough scale, might need to be tuned a bit in order to line it up correctly with hands
+
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update() {
 
         switch (current_state) {
             case state.charge:
@@ -56,14 +93,36 @@ public class Boss : MonoBehaviour {
                 break;
         }
 
-        
+
         if (cycle_timer < Time.time) cycle();
 
-        
-       
 
+        if (Input.GetKey(KeyCode.F1)) {
+            animator.Play("Idle");
+            changeWeaponPosition(1);
+        }
+
+        if (Input.GetKey(KeyCode.F2)) {
+            animator.Play("Charge");
+            changeWeaponPosition(1);
+        }
+
+        if (Input.GetKey(KeyCode.F3)) {
+            animator.Play("Smash");
+            changeWeaponPosition(0);
+        }
+
+        if (Input.GetKey(KeyCode.F4)) {
+            animator.Play("Roar");
+            changeWeaponPosition(1);
+        }
+
+        if (Input.GetKey(KeyCode.F5)) {
+            animator.Play("Jump");
+            changeWeaponPosition(1);
+
+        }
     }
-
     public void cycle() {
         //Get a new state
         /*if (transform.rotation.z != 0) {
@@ -169,6 +228,45 @@ public class Boss : MonoBehaviour {
             
 
             drop = true;
+        }
+    }
+
+    private void changeWeaponPosition(int position) {
+        if (position == 0) {
+            guitarObject.transform.parent = weaponObjectSlot.transform;
+            guitarObject.transform.localPosition = guitarAttackPosition;
+            guitarObject.transform.localRotation = guitarAttackRotation;
+            guitarObject.transform.localScale = guitarAttackScale;
+        }
+        else if (position == 1) {
+            guitarObject.transform.parent = modelSpine.transform;
+            guitarObject.transform.localPosition = guitarStartPosition;
+            guitarObject.transform.localRotation = guitarStartRotation;
+            guitarObject.transform.localScale = guitarStartScale;
+        }
+    }
+
+    //Used for animation event (You will need this exactly the same spelling / case / etc.)
+    public void setDefaultPosition() {
+        changeWeaponPosition(1);
+    }
+
+    public void takeDamage(float damage) {
+        if (currentHealthDisTime < Time.time) {
+            enemygeneric.health -= damage;
+
+            EnemyHealth.SetActive(true);
+            EnemyHealth.GetComponent<Slider>().value = enemygeneric.health;
+
+            currentHealthDisTime = Time.time + 0.5f;
+
+            if (enemygeneric.health <= 0) {
+                dead = true;
+                //Instantiate(deathSound, transform.position, transform.rotation);
+                this.transform.tag = "Untagged";
+                Destroy(EnemyHealth.gameObject);
+                Destroy(this.gameObject);
+            }
         }
     }
 }

@@ -26,6 +26,8 @@ public class Projectile_Script : MonoBehaviour {
                 other.GetComponent<Enemy>().takeDamage(damage);
             else if (other.GetComponent<Chaser>() != null)
                 other.GetComponent<Chaser>().takeDamage(damage);
+            else if (other.GetComponent<Boss>() != null)
+                other.GetComponent<Boss>().takeDamage(damage);
         }
 
         //----------------------------------------------------------------------------------
