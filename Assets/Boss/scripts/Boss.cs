@@ -57,6 +57,10 @@ public class Boss : MonoBehaviour {
     public GameObject weaponObjectSlot;
     private int guitarStance;
 
+    //Hitboxes
+    public GameObject crushHitBox;
+    public GameObject chargeHitBox;
+
       // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody>();
@@ -72,6 +76,10 @@ public class Boss : MonoBehaviour {
         guitarAttackPosition = new Vector3(0.0f, 0.0f, 0.0f); // This is only a rough position, might need to be tuned a bit in order to line it up correctly with hands
         guitarAttackRotation = new Quaternion(0.0f, 0.0f, 0.0f, 0.0f); // This is only a rough rotation, might need to be tuned a bit in order to line it up correctly with hands
         guitarAttackScale = new Vector3(1.0f, 1.0f, 1.0f); // This is only a rough scale, might need to be tuned a bit in order to line it up correctly with hands
+
+        //Hitboxes
+        crushHitBox.SetActive(false);
+        chargeHitBox.SetActive(false);
 
     }
 
@@ -133,6 +141,10 @@ public class Boss : MonoBehaviour {
         crush_location = Vector3.zero;
         drop = false;
 
+        //Hitboxes
+        crushHitBox.SetActive(false);
+        chargeHitBox.SetActive(false);
+
         int new_state = Random.Range(1, 5);
         if (new_state > 5) new_state = 5;
         switch (new_state) {
@@ -140,6 +152,7 @@ public class Boss : MonoBehaviour {
                 //transform.Rotate(Vector3.forward * 55 * -direction);
                 animator.Play("Charge");
                 current_state = state.charge;
+                chargeHitBox.SetActive(true);
                 break;
             case 2:
                 
@@ -212,7 +225,10 @@ public class Boss : MonoBehaviour {
         }
         if (!drop) {
             rb.velocity = Vector3.Normalize(crush_location - transform.position) * speed * 1.5f * Time.deltaTime;
-            if (Vector3.Distance(crush_location, transform.position) <= 0.2f) drop = true;
+            if (Vector3.Distance(crush_location, transform.position) <= 0.2f) {
+                drop = true;
+                crushHitBox.SetActive(true);
+            }
         } else {
             rb.velocity = Vector3.down * speed * 4 * Time.deltaTime;
         }
