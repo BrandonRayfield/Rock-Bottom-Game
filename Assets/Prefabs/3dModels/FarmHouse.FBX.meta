@@ -35,6 +35,10 @@ ModelImporter:
     2100002: 'Material #25'
     2100004: 'Material #38'
     2100006: 'Material #39'
+    2100008: 07 - Default
+    2100010: 03 - Default
+    2100012: 01 - Default
+    2100014: 02 - Default
     2300000: Box001
     2300002: Box002
     2300004: Box003
@@ -74,7 +78,32 @@ ModelImporter:
     4300020: Box011
     4300022: Cylinder001
     4300024: Sphere001
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: erge
+    second: {fileID: 2800000, guid: 16af8c25528c8c54daa29a64d0684fd0, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: glass
+    second: {fileID: 2800000, guid: 006616aa95d0428409b0cfaea7765b92, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: rooftile
+    second: {fileID: 2800000, guid: cf92effbc0c7fa5469973071353c4a35, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: whitewood
+    second: {fileID: 2800000, guid: 4d764caa6ae135044acead4615d34f1b, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: woodoodd
+    second: {fileID: 2800000, guid: 6717c6194340f034f92a2d1b34dc21c0, type: 3}
   materials:
     importMaterials: 1
     materialName: 0

@@ -11,6 +11,15 @@ ModelImporter:
     100010: Pyramid011
     100012: Pyramid012
     100014: //RootNode
+    100016: Cylinder003
+    100018: Group005
+    100020: Group006
+    100022: Pyramid013
+    100024: Pyramid014
+    100026: Pyramid015
+    100028: Pyramid016
+    100030: Pyramid017
+    100032: Pyramid018
     400000: Cylinder002
     400002: Pyramid007
     400004: Pyramid008
@@ -19,10 +28,22 @@ ModelImporter:
     400010: Pyramid011
     400012: Pyramid012
     400014: //RootNode
+    400016: Cylinder003
+    400018: Group005
+    400020: Group006
+    400022: Pyramid013
+    400024: Pyramid014
+    400026: Pyramid015
+    400028: Pyramid016
+    400030: Pyramid017
+    400032: Pyramid018
     2100000: 'Material #29'
     2100002: 'Material #30'
     2100004: 'Material #26'
     2100006: 'Material #28'
+    2100008: 14 - Default
+    2100010: 15 - Default
+    2100012: 03 - Default
     2300000: Cylinder002
     2300002: Pyramid007
     2300004: Pyramid008
@@ -30,6 +51,13 @@ ModelImporter:
     2300008: Pyramid010
     2300010: Pyramid011
     2300012: Pyramid012
+    2300014: Cylinder003
+    2300016: Pyramid013
+    2300018: Pyramid014
+    2300020: Pyramid015
+    2300022: Pyramid016
+    2300024: Pyramid017
+    2300026: Pyramid018
     3300000: Cylinder002
     3300002: Pyramid007
     3300004: Pyramid008
@@ -37,6 +65,13 @@ ModelImporter:
     3300008: Pyramid010
     3300010: Pyramid011
     3300012: Pyramid012
+    3300014: Cylinder003
+    3300016: Pyramid013
+    3300018: Pyramid014
+    3300020: Pyramid015
+    3300022: Pyramid016
+    3300024: Pyramid017
+    3300026: Pyramid018
     4300000: Pyramid011
     4300002: Pyramid010
     4300004: Cylinder002
@@ -44,7 +79,29 @@ ModelImporter:
     4300008: Pyramid008
     4300010: Pyramid012
     4300012: Pyramid007
-  externalObjects: {}
+    4300014: Pyramid016
+    4300016: Pyramid018
+    4300018: Pyramid014
+    4300020: Pyramid017
+    4300022: Pyramid015
+    4300024: Pyramid013
+    4300026: Cylinder003
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: brighttree
+    second: {fileID: 2800000, guid: ce104b49a2beddd45b2160201165cf01, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: tree_bark
+    second: {fileID: 2800000, guid: 189a1f0dfea7b694ca0610a33acbf105, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: tree_leaves_dark
+    second: {fileID: 2800000, guid: 993e2edcbb53b2946916ffc9508f3142, type: 3}
   materials:
     importMaterials: 1
     materialName: 0

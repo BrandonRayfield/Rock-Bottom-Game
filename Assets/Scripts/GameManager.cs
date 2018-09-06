@@ -63,6 +63,7 @@ public class GameManager : MonoBehaviour {
         Physics.IgnoreLayerCollision(8, 10);
         Physics.IgnoreLayerCollision(8, 11);
         Physics.IgnoreLayerCollision(11, 11);
+        Physics.IgnoreLayerCollision(10, 11);
         Physics.IgnoreLayerCollision(10, 13);
         Physics.IgnoreLayerCollision(12, 13);
     }

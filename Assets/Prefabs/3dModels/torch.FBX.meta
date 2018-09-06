@@ -122,6 +122,8 @@ ModelImporter:
     400114: Pyramid020
     400116: //RootNode
     2100000: 'Material #2'
+    2100002: 01 - Default
+    2100004: 02 - Default
     2300000: Box015
     2300002: Box016
     2300004: Box017
@@ -293,7 +295,17 @@ ModelImporter:
     4300108: Pyramid018
     4300110: Pyramid019
     4300112: Pyramid020
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: gold-texture
+    second: {fileID: 2800000, guid: 4fde56149dfea934f91496b6730e5158, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: steel2
+    second: {fileID: 2800000, guid: 7295fe7e07e979946a69c8208b5c1fdd, type: 3}
   materials:
     importMaterials: 1
     materialName: 0
