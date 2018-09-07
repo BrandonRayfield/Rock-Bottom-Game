@@ -38,8 +38,12 @@ public class Boss : MonoBehaviour {
     private bool dead = false;
     public EnemyGeneric enemygeneric;
 
-    //Smash variables
+    //attack objects
     public GameObject smash_projectile;
+    public GameObject crushAttack;
+    public GameObject chargeAttack;
+    public GameObject crushLocation;
+    public GameObject chargeLocation;
 
     //NEW VARIABLES
 
@@ -57,9 +61,6 @@ public class Boss : MonoBehaviour {
     public GameObject weaponObjectSlot;
     private int guitarStance;
 
-    //Hitboxes
-    public GameObject crushHitBox;
-    public GameObject chargeHitBox;
 
       // Use this for initialization
     void Start () {
@@ -77,11 +78,7 @@ public class Boss : MonoBehaviour {
         guitarAttackRotation = new Quaternion(0.0f, 0.0f, 0.0f, 0.0f); // This is only a rough rotation, might need to be tuned a bit in order to line it up correctly with hands
         guitarAttackScale = new Vector3(1.0f, 1.0f, 1.0f); // This is only a rough scale, might need to be tuned a bit in order to line it up correctly with hands
 
-        //Hitboxes
-        crushHitBox.SetActive(false);
-        chargeHitBox.SetActive(false);
-
-    }
+   }
 
     // Update is called once per frame
     void Update() {
@@ -141,10 +138,6 @@ public class Boss : MonoBehaviour {
         crush_location = Vector3.zero;
         drop = false;
 
-        //Hitboxes
-        crushHitBox.SetActive(false);
-        chargeHitBox.SetActive(false);
-
         int new_state = Random.Range(1, 5);
         if (new_state > 5) new_state = 5;
         switch (new_state) {
@@ -152,7 +145,7 @@ public class Boss : MonoBehaviour {
                 //transform.Rotate(Vector3.forward * 55 * -direction);
                 animator.Play("Charge");
                 current_state = state.charge;
-                chargeHitBox.SetActive(true);
+                Instantiate(chargeAttack, chargeLocation.transform.position, chargeLocation.transform.rotation);
                 break;
             case 2:
                 
@@ -182,6 +175,7 @@ public class Boss : MonoBehaviour {
 
     public void charge() {
         rb.velocity = new Vector3(speed * direction * Time.deltaTime * 2.5f, 0, 0);
+        cycle_timer = Time.time + 1f;
     }
 
     public void OnTriggerEnter(Collider other) {
@@ -227,7 +221,7 @@ public class Boss : MonoBehaviour {
             rb.velocity = Vector3.Normalize(crush_location - transform.position) * speed * 1.5f * Time.deltaTime;
             if (Vector3.Distance(crush_location, transform.position) <= 0.2f) {
                 drop = true;
-                crushHitBox.SetActive(true);
+                Instantiate(crushAttack, crushLocation.transform.position, crushLocation.transform.rotation);
             }
         } else {
             rb.velocity = Vector3.down * speed * 4 * Time.deltaTime;
@@ -236,7 +230,7 @@ public class Boss : MonoBehaviour {
 
     public void smash() {
         if (!drop) {
-            GameObject projectile = Instantiate(smash_projectile, transform.position + new Vector3(direction, 0.25f, 0f), crush_rotation);
+            GameObject projectile = Instantiate(smash_projectile, transform.position + new Vector3(direction, -1.15f, 0f), crush_rotation);
             Rigidbody projectile_rb = projectile.GetComponent<Rigidbody>();
             projectile_rb.velocity = new Vector3(direction * speed * Time.deltaTime, 0f, 0f);
             projectile_rb.useGravity = false;
