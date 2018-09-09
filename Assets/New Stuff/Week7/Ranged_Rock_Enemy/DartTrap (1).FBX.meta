@@ -1,9 +1,7 @@
 fileFormatVersion: 2
-guid: 47c2a909be993124ca1067593fd6e2d0
-timeCreated: 1536262085
-licenseType: Free
+guid: e3e134feb9c33fd42a1afa529270a297
 ModelImporter:
-  serializedVersion: 21
+  serializedVersion: 23
   fileIDToRecycleName:
     100000: Box001
     100002: Box002
@@ -73,6 +71,8 @@ ModelImporter:
     400062: //RootNode
     400064: Group001
     400066: Torus001
+    2100000: 01 - Default
+    2100002: 03 - Default
     2300000: Box001
     2300002: Box002
     2300004: Box003
@@ -166,11 +166,12 @@ ModelImporter:
     4300056: Box041
     4300058: Box042
     4300060: Box001
-    9500000: //RootNode
+  externalObjects: {}
   materials:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -183,6 +184,8 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -207,11 +210,15 @@ ModelImporter:
     optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -236,7 +243,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

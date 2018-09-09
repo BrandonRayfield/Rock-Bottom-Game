@@ -40,12 +40,8 @@ public class Boss : MonoBehaviour {
     private bool dead = false;
     public EnemyGeneric enemygeneric;
 
-    //attack objects
+    //Smash variables
     public GameObject smash_projectile;
-    public GameObject crushAttack;
-    public GameObject chargeAttack;
-    public GameObject crushLocation;
-    public GameObject chargeLocation;
 
     //NEW VARIABLES
 
@@ -63,7 +59,6 @@ public class Boss : MonoBehaviour {
     public GameObject weaponObjectSlot;
     private int guitarStance;
 
-
       // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody>();
@@ -80,7 +75,7 @@ public class Boss : MonoBehaviour {
         guitarAttackRotation = new Quaternion(0.0f, 0.0f, 0.0f, 0.0f); // This is only a rough rotation, might need to be tuned a bit in order to line it up correctly with hands
         guitarAttackScale = new Vector3(1.0f, 1.0f, 1.0f); // This is only a rough scale, might need to be tuned a bit in order to line it up correctly with hands
 
-   }
+    }
 
     // Update is called once per frame
     void Update() {
@@ -147,7 +142,6 @@ public class Boss : MonoBehaviour {
                 //transform.Rotate(Vector3.forward * 55 * -direction);
                 animator.Play("Charge");
                 current_state = state.charge;
-                Instantiate(chargeAttack, chargeLocation.transform.position, chargeLocation.transform.rotation);
                 break;
             case 2:
                 
@@ -177,7 +171,6 @@ public class Boss : MonoBehaviour {
 
     public void charge() {
         rb.velocity = new Vector3(speed * direction * Time.deltaTime * 2.5f, 0, 0);
-        cycle_timer = Time.time + 1f;
     }
 
     public void OnTriggerEnter(Collider other) {
@@ -221,10 +214,7 @@ public class Boss : MonoBehaviour {
         }
         if (!drop) {
             rb.velocity = Vector3.Normalize(crush_location - transform.position) * speed * 1.5f * Time.deltaTime;
-            if (Vector3.Distance(crush_location, transform.position) <= 0.2f) {
-                drop = true;
-                Instantiate(crushAttack, crushLocation.transform.position, crushLocation.transform.rotation);
-            }
+            if (Vector3.Distance(crush_location, transform.position) <= 0.2f) drop = true;
         } else {
             rb.velocity = Vector3.down * speed * 4 * Time.deltaTime;
         }
@@ -232,7 +222,7 @@ public class Boss : MonoBehaviour {
 
     public void smash() {
         if (!drop) {
-            GameObject projectile = Instantiate(smash_projectile, transform.position + new Vector3(direction, -1.15f, 0f), crush_rotation);
+            GameObject projectile = Instantiate(smash_projectile, transform.position + new Vector3(direction, 0.25f, 0f), crush_rotation);
             Rigidbody projectile_rb = projectile.GetComponent<Rigidbody>();
             projectile_rb.velocity = new Vector3(direction * speed * Time.deltaTime, 0f, 0f);
             projectile_rb.useGravity = false;
