@@ -12,7 +12,7 @@ public class Target_Manager : MonoBehaviour {
     private int targetsLeft;
     private int totalTargets;
 
-    public string animationName = "Door_Opening";
+    public string animationName = "doorOpening";
 
     public GameObject lockedObject;
     private Animator lockedObjectAnimator;

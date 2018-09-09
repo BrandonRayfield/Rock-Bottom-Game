@@ -48,10 +48,6 @@ public class DialogueManager : MonoBehaviour {
 
         isTalking = true;
 
-        if (isAutomatic) {
-            autoComplete = false;
-        }
-
         animator.SetBool("IsOpen", true);
         //Debug.Log("Starting Coversation with " + dialogue.name);
         sentences.Clear();
