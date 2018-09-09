@@ -31,7 +31,7 @@ public class Ring_Trigger : MonoBehaviour {
     public AudioClip countryMusic;
     public AudioClip rockMusic;
 
-
+    // Merge me :)
 
     // Use this for initialization
     void Start () {

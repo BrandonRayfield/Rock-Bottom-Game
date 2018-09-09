@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 public class Boss : MonoBehaviour {
 
+    // Merge me :)
+
     public enum state { charge, smash, crush, summon, idle};
     public bool started = false;
 
