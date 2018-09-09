@@ -76,7 +76,7 @@ public class DialogueTrigger : MonoBehaviour {
         }
 
         // Used to continue to next sentence, without allowing player to repeat dialogue after completed
-        if(isAutomatic && !autoComplete && canTalk && Input.GetKeyDown(KeyCode.E)) {
+        if(isAutomatic && !autoComplete && Input.GetKeyDown(KeyCode.E)) {
             StartTalking();
         }
 

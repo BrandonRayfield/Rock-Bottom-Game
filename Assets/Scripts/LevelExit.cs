@@ -55,7 +55,6 @@ public class LevelExit : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other) {
         if (other.gameObject == playerObject) {
-            interactText.text = "Press 'E' to continue!";
             interactText.enabled = true;
             canFinish = true;
         }
@@ -63,7 +62,6 @@ public class LevelExit : MonoBehaviour {
 
     private void OnTriggerExit(Collider other) {
         if (other.gameObject == playerObject) {
-            interactText.text = "";
             interactText.enabled = false;
             canFinish = false;
         }

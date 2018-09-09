@@ -28,7 +28,7 @@ public class Untimed_Trigger_Event_Script : MonoBehaviour {
     // Animation Variables
     private Animator playerAnimator;
     private Animator lockedObjectAnimator;
-	public string animationName; 
+	public string animationName = "doorOpening"; 
 
     // Currency Variables
     public int costAmount;

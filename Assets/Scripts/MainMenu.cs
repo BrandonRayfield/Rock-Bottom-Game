@@ -74,24 +74,20 @@ public class MainMenu : MonoBehaviour {
         SceneManager.LoadScene(3);
     }
 
-    public void Load_Ring_Of_Fire() {
+    public void Load_Prototype_Game() {
         SceneManager.LoadScene(4);
     }
 
-    public void Load_Prototype_Game() {
+    public void Load_Rock_Level_2() {
         SceneManager.LoadScene(5);
     }
 
-    public void Load_Rock_Level_2() {
+    public void Load_Boss_Game() {
         SceneManager.LoadScene(6);
     }
 
-    public void Load_Boss_Game() {
-        SceneManager.LoadScene(7);
-    }
-
     public void Load_Test_Game() {
-        SceneManager.LoadScene(8);
+        SceneManager.LoadScene(7);
     }
 
 
