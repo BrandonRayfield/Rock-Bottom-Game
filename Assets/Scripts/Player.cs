@@ -165,6 +165,11 @@ public class Player : MonoBehaviour {
     public Vector3 target;
     private Vector3 nullTarget = new Vector3(0, 0, 0);
 
+    // Transition Scene Variables
+    public bool isTransiton;
+    public GameObject elevatorTrigger;
+    public Animator elevatorAnimator;
+
     // Use this for initialization
     void Start () {
 		animator = GetComponent<Animator> ();
@@ -265,6 +270,14 @@ public class Player : MonoBehaviour {
                         health = maxHealth;
                         time = 3f;
                     }
+
+                    // Resetting Elevator in transition
+                    if (isTransiton) {
+                        transform.parent = null;
+                        elevatorAnimator.Play("Reset");
+                        elevatorTrigger.GetComponent<Ring_Trigger>().SetIsTriggered(false);
+                    }
+
                 }
             }
         }
