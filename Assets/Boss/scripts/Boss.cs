@@ -170,7 +170,7 @@ public class Boss : MonoBehaviour {
         }
 
         //reset timer
-        cycle_timer = Time.time + 3f;
+        cycle_timer = Time.time + 1.5f;
     }
 
     public void charge() {
