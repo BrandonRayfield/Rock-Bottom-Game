@@ -84,4 +84,8 @@ public class Ring_Trigger : MonoBehaviour {
         }
     }
 
+    public void SetIsTriggered(bool triggered) {
+        isTriggered = triggered;
+    }
+
 }
