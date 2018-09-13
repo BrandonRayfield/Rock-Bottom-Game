@@ -6,6 +6,10 @@ using UnityEngine.UI;
 
 public class Comic_Controller : MonoBehaviour {
 
+    public bool isEnding;
+    public GameObject fadeImage;
+    public GameObject endScreen;
+
     public GameObject[] imageObjects;
     public Sprite[] comicPanels;
 
@@ -57,9 +61,19 @@ public class Comic_Controller : MonoBehaviour {
 
 
         } else {
-            Load_Level();
+            if(!isEnding) {
+                Load_Level();
+            } else {
+                fadeImage.GetComponent<Fade_Script>().LoadNewLevel(0, true);
+                Invoke("showEndScreen", 1);
+            }
+
         }
 
+    }
+
+    public void showEndScreen() {
+        endScreen.SetActive(true);
     }
 
     public void Load_Level() {
