@@ -90,7 +90,7 @@ public class MainMenu : MonoBehaviour {
         SceneManager.LoadScene(7);
     }
 
-    public void Load_Test_Game() {
+    public void Load_End_Comic() {
         SceneManager.LoadScene(8);
     }
 
