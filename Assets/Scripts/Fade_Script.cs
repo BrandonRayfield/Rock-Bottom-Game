@@ -12,13 +12,23 @@ public class Fade_Script : MonoBehaviour {
         animator.SetTrigger("FadeOut");
     }
 
+    public void delayedFadeToLevel() {
+        animator.SetTrigger("DelayedFadeOut");
+        Invoke("OnFadeComplete", 5);
+    }
+
     public void OnFadeComplete() {
         SceneManager.LoadScene(sceneNumber);
     }
 
-    public void LoadNewLevel(int levelIndex) {
+    public void LoadNewLevel(int levelIndex, bool isDelay) {
         sceneNumber = levelIndex;
-        FadeToLevel();
+
+        if(isDelay) {
+            delayedFadeToLevel();
+        } else {
+            FadeToLevel();
+        }
     }
 
 }

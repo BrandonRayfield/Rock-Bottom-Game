@@ -41,7 +41,7 @@ public class LevelExit : MonoBehaviour {
             time += Time.deltaTime;
 
             if (time > restartTime) {
-                fadeImage.GetComponent<Fade_Script>().LoadNewLevel(sceneNumber);
+                fadeImage.GetComponent<Fade_Script>().LoadNewLevel(sceneNumber, false);
             }
         }
 
