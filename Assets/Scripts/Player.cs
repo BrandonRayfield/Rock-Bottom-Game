@@ -111,6 +111,9 @@ public class Player : MonoBehaviour {
     public bool touchTopCrush;
     public bool touchBottomCrush;
 
+    // Checkpoint Variables
+    private bool checkpointActivated;
+
     //UI Variables
     public GameObject goldKeyUI;
     public Slider healthBar;
@@ -119,6 +122,7 @@ public class Player : MonoBehaviour {
     public Text shardText;
     public Text currencyText;
     public Text livesText;
+    public GameObject restartMenu;
 
     // Weapon UI Variables
     public GameObject currentGuitarIcon;
@@ -179,6 +183,9 @@ public class Player : MonoBehaviour {
 		newRotation = transform.rotation;
         health = maxHealth;
         currentDirection = 1;
+
+        // Make sure game over menu starts disabled
+        restartMenu.SetActive(false);
 
         livesLeft = 3;
         currentPitch = minPitch;
@@ -255,7 +262,9 @@ public class Player : MonoBehaviour {
 
             if (time <= restartTime) {
                 if (livesLeft < 0) {
-                    SceneManager.LoadScene(0);
+                    //SceneManager.LoadScene(0);
+                    gameResult.enabled = false;
+                    restartMenu.SetActive(true);
                 } else {
                     gameResult.enabled = false;
                     dead = false;
@@ -316,6 +325,7 @@ public class Player : MonoBehaviour {
         healthBar.value = health / 100;
     }
 
+    // Moved jumping code to fixed update in order to fix weird super jump glitch. Seems to work much better now
     private void FixedUpdate() {
         if(wantsToJump) {
             Vector3 velocity = rb.velocity;
@@ -540,6 +550,7 @@ public class Player : MonoBehaviour {
         if (otherObject.transform.tag == "Checkpoint") {
             setCheckPoint(otherObject.gameObject);
             Instantiate(checkpointSound, transform.position, transform.rotation);
+
         }
 
         if(otherObject.transform.tag == "Rope")
