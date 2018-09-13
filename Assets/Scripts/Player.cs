@@ -61,8 +61,9 @@ public class Player : MonoBehaviour {
     //Running
     private bool isRunning;
 
-	//Jumping
-	public float jumpForce = 200.0f;
+    //Jumping
+    private bool wantsToJump;
+    public float jumpForce = 200.0f;
 	private float distToGround = 1;
 	private float jumpCoolDown = 0.6f;
 	private float jumpTime;
@@ -315,6 +316,19 @@ public class Player : MonoBehaviour {
         healthBar.value = health / 100;
     }
 
+    private void FixedUpdate() {
+        if(wantsToJump) {
+            Vector3 velocity = rb.velocity;
+            velocity.y = jumpForce * Time.deltaTime;
+            rb.velocity = velocity;
+            //rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Force);
+            Instantiate(jumpSound, transform.position, transform.rotation);
+            canDoubleJump = true;
+            //jumpTime = Time.time + jumpCoolDown;
+            wantsToJump = false;
+        }
+    }
+
     private void Controls() {
 
         if (!IsGrounded()) {
@@ -328,13 +342,7 @@ public class Player : MonoBehaviour {
             //Jumping
             if(canJump) {
                 if (Input.GetKeyDown("space") && IsGrounded() && Time.time > jumpTime) {
-                    Vector3 velocity = rb.velocity;
-                    velocity.y = jumpForce * Time.deltaTime;
-                    rb.velocity = velocity;
-                    //rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Force);
-                    Instantiate(jumpSound, transform.position, transform.rotation);
-                    canDoubleJump = true;
-                    //jumpTime = Time.time + jumpCoolDown;
+                    wantsToJump = true;
                 }
 
                 if(unlockedDoubleJump) {
