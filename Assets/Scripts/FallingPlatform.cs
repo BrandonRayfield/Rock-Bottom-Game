@@ -7,37 +7,49 @@ public class FallingPlatform : MonoBehaviour {
     public float fallTime = 1.0f;
     public float respawnTime = 9.0f;
     private bool playerTouched = false;
+    private bool isShaking;
 
     private GameObject fallingPlatform;
+    private Animator platformAnimator;
     private Vector3 platformStartPosition;
     private Quaternion platformStartRotation;
 
 	// Use this for initialization
 	void Start () {
-        fallingPlatform = this.gameObject;
-        platformStartPosition = fallingPlatform.transform.position;
-        platformStartRotation = fallingPlatform.transform.rotation;
+        fallingPlatform = gameObject.transform.GetChild(0).gameObject;
+        platformAnimator = fallingPlatform.GetComponent<Animator>();
+        platformStartPosition = transform.position;
+        platformStartRotation = transform.rotation;
 
     }
 	
 	// Update is called once per frame
 	void Update () {
+
+        if(isShaking) {
+            platformAnimator.Play("shaking_platform");
+        } else {
+            platformAnimator.Play("stable");
+        }
+
         if (playerTouched)
         {
+            isShaking = true;
             time += Time.deltaTime;
-
             if (time > fallTime)
             {
-                fallingPlatform.GetComponent<Rigidbody>().useGravity = true;
-                fallingPlatform.GetComponent<Rigidbody>().isKinematic = false;
+                isShaking = false;
+                GetComponent<Rigidbody>().useGravity = true;
+                GetComponent<Rigidbody>().isKinematic = false;
             }
 
             if (time > respawnTime) {
-                fallingPlatform.GetComponent<Rigidbody>().useGravity = false;
-                fallingPlatform.GetComponent<Rigidbody>().isKinematic = true;
+                GetComponent<Rigidbody>().useGravity = false;
+                GetComponent<Rigidbody>().isKinematic = true;
                 playerTouched = false;
-                fallingPlatform.transform.position = platformStartPosition;
-                fallingPlatform.transform.rotation = platformStartRotation;
+                isShaking = false;
+                transform.position = platformStartPosition;
+                transform.rotation = platformStartRotation;
                 time = 0;
             }
 
