@@ -64,7 +64,8 @@ public class CameraScript : MonoBehaviour {
         transform.position = Vector3.MoveTowards(transform.position, cameraPosition, 10.0f * Time.deltaTime);
     }
 
-    public void SetFocusPoint(GameObject newFocus) {
+    public void SetFocusPoint(GameObject newFocus, float newFocusTime) {
+        focusTime = newFocusTime;
         focusPoint = newFocus.transform.position;
         isFinished = false;
         boolNewFocus = true;

@@ -80,7 +80,7 @@ public class DialogueManager : MonoBehaviour {
             nameText.text = sentence.name;
 
             if(sentence.newFocus != null) {
-                cameraObject.GetComponent<CameraScript>().SetFocusPoint(sentence.newFocus);
+                cameraObject.GetComponent<CameraScript>().SetFocusPoint(sentence.newFocus, sentence.focusTime);
             }
 
             StartCoroutine(TypeSentence(sentence.sentences));

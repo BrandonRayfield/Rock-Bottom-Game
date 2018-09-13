@@ -21,6 +21,7 @@ public class DialogueTrigger : MonoBehaviour {
     public float rewardHeightPosition = 1.0f;
     public bool isProgressor;
     public GameObject progressObject;
+    public float focusTime = 4.0f;
     private Animator progressObjectAnimator;
 
 
@@ -114,7 +115,7 @@ public class DialogueTrigger : MonoBehaviour {
                 // If the NPC is supposed to unlock the next area for the player, open object
                 if (isProgressor && !isUnlocked) {
                     progressObjectAnimator.Play("doorOpening");
-                    cameraObject.GetComponent<CameraScript>().SetFocusPoint(progressObject);
+                    cameraObject.GetComponent<CameraScript>().SetFocusPoint(progressObject, focusTime);
                     isUnlocked = true;
                 }
 

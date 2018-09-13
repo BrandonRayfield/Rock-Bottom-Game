@@ -8,6 +8,7 @@ public class Untimed_Trigger_Event_Script : MonoBehaviour {
     // General Variables
     public GameObject playerObject;
     public GameObject lockedObject;
+    public float focusTime = 4.0f;
     private GameObject cameraObject;
 
     // Sound Variables
@@ -92,7 +93,7 @@ public class Untimed_Trigger_Event_Script : MonoBehaviour {
         if (padTriggered) {
             time += Time.deltaTime;
             if (time >= songLength) {
-                cameraObject.GetComponent<CameraScript>().SetFocusPoint(lockedObject);
+                cameraObject.GetComponent<CameraScript>().SetFocusPoint(lockedObject, focusTime);
 				lockedObjectAnimator.Play(animationName);
                 Instantiate(doorSound, transform.position, transform.rotation);
                 time = 0;

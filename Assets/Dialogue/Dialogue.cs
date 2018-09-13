@@ -14,4 +14,6 @@ public class Dialogue {
 
     public GameObject newFocus;
 
+    public float focusTime = 4.0f;
+
 }

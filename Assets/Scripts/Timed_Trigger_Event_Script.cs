@@ -34,6 +34,7 @@ public class Timed_Trigger_Event_Script : MonoBehaviour {
 
     // Check if player made it in time Variables
     public GameObject lockedObject;
+    public float focusTime = 4.0f;
     public bool madeIt;
     public GameObject madeItZone;
 
@@ -81,7 +82,7 @@ public class Timed_Trigger_Event_Script : MonoBehaviour {
         if (padTriggered) {
             time += Time.deltaTime;
             if (time >= 1) {
-                cameraObject.GetComponent<CameraScript>().SetFocusPoint(lockedObject);
+                cameraObject.GetComponent<CameraScript>().SetFocusPoint(lockedObject, focusTime);
                 time = 0;
                 padTriggered = false;
                 currentTime = maxTime;
