@@ -27,6 +27,10 @@ public class DialogueManager : MonoBehaviour {
     private bool isAutomatic;
     private bool autoComplete;
 
+    // Boss Cutscene Variables
+    private bool isBossScene;
+    private bool bossComplete;
+
     // GameManager Object for quests
     private GameManager gameManager;
 
@@ -52,6 +56,10 @@ public class DialogueManager : MonoBehaviour {
             autoComplete = false;
         }
 
+        if (isBossScene) {
+            bossComplete = false;
+        }
+
         animator.SetBool("IsOpen", true);
         //Debug.Log("Starting Coversation with " + dialogue.name);
         sentences.Clear();
@@ -68,6 +76,10 @@ public class DialogueManager : MonoBehaviour {
 
             if (isAutomatic) {
                 autoComplete = true;
+            }
+
+            if (isBossScene) {
+                bossComplete = true;
             }
 
             EndDialogue();
@@ -144,12 +156,25 @@ public class DialogueManager : MonoBehaviour {
         return currentNpcID;
     }
 
+    //--------------------------------------------------------------------------------------
+    // Automatic Functions
+
     public void setIsAutomatic(bool automatic) {
         isAutomatic = automatic;
     }
 
     public bool getIsAutoComplete() {
         return autoComplete;
+    }
+
+    //--------------------------------------------------------------------------------------
+    // Boss Functions
+    public void setIsBoss(bool boss) {
+        isBossScene = boss;
+    }
+
+    public bool getIsBossComplete() {
+        return bossComplete;
     }
 
 }
