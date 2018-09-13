@@ -37,6 +37,10 @@ public class Chaser : MonoBehaviour {
     public GameObject EnemyHealth;
     private float currentHealthDisTime;
     private bool dead = false;
+
+    //Object Spawn Variables
+    private int randomNumberDrop;
+    public GameObject healthDrop;
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody>();
@@ -240,11 +244,20 @@ public class Chaser : MonoBehaviour {
 
             if (enemygeneric.health <= 0) {
                 dead = true;
+                randomDrop();
                 //Instantiate(deathSound, transform.position, transform.rotation);
                 this.transform.tag = "Untagged";
                 Destroy(EnemyHealth.gameObject);
                 Destroy(this.gameObject);
             }
+        }
+    }
+
+    private void randomDrop() {
+        randomNumberDrop = Random.Range(1, 3);
+
+        if (randomNumberDrop == 1) {
+            Instantiate(healthDrop, new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z), transform.rotation);
         }
     }
 }

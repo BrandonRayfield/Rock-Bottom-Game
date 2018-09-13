@@ -161,21 +161,26 @@ public class Boss : MonoBehaviour {
                 animator.Play("Charge");
                 current_state = state.charge;
                 Instantiate(chargeAttack, chargeLocation.transform.position, chargeLocation.transform.rotation);
+                cycle_timer = Time.time + 3f;
                 break;
             case 2:
                 
                 current_state = state.crush;
+                //cycle_timer = Time.time + 1.5f;
                 break;
             case 3:
                 animator.Play("Roar");
                 current_state = state.smash;
+                cycle_timer = Time.time + 1.5f;
                 break;
             case 4:
                 summoned = false;
                 current_state = state.summon;
+                cycle_timer = Time.time + 1.5f;
                 break;
             case 5:
                 current_state = state.idle;
+                cycle_timer = Time.time + 1.5f;
                 break;
         }
         //change direction
@@ -185,12 +190,12 @@ public class Boss : MonoBehaviour {
         }
 
         //reset timer
-        cycle_timer = Time.time + 1.5f;
+        
     }
 
     public void charge() {
         rb.velocity = new Vector3(speed * direction * Time.deltaTime * 2.5f, 0, 0);
-        cycle_timer = Time.time + 1f;
+        
     }
 
     public void OnTriggerEnter(Collider other) {

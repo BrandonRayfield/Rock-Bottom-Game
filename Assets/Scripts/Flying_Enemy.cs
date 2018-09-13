@@ -38,6 +38,10 @@ public class Flying_Enemy : MonoBehaviour {
     private Transform healthBarTarget;
     public GameObject EnemyHealth;
     private float currentHealthDisTime;
+
+    //Object Spawn Variables
+    private int randomNumberDrop;
+    public GameObject healthDrop;
     // Use this for initialization
     void Start() {
         try {
@@ -100,7 +104,8 @@ public class Flying_Enemy : MonoBehaviour {
 
             LayerMask mask = 9;
             
-            if (!Physics.Linecast(transform.position, player.transform.position, mask)) {
+            if (!Physics.Linecast(transform.position, player.transform.position, mask) && 
+                Vector3.Distance(player.transform.position, transform.position) < 5f) {
                 if (Mathf.Abs(transform.position.y - player.transform.position.y) <= 1f &&
                     Mathf.Abs(transform.position.x - player.transform.position.x) <= 5f) {
                     swoop_target = player.transform.position + (player.transform.position - transform.position);
@@ -153,6 +158,7 @@ public class Flying_Enemy : MonoBehaviour {
 
             if (enemygeneric.health <= 0) {
                 dead = true;
+                randomDrop();
                 //Instantiate(deathSound, transform.position, transform.rotation);
                 this.transform.tag = "Untagged";
                 Destroy(EnemyHealth.gameObject);
@@ -197,6 +203,14 @@ public class Flying_Enemy : MonoBehaviour {
 
             swoop_target = away;
             moveTimer = Time.time + 1f;
+        }
+    }
+
+    private void randomDrop() {
+        randomNumberDrop = Random.Range(1, 3);
+
+        if (randomNumberDrop == 1) {
+            Instantiate(healthDrop, new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z), transform.rotation);
         }
     }
 }
