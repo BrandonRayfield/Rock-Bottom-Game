@@ -40,6 +40,12 @@ public class DialogueTrigger : MonoBehaviour {
     private bool hasTriggered;
     private bool autoComplete;
 
+    // Boss Variables
+    public bool isBossCutscene;
+    public GameObject bossObject;
+    private bool bossActivate;
+    private bool bossComplete;
+
     //UI Elements
     public Text interactText;
 
@@ -62,6 +68,7 @@ public class DialogueTrigger : MonoBehaviour {
 
         currentNpcID = FindObjectOfType<DialogueManager>().getCurrentNpcID();
         autoComplete = FindObjectOfType<DialogueManager>().getIsAutoComplete();
+        bossComplete = FindObjectOfType<DialogueManager>().getIsBossComplete();
 
         if (canTalk) {
             isTalking = FindObjectOfType<DialogueManager>().getIsTalking();
@@ -84,6 +91,11 @@ public class DialogueTrigger : MonoBehaviour {
         if (currentNpcID == NpcID && !canTalk) {
             FindObjectOfType<DialogueManager>().EndDialogue();
             isTalking = false;
+        }
+
+        if(isBossCutscene && bossComplete && !bossActivate) {
+            bossObject.GetComponent<Boss>().setIsEngaged(true);
+            bossActivate = true;
         }
 
     }
@@ -131,6 +143,7 @@ public class DialogueTrigger : MonoBehaviour {
         if (other.gameObject.tag == "Player") {
             FindObjectOfType<DialogueManager>().setCurrentNpcID(NpcID);
             FindObjectOfType<DialogueManager>().setIsAutomatic(isAutomatic);
+            FindObjectOfType<DialogueManager>().setIsBoss(isBossCutscene);
             canTalk = true;
 
             if (isAutomatic && !hasTriggered) {

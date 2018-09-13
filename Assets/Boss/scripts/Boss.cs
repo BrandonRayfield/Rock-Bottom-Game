@@ -61,6 +61,11 @@ public class Boss : MonoBehaviour {
     public GameObject weaponObjectSlot;
     private int guitarStance;
 
+    // Winning Variables
+    public GameObject bossZone;
+    public GameObject finalDialogue;
+    public bool isEngaged;
+
 
       // Use this for initialization
     void Start () {
@@ -83,23 +88,33 @@ public class Boss : MonoBehaviour {
     // Update is called once per frame
     void Update() {
 
-        switch (current_state) {
-            case state.charge:
-                charge();
-                break;
-            case state.summon:
-                summon();
-                break;
-            case state.crush:
-                crush();
-                break;
-            case state.smash:
-                smash();
-                break;
+        if(isEngaged && !dead) {
+            if (EnemyHealth != null) {
+                EnemyHealth.SetActive(true);
+            }
+            switch (current_state) {
+                case state.charge:
+                    charge();
+                    break;
+                case state.summon:
+                    summon();
+                    break;
+                case state.crush:
+                    crush();
+                    break;
+                case state.smash:
+                    smash();
+                    break;
+            }
+
+            if (cycle_timer < Time.time) cycle();
+        } else {
+            if (EnemyHealth != null) {
+                EnemyHealth.SetActive(false);
+            }
         }
+        
 
-
-        if (cycle_timer < Time.time) cycle();
 
 
         if (Input.GetKey(KeyCode.F1)) {
@@ -262,21 +277,33 @@ public class Boss : MonoBehaviour {
     }
 
     public void takeDamage(float damage) {
-        if (currentHealthDisTime < Time.time) {
-            enemygeneric.health -= damage;
+        if (isEngaged) {
+            if (currentHealthDisTime < Time.time) {
+                enemygeneric.health -= damage;
 
-            EnemyHealth.SetActive(true);
-            EnemyHealth.GetComponent<Slider>().value = enemygeneric.health;
+                EnemyHealth.SetActive(true);
+                EnemyHealth.GetComponent<Slider>().value = enemygeneric.health;
 
-            currentHealthDisTime = Time.time + 0.5f;
+                currentHealthDisTime = Time.time + 0.5f;
 
-            if (enemygeneric.health <= 0) {
-                dead = true;
-                //Instantiate(deathSound, transform.position, transform.rotation);
-                this.transform.tag = "Untagged";
-                Destroy(EnemyHealth.gameObject);
-                Destroy(this.gameObject);
+                if (enemygeneric.health <= 0) {
+                    dead = true;
+                    //Instantiate(deathSound, transform.position, transform.rotation);
+                    this.transform.tag = "Untagged";
+                    Destroy(EnemyHealth.gameObject);
+                    //Destroy(this.gameObject);
+                    //animator.Play("Kneel");
+                    animator.Play("Idle");
+                    bossZone.GetComponent<Boss_Zone>().setIsDisabled(true);
+                    finalDialogue.SetActive(true);
+                    finalDialogue.transform.SetParent(null);
+                }
             }
-        }
+        }  
     }
+
+    public void setIsEngaged(bool engage) {
+        isEngaged = engage;
+    }
+
 }
