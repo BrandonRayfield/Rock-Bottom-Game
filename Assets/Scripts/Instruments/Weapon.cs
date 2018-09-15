@@ -66,12 +66,12 @@ public abstract class Weapon : MonoBehaviour {
                 attackTimer = Time.time + attackRate;
             }
             //Lightning Attack
-            if (Input.GetKeyDown("1") && Time.time > magicTimer1) {
+            if (Input.GetKeyDown("x") && Time.time > magicTimer1) {
                 SpecialAttack1();
                 magicTimer1 = Time.time + magicRate1;
             }
 
-            if (Input.GetKeyDown("2") && Time.time > magicTimer2) {
+            if (Input.GetKeyDown("c") && Time.time > magicTimer2) {
                 SpecialAttack2();
                 magicTimer2 = Time.time + magicRate2;
             }
