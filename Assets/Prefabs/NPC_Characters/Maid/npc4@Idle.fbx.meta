@@ -1,9 +1,7 @@
 fileFormatVersion: 2
 guid: 7914fcc14a034cf43ae304ffb0fd46d8
-timeCreated: 1535650167
-licenseType: Free
 ModelImporter:
-  serializedVersion: 21
+  serializedVersion: 23
   fileIDToRecycleName:
     100000: default
     100002: default002
@@ -68,10 +66,43 @@ ModelImporter:
     7400000: mixamo.com
     9500000: //RootNode
     13700000: default002
+    2186277476908879412: ImportLogs
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: defaultSG1mat
+    second: {fileID: 2100000, guid: 2f192bbea2583024a9c37561c35ac423, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: defaultSG2mat
+    second: {fileID: 2100000, guid: 69c36ab9f9877f5429ddeb31e9ab0ca9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: defaultSG3mat
+    second: {fileID: 2100000, guid: 7cfbe7a7074221b44b7e03f39b6eb0bd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: defaultSG4mat
+    second: {fileID: 2100000, guid: 3aaac29b97ba34e4f99bb80d79d660ae, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: defaultSG5mat
+    second: {fileID: 2100000, guid: 41ade5c3a0f92d441b3e3dd5a45c75ba, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: defaultSGmat
+    second: {fileID: 2100000, guid: 55b06cc03e4d34448baaf0c90eb23e5d, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
+    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -84,6 +115,8 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -108,11 +141,15 @@ ModelImporter:
     optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0

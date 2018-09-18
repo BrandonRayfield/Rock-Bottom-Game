@@ -1,0 +1,242 @@
+fileFormatVersion: 2
+guid: 332842178b5540b4ab51bd0b5b4d76de
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Bone025
+    100004: Bone026
+    100006: Bone027
+    100008: Bone028
+    100010: Bone029
+    100012: Bone030
+    100014: Bone031
+    100016: Bone032
+    100018: Bone033
+    100020: Bone034
+    100022: Bone035
+    100024: Bone036
+    100026: Bone037
+    100028: Bone038
+    100030: Bone039
+    100032: Bone040
+    100034: Bone041
+    100036: Bone042
+    100038: Bone043
+    100040: Bone044
+    100042: Bone045
+    100044: Bone046
+    100046: Bone047
+    100048: Bone048
+    100050: Bone049
+    100052: Bone050
+    100054: Box001
+    100056: Box005
+    100058: Cone001
+    100060: Cone002
+    100062: Cone004
+    100064: Cone005
+    100066: Cone007
+    100068: Cone008
+    100070: Cone009
+    100072: Cone010
+    100074: IK Chain001
+    100076: IK Chain002
+    100078: IK Chain003
+    100080: IK Chain004
+    100082: IK Chain005
+    100084: IK Chain006
+    100086: IK Chain007
+    100088: IK Chain008
+    100090: Sphere001
+    100092: Sphere002
+    100094: Sphere003
+    100096: Sphere004
+    100098: Sphere005
+    100100: Sphere006
+    400000: //RootNode
+    400002: Bone025
+    400004: Bone026
+    400006: Bone027
+    400008: Bone028
+    400010: Bone029
+    400012: Bone030
+    400014: Bone031
+    400016: Bone032
+    400018: Bone033
+    400020: Bone034
+    400022: Bone035
+    400024: Bone036
+    400026: Bone037
+    400028: Bone038
+    400030: Bone039
+    400032: Bone040
+    400034: Bone041
+    400036: Bone042
+    400038: Bone043
+    400040: Bone044
+    400042: Bone045
+    400044: Bone046
+    400046: Bone047
+    400048: Bone048
+    400050: Bone049
+    400052: Bone050
+    400054: Box001
+    400056: Box005
+    400058: Cone001
+    400060: Cone002
+    400062: Cone004
+    400064: Cone005
+    400066: Cone007
+    400068: Cone008
+    400070: Cone009
+    400072: Cone010
+    400074: IK Chain001
+    400076: IK Chain002
+    400078: IK Chain003
+    400080: IK Chain004
+    400082: IK Chain005
+    400084: IK Chain006
+    400086: IK Chain007
+    400088: IK Chain008
+    400090: Sphere001
+    400092: Sphere002
+    400094: Sphere003
+    400096: Sphere004
+    400098: Sphere005
+    400100: Sphere006
+    2100000: 20 - Default
+    2100002: 07 - Default
+    2100004: 13 - Default
+    2100006: 09 - Default
+    2100008: 03 - Default
+    2100010: 19 - Default
+    2300000: Cone001
+    2300002: Cone002
+    2300004: Cone004
+    2300006: Cone005
+    2300008: Cone007
+    2300010: Cone008
+    2300012: Cone009
+    2300014: Cone010
+    2300016: Sphere001
+    2300018: Sphere002
+    2300020: Sphere003
+    2300022: Sphere004
+    2300024: Sphere005
+    2300026: Sphere006
+    3300000: Cone001
+    3300002: Cone002
+    3300004: Cone004
+    3300006: Cone005
+    3300008: Cone007
+    3300010: Cone008
+    3300012: Cone009
+    3300014: Cone010
+    3300016: Sphere001
+    3300018: Sphere002
+    3300020: Sphere003
+    3300022: Sphere004
+    3300024: Sphere005
+    3300026: Sphere006
+    4300000: Sphere001
+    4300002: Sphere002
+    4300004: Sphere003
+    4300006: Cone001
+    4300008: Cone002
+    4300010: Cone004
+    4300012: Sphere004
+    4300014: Cone005
+    4300016: Sphere005
+    4300018: Sphere006
+    4300020: Cone007
+    4300022: Cone008
+    4300024: Cone009
+    4300026: Cone010
+    4300028: Box005
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: Box005
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.0254
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
