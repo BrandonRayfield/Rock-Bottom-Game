@@ -208,4 +208,11 @@ public class GameManager : MonoBehaviour {
             throw new Exception("Invalid Quest ID");
         }
     }
+
+    public void killTheSpiders() {
+        GameObject[] spiders = GameObject.FindGameObjectsWithTag("Enemy");
+        for (int i = 0; i < spiders.Length; i++) {
+            if (spiders[i].GetComponent<Chaser>() != null) spiders[i].GetComponent<Chaser>().takeDamage(100);
+        }
+    }
 }
