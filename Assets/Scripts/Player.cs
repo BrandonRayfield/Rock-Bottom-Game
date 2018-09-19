@@ -286,6 +286,7 @@ public class Player : MonoBehaviour {
                         transform.parent = null;
                         elevatorAnimator.Play("Reset");
                         elevatorTrigger.GetComponent<Ring_Trigger>().SetIsTriggered(false);
+                        GameManager.instance.killTheSpiders();
                     }
 
                 }
