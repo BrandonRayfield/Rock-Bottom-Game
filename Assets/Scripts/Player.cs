@@ -289,6 +289,10 @@ public class Player : MonoBehaviour {
                         GameManager.instance.killTheSpiders();
                     }
 
+                    if (SceneManager.GetActiveScene().buildIndex == 7) {
+                        GameManager.instance.killTheSpiders();
+                    }
+
                 }
             }
         }
