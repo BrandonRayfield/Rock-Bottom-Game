@@ -588,6 +588,11 @@ public class Player : MonoBehaviour {
 
             if (itemID == 420) { // Player picks up currency object
                 currencyCount += itemValue;
+                if (currencyCount%100 == 0) {
+                    Instantiate(shardSound, transform.position, transform.rotation);
+                    livesLeft++;
+                    livesText.text = "Lives: " + livesLeft;
+                }
                 currencyText.text = "Beat Coins: " + currencyCount.ToString();
 
                 if (randomPickupPitch) {

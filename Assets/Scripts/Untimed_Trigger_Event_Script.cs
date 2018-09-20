@@ -72,6 +72,8 @@ public class Untimed_Trigger_Event_Script : MonoBehaviour {
     private void activatePad() {
         currentAmount = playerObject.GetComponent<Player>().getCurrencyAmount();
         if (currentAmount >= costAmount) {
+            //pause enemies
+            GameManager.instance.isTalking = true;
             playerObject.GetComponent<PauseMenu>().selectGuitar();
             playerAnimator.Play("Guitar Playing");
             Instantiate(guitarSound, transform.position, transform.rotation);
@@ -130,6 +132,8 @@ public class Untimed_Trigger_Event_Script : MonoBehaviour {
                 Instantiate(doorSound, transform.position, transform.rotation);
                 time = 0;
                 padTriggered = false;
+                //resume enemies
+                GameManager.instance.isTalking = false;
             }
         }
 	}
