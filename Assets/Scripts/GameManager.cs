@@ -24,6 +24,9 @@ public class GameManager : MonoBehaviour {
 
     private bool questUpdated;
 
+    //Dialogue variables
+    public bool isTalking = false;
+
     // Awake Checks - Singleton setup
     void Awake() {
 

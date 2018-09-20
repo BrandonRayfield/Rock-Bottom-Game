@@ -65,51 +65,53 @@ public class Chaser : MonoBehaviour {
         //Health bar update
         EnemyHealth.transform.position = Camera.main.WorldToScreenPoint(new Vector3(healthBarTarget.position.x, healthBarTarget.position.y + 1, healthBarTarget.position.z));
 
-        //Check if player is visible
-        if (playerSeen && direction != (int)Mathf.Sign(player.transform.position.x - transform.position.x) &&
-            turnTimer < Time.time) {
+        if (GameManager.instance.isTalking == false) {
+            //Check if player is visible
+            if (playerSeen && direction != (int)Mathf.Sign(player.transform.position.x - transform.position.x) &&
+                turnTimer < Time.time) {
                 transform.Rotate(new Vector3(0f, 180f, 0f));
                 direction = direction * -1;
 
-            turnTimer = Time.time + 0.1f;
+                turnTimer = Time.time + 0.1f;
 
-        }
+            }
 
-        if (platform()) {
-            jump();
-        }
+            if (platform()) {
+                jump();
+            }
 
-        if (playerSeen && Vector3.Distance(transform.position, player.transform.position) < attackRange 
-            && IsGrounded() && attackTimer < Time.time) {
-            Vector3 location = (player.transform.position + Vector3.up) - transform.position;
-            location = Vector3.Normalize(location);
+            if (playerSeen && Vector3.Distance(transform.position, player.transform.position) < attackRange
+                && IsGrounded() && attackTimer < Time.time) {
+                Vector3 location = (player.transform.position + Vector3.up) - transform.position;
+                location = Vector3.Normalize(location);
                 rb.AddForce(location * 300);
                 isJumping = true;
-            GameObject damageBox = Instantiate(damageHitBox, transform.position, transform.rotation);
-            damageBox.transform.parent = transform;
+                GameObject damageBox = Instantiate(damageHitBox, transform.position, transform.rotation);
+                damageBox.transform.parent = transform;
 
-            playerSeen = false;
-            searchTimer = Time.time + 1f;
+                playerSeen = false;
+                searchTimer = Time.time + 1f;
 
 
-            //attacked = true;
-            stupidAttackLandingTimer = Time.time + 0.1f;
-            
+                //attacked = true;
+                stupidAttackLandingTimer = Time.time + 0.1f;
+
+            }
+
+            if ((noDrop() && !blocked()) || isJumping) {
+                transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
+                //print("ITS WORKING");
+            }
+            else if (!isJumping) {
+                transform.Rotate(new Vector3(0f, 180f, 0f));
+                direction = direction * -1;
+            }
+            if (IsGrounded()) {
+                isJumping = false;
+            }
+
+
         }
-
-        if ((noDrop() && !blocked()) || isJumping) {
-            transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
-            //print("ITS WORKING");
-        } else if (!isJumping){
-            transform.Rotate(new Vector3(0f, 180f, 0f));
-            direction = direction * -1;
-        }
-        if (IsGrounded()) {
-            isJumping = false;
-        }
-        
-
-
         
 
         //Timer updates
