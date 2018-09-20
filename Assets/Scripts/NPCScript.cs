@@ -144,6 +144,8 @@ public class NPCScript : MonoBehaviour {
         }
 
         if (canTalk && !decisionTime && !isTalking && Input.GetKeyDown("e")) {
+            //Talk to NPC Stop Time
+            Time.timeScale = 0f;
             // Player talks to NPC for first time
             if (firstTalk && GameManager.instance.goldKey == false) {
                 textBackground.SetActive(true);
@@ -343,6 +345,9 @@ public class NPCScript : MonoBehaviour {
             currentlyDisplayingText = 4;
             questIcon.SetActive(true);
         }
+
+        //Restart Time
+        Time.timeScale = 1.0f;
     }
 
     IEnumerator AnimateText() {

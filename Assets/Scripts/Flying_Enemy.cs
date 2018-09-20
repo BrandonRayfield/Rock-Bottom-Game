@@ -99,36 +99,39 @@ public class Flying_Enemy : MonoBehaviour {
     }
 
     public void Movement() {
+        if (GameManager.instance.isTalking == false) {
+            if (Vector3.Distance(transform.position, swoop_target) <= targetRadius || moveTimer < Time.time) {
 
-        if (Vector3.Distance(transform.position, swoop_target) <= targetRadius || moveTimer < Time.time) {
+                LayerMask mask = 9;
 
-            LayerMask mask = 9;
-            
-            if (!Physics.Linecast(transform.position, player.transform.position, mask) && 
-                Vector3.Distance(player.transform.position, transform.position) < 5f) {
-                if (Mathf.Abs(transform.position.y - player.transform.position.y) <= 1f &&
-                    Mathf.Abs(transform.position.x - player.transform.position.x) <= 5f) {
-                    swoop_target = player.transform.position + (player.transform.position - transform.position);
-                    swoop_target.y = transform.position.y;
-                    moveTimer = Time.time + 0.5f;
-                    speed = 250f;
+                if (!Physics.Linecast(transform.position, player.transform.position, mask) &&
+                    Vector3.Distance(player.transform.position, transform.position) < 5f) {
+                    if (Mathf.Abs(transform.position.y - player.transform.position.y) <= 1f &&
+                        Mathf.Abs(transform.position.x - player.transform.position.x) <= 5f) {
+                        swoop_target = player.transform.position + (player.transform.position - transform.position);
+                        swoop_target.y = transform.position.y;
+                        moveTimer = Time.time + 0.5f;
+                        speed = 250f;
+                    }
+                    else {
+                        swoop_target = new Vector3(Random.Range(-4, 4) + player.transform.position.x,
+                            player.transform.position.y, 0f);
+                        moveTimer = Time.time + 0.5f;
+                        speed = 110f;
+                    }
+
                 }
                 else {
-                    swoop_target = new Vector3(Random.Range(-4, 4) + player.transform.position.x,
-                        player.transform.position.y, 0f);
+                    swoop_target = new Vector3(Random.Range(-4, 4) + transform.position.x,
+                        Random.Range(-4, 4) + transform.position.y, 0f);
                     moveTimer = Time.time + 0.5f;
                     speed = 110f;
                 }
 
-            } else {
-                swoop_target = new Vector3(Random.Range(-4, 4) + transform.position.x,
-                    Random.Range(-4, 4) + transform.position.y, 0f);
-                moveTimer = Time.time + 0.5f;
-                speed = 110f;
             }
-                
-        } else {
-            MoveTowardsTarget(swoop_target);
+            else {
+                MoveTowardsTarget(swoop_target);
+            }
         }
     }
 

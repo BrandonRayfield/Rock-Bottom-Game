@@ -153,14 +153,15 @@ public class Boss : MonoBehaviour {
         crush_location = Vector3.zero;
         drop = false;
 
-        int new_state = Random.Range(1, 5);
+        int new_state = Random.Range(1, 6);
         if (new_state > 5) new_state = 5;
         switch (new_state) {
             case 1:
                 //transform.Rotate(Vector3.forward * 55 * -direction);
                 animator.Play("Charge");
                 current_state = state.charge;
-                Instantiate(chargeAttack, chargeLocation.transform.position, chargeLocation.transform.rotation);
+                GameObject charge = Instantiate(chargeAttack, chargeLocation.transform.position, chargeLocation.transform.rotation);
+                charge.transform.parent = transform;
                 cycle_timer = Time.time + 3f;
                 break;
             case 2:
@@ -215,8 +216,9 @@ public class Boss : MonoBehaviour {
         if (cycle_timer - Time.time >= 1.0f) {
             MoveTowards(player.transform.position);
         } else if (!summoned) {
-            Instantiate(summons[0], transform.position + new Vector3(2f,-1.25f,0f), transform.rotation);
-            Instantiate(summons[0], transform.position + new Vector3(-2f, -1.25f, 0f), transform.rotation);
+            GameObject spawn1 = Instantiate(summons[0], transform.position + new Vector3(2f,-1.25f,0f), crushAttack.transform.rotation);
+            GameObject spawn2 = Instantiate(summons[0], transform.position + new Vector3(-2f, -1.25f, 0f), crushAttack.transform.rotation);
+            
             summoned = true;
         } else {
             MoveTowards(player.transform.position);
@@ -224,11 +226,11 @@ public class Boss : MonoBehaviour {
     }
 
     public void MoveTowards(Vector3 location) {
-        if (Mathf.Abs(transform.position.x - location.x) >= 1) {
-            rb.velocity = new Vector3(speed * Mathf.Sign(transform.position.x - location.x) * Time.deltaTime * 2.5f, 0, 0);
-        } else {
-            rb.velocity = new Vector3(0f, 0f, 0f);
-        }
+        //if (Mathf.Abs(Vector3.Distance(transform.position, location)) >= 1) {
+            rb.velocity = new Vector3(speed * Mathf.Sign(location.x - transform.position.x) * Time.deltaTime * 2.5f, 0, 0);
+        //} else {
+           // rb.velocity = new Vector3(0f, 0f, 0f);
+       // }
     }
 
     public void crush() {
@@ -241,7 +243,8 @@ public class Boss : MonoBehaviour {
             rb.velocity = Vector3.Normalize(crush_location - transform.position) * speed * 1.5f * Time.deltaTime;
             if (Vector3.Distance(crush_location, transform.position) <= 0.2f) {
                 drop = true;
-                Instantiate(crushAttack, crushLocation.transform.position, crushLocation.transform.rotation);
+                GameObject crush = Instantiate(crushAttack, crushLocation.transform.position, crushLocation.transform.rotation);
+                crush.transform.parent = transform;
             }
         } else {
             rb.velocity = Vector3.down * speed * 4 * Time.deltaTime;

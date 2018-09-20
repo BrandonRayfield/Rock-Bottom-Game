@@ -25,6 +25,9 @@ public class GameManager : MonoBehaviour {
     //Expression Variable
     private int expressionValue;
 
+    //Dialogue variables
+    public bool isTalking = false;
+
     // Awake Checks - Singleton setup
     void Awake() {
 

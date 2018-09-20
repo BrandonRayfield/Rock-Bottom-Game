@@ -51,7 +51,7 @@ public class DialogueManager : MonoBehaviour {
     public void StartDialogue(Dialogue[] dialogue) {
 
         isTalking = true;
-
+        gameManager.isTalking = true;
         if (isAutomatic) {
             autoComplete = false;
         }
@@ -125,6 +125,8 @@ public class DialogueManager : MonoBehaviour {
         isTalking = false;
         finishedTalking = true;
         animator.SetBool("IsOpen", false);
+
+        gameManager.isTalking = false;
 
         if(isQuestGiver) {
             gameManager.AcceptQuest(questID);
