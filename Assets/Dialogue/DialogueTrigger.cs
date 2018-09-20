@@ -37,6 +37,7 @@ public class DialogueTrigger : MonoBehaviour {
 
     // Autotrigger Variables
     public bool isAutomatic;
+    public bool isStageDialogue;
     private bool hasTriggered;
     private bool autoComplete;
 
@@ -48,6 +49,17 @@ public class DialogueTrigger : MonoBehaviour {
 
     //UI Elements
     public Text interactText;
+
+    // Expression Variables
+    public GameObject questionObject;
+    public GameObject updateObject;
+
+    private GameObject spawnedQuestionObject;
+    private GameObject spawnedUpdateObject;
+
+    private bool hasUpdatedExpression;
+    private bool questExpression;
+    private int expressionType;
 
     void Start() {
         gameManager = FindObjectOfType<GameManager>();
@@ -62,6 +74,24 @@ public class DialogueTrigger : MonoBehaviour {
             cameraObject = null;
         }
 
+        // Spawn expression Icons so we don't have to go through and update all the NPC's
+        if(!isAutomatic) {
+            Vector3 spawnLocation = new Vector3(transform.position.x + 0.03f, transform.position.y + rewardHeightPosition + 0.15f, transform.position.z);
+            spawnedQuestionObject = Instantiate(questionObject, spawnLocation, transform.rotation);
+            Vector3 spawnLocation2 = new Vector3(transform.position.x + 0.03f, transform.position.y + rewardHeightPosition - 0.15f, transform.position.z);
+            spawnedUpdateObject = Instantiate(updateObject, spawnLocation, transform.rotation);
+            updateExpression(0);
+        }
+
+        // Show the correct expression depending on the dialogue type
+        if(!isAutomatic && !isQuestGiver) {
+            updateExpression(2); // Set Exclamation Mark active if lyric NPC or Sign
+        } else if (!isAutomatic && isQuestGiver) {
+            updateExpression(1); // Set Question Mark active if quest NPC
+        } else if (!isAutomatic) {
+            updateExpression(0); // Disable Both (Because Auto-trigger)
+        }
+
     }
 
     public void Update() {
@@ -69,6 +99,14 @@ public class DialogueTrigger : MonoBehaviour {
         currentNpcID = FindObjectOfType<DialogueManager>().getCurrentNpcID();
         autoComplete = FindObjectOfType<DialogueManager>().getIsAutoComplete();
         bossComplete = FindObjectOfType<DialogueManager>().getIsBossComplete();
+
+        if(isQuestGiver && !hasUpdatedExpression) {
+            questExpression = GameManager.instance.GetIsComplete(questID);
+            if(questExpression) {
+                updateExpression(2);
+                hasUpdatedExpression = true;
+            }
+        }
 
         if (canTalk) {
             isTalking = FindObjectOfType<DialogueManager>().getIsTalking();
@@ -106,8 +144,18 @@ public class DialogueTrigger : MonoBehaviour {
 
     // Code for triggering the dialogue interaction
     private void StartTalking() {
-        interactText.enabled = false;
 
+        if(isAutomatic && isStageDialogue) {
+            interactText.enabled = false;
+        }
+
+        //Remove Update expression once spoken to
+        if(!isAutomatic) {
+            interactText.enabled = false;
+            updateExpression(0);
+        }
+
+        //Update variables from Dialogue Manager
         FindObjectOfType<DialogueManager>().setIsQuestGiver(isQuestGiver);
         FindObjectOfType<DialogueManager>().setQuestID(questID);
 
@@ -130,7 +178,6 @@ public class DialogueTrigger : MonoBehaviour {
                     cameraObject.GetComponent<CameraScript>().SetFocusPoint(progressObject, focusTime);
                     isUnlocked = true;
                 }
-
             } else {
                 FindObjectOfType<DialogueManager>().StartDialogue(dialogue);
             }
@@ -166,10 +213,30 @@ public class DialogueTrigger : MonoBehaviour {
     }
 
     private void OnTriggerExit(Collider other) {
-        if (other.gameObject.tag == "Player") {
+        if (!isAutomatic && other.gameObject.tag == "Player") {
             canTalk = false;
             interactText.enabled = false;
             interactText.text = "";
         }
     }
+
+    private void updateExpression(int expressionType) {
+        if (expressionType == 1) {              //Question Mark is Active
+            spawnedQuestionObject.SetActive(true);
+            spawnedUpdateObject.SetActive(false);
+        } else if (expressionType == 2) {       //Exclamation is Active
+            spawnedQuestionObject.SetActive(false);
+            spawnedUpdateObject.SetActive(true);
+        } else {                                //None are Active
+            spawnedQuestionObject.SetActive(false);
+            spawnedUpdateObject.SetActive(false);
+        }
+    }
+
+    public void newExpression(int questID) {
+        if(NpcID == questID && !isAutomatic) {
+            updateExpression(2);
+        }
+    }
+
 }

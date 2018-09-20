@@ -22,7 +22,8 @@ public class GameManager : MonoBehaviour {
     [HideInInspector]
     public string currentUIQuestText;
 
-    private bool questUpdated;
+    //Expression Variable
+    private int expressionValue;
 
     // Awake Checks - Singleton setup
     void Awake() {
@@ -71,43 +72,15 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        //enemies = GameObject.FindGameObjectsWithTag("Enemy");
-		//enemiesRemaining.text = "Enemies Remaining: " + enemies.Length;
-
-        foreach (Quest quest in questList) {
-
-            if(quest.currentAmount >= quest.totalAmount && (quest.isKillQuest || quest.isCollectQuest)) {
-                quest.isComplete = true;
-            }
-
-            //quest.currentAmount = quest.totalAmount - quest.currentAmount;
-
-            if(quest.isCollectQuest) {
-                //quest.currentAmount = quest.totalAmount - GetAmountTotal(quest.objectTag);
-            } else if (quest.isKillQuest) {
-                quest.currentAmount = quest.totalAmount - GetAmountTotal(quest.objectTag);
-
-            } else if (quest.isDestroyQuest) {
-                quest.isComplete = isDestroyed(quest.targetObject, quest);
-            }
-
-            if (quest.currentAmount != quest.previousAmount) {
-                updateUI();
-                quest.previousAmount = quest.currentAmount;
-            }
-
-        }
-
-        //enemiesRemaining.text = UIQuestText;
-
-
     }
 
+    // Used to check how many objects / kills a player needs for a quest
     public int GetAmountTotal(string objectTag) {
         questObjects = GameObject.FindGameObjectsWithTag(objectTag);
         return questObjects.Length;
     }
 
+    // Used to check if the player has completed a quest yet
     public bool GetIsComplete(int IDcheck) {
 
         if(IDcheck < questList.Length) {
@@ -117,6 +90,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    // Used to check if the player has accepted a quest yet
     public bool GetHasAccepted(int IDcheck) {
 
         if (IDcheck < questList.Length) {
@@ -127,15 +101,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public bool isDestroyed(GameObject target, Quest quest ) {
-        if(target == null) {
-            quest.currentAmount++;
-            return true;
-        } else {
-            return false;
-        }
-    }
-
+    // Used to update the UI when a quest is updated
     public void updateUI() {
 
         UIQuestText.Clear();
@@ -161,14 +127,9 @@ public class GameManager : MonoBehaviour {
         }
 
         enemiesRemaining.text = currentUIQuestText;
-
-        //if (UIQuestText == "") {
-        //    UIQuestText = quest.UITextDisplay + quest.currentAmount + " / " + quest.totalAmount;
-        //} else {
-        //    UIQuestText += "\n" + quest.UITextDisplay + quest.currentAmount + " / " + quest.totalAmount;
-        //}
     }
 
+    //Used to accept a quest
     public void AcceptQuest(int IDcheck) {
 
         if(IDcheck < questList.Length) {
@@ -179,36 +140,63 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    // Used to update a quest when it is completed by the player
     public void CompletedQuest(int IDcheck) {
         if (IDcheck < questList.Length) {
             questList[IDcheck].isComplete = true;
             updateUI();
+
         } else {
             throw new Exception("Invalid Quest ID");
         }
     }
 
-    // Adds an specific ammount to the current amount
+    // Adds an specific ammount to the current amount (Used for most quest types)
     public void AddCounter(int questID, int amount) {
         if(questID < questList.Length) {
             questList[questID].currentAmount += amount;
             updateUI();
+
+            //Check if quest is complete
+            if (questList[questID].currentAmount >= questList[questID].totalAmount) {
+                questList[questID].isComplete = true;
+            }
+
         } else {
             throw new Exception("Invalid Quest ID");
         }
         
     }
 
-    // Sets the current amount to a specific amount
+    // Sets the current amount to a specific amount (Used for target quests)
     public void SetCounter(int questID, int amount) {
         if (questID < questList.Length) {
             questList[questID].currentAmount = amount;
             updateUI();
+
+            //Check if quest is complete
+            if (questList[questID].currentAmount >= questList[questID].totalAmount) {
+                questList[questID].isComplete = true;
+            }
+
         } else {
             throw new Exception("Invalid Quest ID");
         }
     }
 
+    public int getExpressionType(int questID) {
+        if(questID < questList.Length) {
+            if (questList[questID].isComplete) {
+                return 2;
+            } else {
+                return 0;
+            }
+        } else {
+            return 0;
+        }
+    }
+
+    //Used to kill all spiders in a scene (used in transition and boss fight scenes)
     public void killTheSpiders() {
         GameObject[] spiders = GameObject.FindGameObjectsWithTag("Enemy");
         for (int i = 0; i < spiders.Length; i++) {
