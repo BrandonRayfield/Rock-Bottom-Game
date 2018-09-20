@@ -68,5 +68,6 @@ public class Harmonica_Script : Weapon {
         createdShield.transform.parent = gameObject.transform.parent;
         createdShield.transform.position +=new Vector3(0f,1f,-0.4f);
         playerObject.GetComponent<Player>().invulnerable = true;
+        magicTimer1 = Time.time + magicRate1;
     }
 }

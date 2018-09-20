@@ -19,12 +19,24 @@ public class Guitar_Script : Weapon {
     public float growTime;
     private float currentGrowTime;
 
+    protected override void Update() {
+        base.Update();
+
+        target = lightningControl.GetComponent<ThunderCollider>().findClosest();
+        //Debug.Log(target);
+        if(target != new Vector3(0, 0, 0)) {
+            canUse1 = true;
+        } else {
+            canUse1 = false;
+        }
+    }
+
     protected override void SpecialAttack1() {
         target = lightningControl.GetComponent<ThunderCollider>().findClosest();
 
-        if (target != nullTarget) {
+        if (target != new Vector3(0,0,0)) {
 
-            Debug.Log("Target Found");
+            //Debug.Log("Target Found");
 
             currentDirection = playerObject.GetComponent<Player>().getPlayerDirection();
             Debug.Log(currentDirection);
@@ -37,7 +49,7 @@ public class Guitar_Script : Weapon {
             Invoke("channelAbility", channelTime);
             magicTimer1 = Time.time + magicRate1;
         } else {
-            Debug.Log("No valid target.");
+            //Debug.Log("No valid target.");
         }
     }
 
@@ -53,7 +65,7 @@ public class Guitar_Script : Weapon {
     }
 
     private void channelAbility() {
-        target = lightningControl.GetComponent<ThunderCollider>().findClosest();
+        //target = lightningControl.GetComponent<ThunderCollider>().findClosest();
         //target.y += 8.5f;
         lightningAttack(target);
         //currentChannelTime = 0;

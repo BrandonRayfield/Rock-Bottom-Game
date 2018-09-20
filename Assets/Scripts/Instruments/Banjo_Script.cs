@@ -13,6 +13,18 @@ public class Banjo_Script : Weapon {
     public Vector3 target;
     private Vector3 nullTarget = new Vector3(0, 0, 0);
 
+    protected override void Update() {
+        base.Update();
+
+        target = lightningControl.GetComponent<ThunderCollider>().findClosest();
+        //Debug.Log(target);
+        if (target != new Vector3(0, 0, 0)) {
+            canUse1 = true;
+        } else {
+            canUse1 = false;
+        }
+    }
+
     protected override void SpecialAttack1() {
         target = lightningControl.GetComponent<ThunderCollider>().findClosest();
 

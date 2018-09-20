@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour {
 
@@ -12,11 +13,14 @@ public class PauseMenu : MonoBehaviour {
     public bool GameIsPaused;
     private bool weaponUIOpen;
     public bool controlUIOpen;
+    private bool guitarEquipped;
     
     // UI Objects
     public GameObject pauseMenuUI;
     public GameObject controlMenuUI;
     public GameObject weaponSelectUI;
+
+    public GameObject currentWeaponUI;
 
     // Weapon Objects
     public GameObject guitarObject;
@@ -39,10 +43,6 @@ public class PauseMenu : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-
-        if (Input.GetKeyDown("3")) {
-            selectHarmonica();
-        }
 
         if (!GameIsPaused && !weaponUIOpen && Input.GetKeyDown(KeyCode.Q)) {
             weaponUIOpen = true;
@@ -78,9 +78,17 @@ public class PauseMenu : MonoBehaviour {
 	}
 
     public void selectGuitar() {
-        Debug.Log("Selected Guitar");
+        //Debug.Log("Selected Guitar");
         guitarObject.SetActive(true);
         harmonicaObject.SetActive(false);
+        guitarEquipped = true;
+
+        playerObject.GetComponent<Player>().updateWeaponAbilities();
+
+        playerObject.GetComponent<Player>().updateAbilityCooldown1(guitarObject.GetComponent<Weapon>().getAbilityCD1());
+        playerObject.GetComponent<Player>().updateAbilityCooldown2(guitarObject.GetComponent<Weapon>().getAbilityCD2());
+
+        currentWeaponUI.GetComponent<Image>().sprite = playerObject.GetComponent<Player>().getCurrentGuitarIcon().GetComponent<Image>().sprite;
 
         weaponUIOpen = false;
         Time.timeScale = 1f;
@@ -90,9 +98,16 @@ public class PauseMenu : MonoBehaviour {
     }
 
     public void selectHarmonica() {
-        Debug.Log("Selected Harmonica");
+        //Debug.Log("Selected Harmonica");
         harmonicaObject.SetActive(true);
         guitarObject.SetActive(false);
+        guitarEquipped = false;
+
+        playerObject.GetComponent<Player>().updateWeaponAbilities();
+        playerObject.GetComponent<Player>().updateAbilityCooldown1(harmonicaObject.GetComponent<Weapon>().getAbilityCD1());
+        playerObject.GetComponent<Player>().updateAbilityCooldown2(harmonicaObject.GetComponent<Weapon>().getAbilityCD2());
+
+        currentWeaponUI.GetComponent<Image>().sprite = playerObject.GetComponent<Player>().getCurrentWindIcon().GetComponent<Image>().sprite;
 
         weaponUIOpen = false;
         Time.timeScale = 1f;
@@ -160,6 +175,10 @@ public class PauseMenu : MonoBehaviour {
 
     public void setHarmonicaWeapon(GameObject newHarmonica) {
         harmonicaObject = newHarmonica;
+    }
+
+    public bool getGuitarEquipped() {
+        return guitarEquipped;
     }
 
 }

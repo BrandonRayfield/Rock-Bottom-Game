@@ -21,10 +21,14 @@ public abstract class Weapon : MonoBehaviour {
     public float magicRate1 = 2f; // How long the player has to wait between activating abilities
     public float magicRate2 = 2f; // How long the player has to wait between activating abilities
 
+    protected bool canUse1 = true;
+    protected bool canUse2 = true;
+
     // Sound variables
     public GameObject attackSound;
     public GameObject magicSound1;
     public GameObject magicSound2;
+    public GameObject errorSound;
 
     // Animation variables
     protected Animator animator;
@@ -51,7 +55,7 @@ public abstract class Weapon : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
+	protected virtual void Update () {
 
         AdjustWeaponPosition();
 
@@ -66,15 +70,26 @@ public abstract class Weapon : MonoBehaviour {
                 attackTimer = Time.time + attackRate;
             }
             //Lightning Attack
-            if (Input.GetKeyDown("x") && Time.time > magicTimer1) {
-                SpecialAttack1();
-                magicTimer1 = Time.time + magicRate1;
+            if(Input.GetKeyDown("x")) {
+                if (canUse1 && Time.time > magicTimer1) {
+                    SpecialAttack1();
+                    playerObject.GetComponent<Player>().updateAbilityCooldown1(magicTimer1);
+                    //magicTimer1 = Time.time + magicRate1;
+                } else if (!canUse1 || Time.time < magicTimer1) {
+                    Instantiate(errorSound, transform.position, transform.rotation);
+                }
+            }
+            
+            if(Input.GetKeyDown("c")) {
+                if (canUse2 && Time.time > magicTimer2) {
+                    SpecialAttack2();
+                    //magicTimer2 = Time.time + magicRate2;
+                    playerObject.GetComponent<Player>().updateAbilityCooldown2(magicTimer2);
+                } else if (!canUse2 || (Time.time < magicTimer2)) {
+                    Instantiate(errorSound, transform.position, transform.rotation);
+                }
             }
 
-            if (Input.GetKeyDown("c") && Time.time > magicTimer2) {
-                SpecialAttack2();
-                magicTimer2 = Time.time + magicRate2;
-            }
         }
     }
 
@@ -151,6 +166,33 @@ public abstract class Weapon : MonoBehaviour {
 
     public void setCanAttack(bool attackSetting) {
         canAttack = attackSetting;
+    }
+
+    public float getAbilityCD1() {
+        return magicTimer1;
+    }
+
+
+    public float getAbilityCD2() {
+        return magicTimer2;
+    }
+
+
+    public float getMagicRate1() {
+        return magicRate1;
+    }
+
+
+    public float getMagicRate2() {
+        return magicRate2;
+    }
+
+    public bool getCanUse1() {
+        return canUse1;
+    }
+
+    public bool getCanUse2() {
+        return canUse2;
     }
 
 }

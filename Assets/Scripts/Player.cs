@@ -6,50 +6,61 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour {
 
-	Animator animator;
+    //---------------------------------------------------------------
+    Animator animator;
 	Rigidbody rb;
+    [Header("Main Objects")]
     public GameObject cameraObject;
     public GameObject playerModel;
 
+    //---------------------------------------------------------------
     // Guitar Objects
+    [Header("Weapon Objects")]
     public GameObject banjoObject;
     public GameObject guitarObject;
     public GameObject currentGuitarObject;
 
+    //---------------------------------------------------------------
     // Wind Objects
     public GameObject harmonicaObject;
     public GameObject megaphoneObject;
     public GameObject currentHarmonicaObject;
 
+    //---------------------------------------------------------------
     // Instument Unlocks
     public bool harmonicaUnlocked;
     public bool guitarUnlocked;
     public bool megaphoneUnlocked;
 
+    //---------------------------------------------------------------
     // Skeleton Objects used for repositioning instruments
     public GameObject guitarParentSpine;
     public GameObject guitarParentHand;
 
     private int guitarStance; // Determines what guitar object is enabled. 0 for Back enabled, 1 for front, 2 for swing
 
+    //---------------------------------------------------------------
     //Time variables
     private float time = 3.0f;
     private float restartTime = 0;
 
-
+    //---------------------------------------------------------------
     private bool canMove; // Disables player movement. Mainly used for pausing and dialogue
     private bool canJump; // Work around for weird bug we are having
     private bool canSwing; // Used for rope swings
     private GameObject ropeObject;
 
+    [HideInInspector]
     public bool unlockedDoubleJump = false;
     private bool canDoubleJump;
 
-
+    //---------------------------------------------------------------
     //Walking
+
     private float moveSpeed = 2.0f;
 	private Quaternion newRotation;
     private int currentDirection;
+    [Header("Movment Variables")]
     public int movementSpeed;
     private int walkSpeed = 10;
     private int runSpeed = 20;
@@ -58,35 +69,44 @@ public class Player : MonoBehaviour {
     private int newWalkSpeed = 4;
     private int newRunSpeed = 8;
 
+    //---------------------------------------------------------------
     //Running
     private bool isRunning;
 
+    //---------------------------------------------------------------
     //Jumping
+    [Header("Jumping Variables")]
     private bool wantsToJump;
     public float jumpForce = 200.0f;
 	private float distToGround = 1;
 	private float jumpCoolDown = 0.6f;
 	private float jumpTime;
 
+    //---------------------------------------------------------------
     // Obstacle Variables
     private bool canPhase;
     private GameObject platformObject;
     private Collider platformCollider;
 
+    //---------------------------------------------------------------
     // Cutscene Variables
     private bool isCutscene = false;
 
+    //---------------------------------------------------------------
     //Spawn Variables
+    [Header("Spawnpoint Variables")]
     public GameObject startPoint;
     public GameObject spawnPoint;
-
+    //---------------------------------------------------------------
     //Damage Variables
+    [Header("Player Health Variables")]
     public float health;
     public float maxHealth = 100.0f;
     private int livesLeft;
     public bool invulnerable = false;
-
     public bool dead = false;
+
+    [Header("Player Damage Variables")]
     private float damage = 50.0f;
     private float attackTimer;
     private float attackRate = 1.5f;
@@ -97,25 +117,16 @@ public class Player : MonoBehaviour {
 
     private float damageTimer;
     private float damageTime = 0.5f;
-
-    // Debuff Variables
-    private int slowDebuff;
-    private int minSlowDebuff = 1;
-    private int maxSlowDebuff = 2;
-    private bool isSlowed;
-
-    private float slowTime;
-    private float slowDuration = 2.0f;
-
+    //---------------------------------------------------------------
     // Obstacle Variables
-    public bool touchTopCrush;
-    public bool touchBottomCrush;
+    private bool touchTopCrush;
+    private bool touchBottomCrush;
 
     // Checkpoint Variables
     private bool checkpointActivated;
-
+    //---------------------------------------------------------------
     //UI Variables
-    public GameObject goldKeyUI;
+    [Header("UI Variables")]
     public Slider healthBar;
     public Text gameResult;
     public Text gameResult2;
@@ -123,8 +134,9 @@ public class Player : MonoBehaviour {
     public Text currencyText;
     public Text livesText;
     public GameObject restartMenu;
-
+    //---------------------------------------------------------------
     // Weapon UI Variables
+    [Header("Weapon UI Variables")]
     public GameObject currentGuitarIcon;
     public Text guitarText;
     public GameObject currentWindIcon;
@@ -134,15 +146,16 @@ public class Player : MonoBehaviour {
     public Sprite guitarImage;
     public Sprite harmonicaImage;
     public Sprite megaphoneImage;
-
+    //---------------------------------------------------------------
     //Item Variables
-    public int shardsNeeded = 3;
+    [Header("Item Variables")]
     public int currencyCount;
     public int shardCount;
     private int itemValue;
     private int itemID;
-
+    //---------------------------------------------------------------
     //Sound Variables
+    [Header("Sound Variables")]
     public GameObject jumpSound;
     public GameObject attackSound;
     public GameObject deathSound;
@@ -157,23 +170,63 @@ public class Player : MonoBehaviour {
     private float minPitch = 0.5f;
     private float maxPitch = 1.5f;
     private float currentPitch;
-
+    //---------------------------------------------------------------
     //Magic Variables
-    public GameObject lightningControl;
-    public GameObject lightningHitbox;
-    public GameObject lightningParticles;
-    public float magicTimer;
-    private float magicRate = 2f;
-    public float currentChannelTime;
-    private float channelTime = 1.0f;
-    public bool channelAbility;
-    public Vector3 target;
-    private Vector3 nullTarget = new Vector3(0, 0, 0);
+    [Header("Ability Variables")]
+    private float magicTimer1;
+    private float magicTimer2;
 
+    private float currentAbilityTime1;
+    private float currentAbilityTime2;
+
+    private float targetTime1;
+    private float targetTime2;
+
+    private bool activatedAbility1;
+    private bool activatedAbility2;
+
+    private float maxCooldown1;
+    private float maxCooldown2;
+
+    private bool canUse1;
+    private bool canUse2;
+
+    //---------------------------------------------------------------
+    // Weapon Ability UI Variables
+    [Header("Ability UI Elements")]
+    public GameObject AbilityUI1;
+    public GameObject AbilityUI2;
+    public GameObject AbilityUI1_CD;
+    public GameObject AbilityUI2_CD;
+    public GameObject AbilityAvailableUI1;
+    public GameObject AbilityAvailableUI2;
+    public Text abilty1Text;
+    public Text abilty2Text;
+    public Text abilty1TimerText;
+    public Text abilty2TimerText;
+
+    //-----------------------
+    // Weapon Icons
+    [Header("Abilty Icons")]
+    public Sprite emptyIcon;
+    public Sprite banjoIcon1;
+
+    public Sprite harmonicaIcon1;
+
+    public Sprite guitarIcon1;
+    public Sprite guitarIcon2;
+
+    public Sprite megaphoneIcon1;
+    public Sprite megaphoneIcon2;
+
+    private bool guitarEquipped;
+    //---------------------------------------------------------------
     // Transition Scene Variables
+    [Header("Transition Scene Variables")]
     public bool isTransiton;
     public GameObject elevatorTrigger;
     public Animator elevatorAnimator;
+    //---------------------------------------------------------------
 
     // Use this for initialization
     void Start () {
@@ -190,7 +243,6 @@ public class Player : MonoBehaviour {
         livesLeft = 3;
         currentPitch = minPitch;
         guitarStance = 0; // Back guitar starts enabled
-        slowDebuff = minSlowDebuff;
 
         livesText.text = "Lives: " + livesLeft;
 
@@ -240,10 +292,19 @@ public class Player : MonoBehaviour {
             cameraObject = null;
         }
 
+        //Disable Ability UI Elements
+        abilty1TimerText.gameObject.SetActive(false);
+        AbilityUI1_CD.gameObject.SetActive(false);
+
+        abilty2TimerText.gameObject.SetActive(false);
+        AbilityUI2_CD.gameObject.SetActive(false);
+
     }
 
     // Update is called once per frame
     void Update() {
+
+        AbilityCooldowns();
 
         if (!dead && !isCutscene) {
             Controls();
@@ -299,18 +360,6 @@ public class Player : MonoBehaviour {
             ropeObject.GetComponent<Rope_Swing>().setIsSwinging(true);
         }
 
-        movementSpeed = movementSpeed / slowDebuff;
-
-        if (isSlowed) {
-            slowDebuff = maxSlowDebuff;
-            slowTime += Time.deltaTime;
-            if (slowTime >= slowDuration) {
-                isSlowed = false;
-                slowDebuff = minSlowDebuff;
-                slowTime = 0f;
-            }
-        }
-
         gameResult2.text = gameResult.text;
         gameResult2.enabled = gameResult.enabled;
 
@@ -336,6 +385,54 @@ public class Player : MonoBehaviour {
             canDoubleJump = true;
             //jumpTime = Time.time + jumpCoolDown;
             wantsToJump = false;
+        }
+    }
+
+    private void AbilityCooldowns() {
+
+        if(guitarEquipped) {
+            canUse1 = currentGuitarObject.GetComponent<Weapon>().getCanUse1();
+            canUse2 = currentGuitarObject.GetComponent<Weapon>().getCanUse2();
+        } else {
+            canUse1 = currentHarmonicaObject.GetComponent<Weapon>().getCanUse1();
+            canUse2 = currentHarmonicaObject.GetComponent<Weapon>().getCanUse2();
+        }
+
+        if(!canUse1) {
+            AbilityAvailableUI1.gameObject.SetActive(true);
+        } else {
+            AbilityAvailableUI1.gameObject.SetActive(false);
+        }
+
+        if (!canUse2) {
+            AbilityAvailableUI2.GetComponent<Image>().color = Color.red;
+            AbilityAvailableUI2.gameObject.SetActive(true);
+        } else {
+            AbilityAvailableUI2.gameObject.SetActive(false);
+        }
+
+        if (activatedAbility1) {
+            currentAbilityTime1 -= Time.deltaTime;
+
+            abilty1TimerText.text = Mathf.RoundToInt(currentAbilityTime1).ToString();
+            AbilityUI1_CD.GetComponent<Image>().fillAmount = (1 / maxCooldown1) * currentAbilityTime1;
+
+            if (currentAbilityTime1 <= 0) {
+                activatedAbility1 = false;
+                abilty1TimerText.gameObject.SetActive(false);
+            }
+        }
+
+        if (activatedAbility2) {
+            currentAbilityTime2 -= Time.deltaTime;
+
+            abilty2TimerText.text = Mathf.RoundToInt(currentAbilityTime2).ToString();
+            AbilityUI2_CD.GetComponent<Image>().fillAmount = (1 / maxCooldown2) * currentAbilityTime2;
+
+            if (currentAbilityTime2 <= 0) {
+                activatedAbility2 = false;
+                abilty2TimerText.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -419,11 +516,11 @@ public class Player : MonoBehaviour {
 
         if (IsGrounded ()) {
             if (isRunning) {
-                movementSpeed = runSpeed / slowDebuff;
+                movementSpeed = runSpeed;
                 newMovementSpeed = newRunSpeed;
                 animator.Play("Run");
             } else {
-                movementSpeed = walkSpeed / slowDebuff;
+                movementSpeed = walkSpeed;
                 newMovementSpeed = newWalkSpeed;
                 animator.Play("Walk");
                 animator.SetBool("isWalking", true);
@@ -472,13 +569,6 @@ public class Player : MonoBehaviour {
     }
 
 	void OnTriggerEnter(Collider otherObject) {
-
-		if (otherObject.transform.tag == "GoldKey") {
-			GameManager.instance.goldKey = true;
-			goldKeyUI.SetActive(true);
-			Instantiate (keySound, transform.position, transform.rotation);
-			Destroy (otherObject.gameObject);
-		}
 
         // Placeholder for inventory system. Will implement better system during holidays
         if(otherObject.transform.tag == "Collectable") {
@@ -609,6 +699,8 @@ public class Player : MonoBehaviour {
 
     }
 
+    //---------------------------------------------------------------------------------------------------------------------
+    // Function used for restoring health from health pickups and checkpoints
     public void gainHealth(int healthRecovered) {
         if (health <= maxHealth - healthRecovered) {
             health += healthRecovered;
@@ -619,6 +711,74 @@ public class Player : MonoBehaviour {
         healthBar.value = (health / maxHealth);
     }
 
+    //---------------------------------------------------------------------------------------------------------------------
+    // Functions used to update weapon ability UI + cooldowns
+    public void updateWeaponAbilities() {
+        guitarEquipped = gameObject.GetComponent<PauseMenu>().getGuitarEquipped();
+
+        if (guitarEquipped && currentGuitarObject == banjoObject) {
+            AbilityUI1.GetComponent<Image>().sprite = banjoIcon1;
+            AbilityUI2.GetComponent<Image>().sprite = emptyIcon;
+        } 
+
+        else if(guitarEquipped && currentGuitarObject == guitarObject) {
+            AbilityUI1.GetComponent<Image>().sprite = guitarIcon1;
+            AbilityUI2.GetComponent<Image>().sprite = guitarIcon2;
+        } 
+        
+        else if (!guitarEquipped && currentHarmonicaObject == harmonicaObject) {
+            AbilityUI1.GetComponent<Image>().sprite = harmonicaIcon1;
+            AbilityUI2.GetComponent<Image>().sprite = emptyIcon;
+        } 
+        
+        else if (!guitarEquipped && currentHarmonicaObject == megaphoneObject) {
+            AbilityUI1.GetComponent<Image>().sprite = megaphoneIcon1;
+            AbilityUI2.GetComponent<Image>().sprite = megaphoneIcon2;
+        }
+
+    }
+
+    public void updateAbilityCooldown1(float currentTime) {
+
+        if(guitarEquipped) {
+            maxCooldown1 = currentGuitarObject.GetComponent<Weapon>().getMagicRate1();
+        } else {
+            maxCooldown1 = currentHarmonicaObject.GetComponent<Weapon>().getMagicRate1();
+        }
+
+        magicTimer1 = currentTime;
+        activatedAbility1 = true;
+        targetTime1 = magicTimer1 - Time.time;
+        currentAbilityTime1 = targetTime1;
+
+        //Enable UI Elements
+        abilty1TimerText.gameObject.SetActive(true);
+        AbilityUI1_CD.gameObject.SetActive(true);
+
+    }
+
+    public void updateAbilityCooldown2(float currentTime) {
+
+        if (guitarEquipped) {
+            maxCooldown2 = currentGuitarObject.GetComponent<Weapon>().getMagicRate2();
+        } else {
+            maxCooldown2 = currentHarmonicaObject.GetComponent<Weapon>().getMagicRate2();
+        }
+
+        magicTimer2 = currentTime;
+        activatedAbility2 = true;
+        targetTime2 = magicTimer2 - Time.time;
+        currentAbilityTime2 = targetTime2;
+
+        //Enable UI Elements
+        abilty2TimerText.gameObject.SetActive(true);
+        AbilityUI2_CD.gameObject.SetActive(true);
+    }
+
+
+
+    //---------------------------------------------------------------------------------------------------------------------
+    // Functions for unlocking new weapons
     private void unlockHarmonica() {
         currentWindIcon.GetComponent<Image>().sprite = harmonicaImage;
         currentWindIcon.SetActive(true);
@@ -735,5 +895,15 @@ public class Player : MonoBehaviour {
 
     public bool getMegaphoneUnlocked() {
         return megaphoneUnlocked;
+    }
+
+    //---------------------------------------------------------------------------------------------------------------------
+    // Getters and Setters for UI
+    public GameObject getCurrentGuitarIcon() {
+        return currentGuitarIcon;
+    }
+
+    public GameObject getCurrentWindIcon() {
+        return currentWindIcon;
     }
 }

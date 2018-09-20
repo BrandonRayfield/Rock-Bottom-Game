@@ -71,6 +71,7 @@ public class Megaphone_Script : Weapon {
         createdShield.transform.parent = gameObject.transform.parent;
         createdShield.transform.position += new Vector3(0f, 1f, 0.1f);
         playerObject.GetComponent<Player>().invulnerable = true;
+        magicTimer1 = Time.time + magicRate1;
     }
 
     protected override void SpecialAttack2() {
@@ -80,8 +81,7 @@ public class Megaphone_Script : Weapon {
             enemies[i].GetComponent<EnemyGeneric>().CopyrightNeutralBoop(playerObject.transform.position);
         }
 
-        /*createdShield.transform.parent = gameObject.transform.parent;
-        createdShield.transform.position += new Vector3(0f, 1f, 0.1f);
-        playerObject.GetComponent<Player>().invulnerable = true;*/
+        magicTimer2 = Time.time + magicRate1;
+
     }
 }
