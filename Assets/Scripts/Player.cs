@@ -353,7 +353,7 @@ public class Player : MonoBehaviour {
             animator.SetBool("isJumping", false);
         }
 
-        if (canMove) {
+        if (canMove && GameManager.instance.isTalking == false) {
             //Jumping
             if(canJump) {
                 if (Input.GetKeyDown("space") && IsGrounded() && Time.time > jumpTime) {
@@ -413,7 +413,12 @@ public class Player : MonoBehaviour {
                 animator.SetBool("isWalking", false);
                 animator.SetBool("isRunning", false);
             }
-        } 
+        } else if (GameManager.instance.isTalking == true) {
+            Vector3 velocity = rb.velocity;
+            if (velocity.y > 0f) velocity.y = 0f;
+            velocity.x = 0f;
+            rb.velocity = velocity;
+        }
     }
 
 	private void Walking(int direction){
