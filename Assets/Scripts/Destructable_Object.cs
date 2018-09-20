@@ -16,6 +16,10 @@ public class Destructable_Object : MonoBehaviour {
 
     public bool isRock;
 
+    //Quest Variables
+    public bool isQuestObject;
+    public int questID;
+
 	// Use this for initialization
 	void Start () {
         currentObjectHealth = maxObjectHealth;
@@ -46,6 +50,9 @@ public class Destructable_Object : MonoBehaviour {
             currentTime += Time.deltaTime;
             if (currentTime >= destroyTime) {
                 Destroy(gameObject);
+            }
+            if(isQuestObject) {
+                GameManager.instance.AddCounter(questID, 1);
             }
         }
 

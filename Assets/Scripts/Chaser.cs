@@ -41,6 +41,11 @@ public class Chaser : MonoBehaviour {
     //Object Spawn Variables
     private int randomNumberDrop;
     public GameObject healthDrop;
+
+    //Quest Variables
+    public bool isQuestEnemy;
+    public int questID;
+
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody>();
@@ -213,6 +218,9 @@ public class Chaser : MonoBehaviour {
 
     public void OnTriggerEnter(Collider other) {
         if(other.tag == "Falloff") {
+            if (isQuestEnemy) {
+                GameManager.instance.AddCounter(questID, 1);
+            }
             Destroy(this.gameObject);
         } else if (other.tag == "Enemy") {
             transform.Rotate(new Vector3(0f, 180f, 0f));
@@ -244,6 +252,9 @@ public class Chaser : MonoBehaviour {
 
             if (enemygeneric.health <= 0) {
                 dead = true;
+                if (isQuestEnemy) {
+                    GameManager.instance.AddCounter(questID, 1);
+                }
                 randomDrop();
                 //Instantiate(deathSound, transform.position, transform.rotation);
                 this.transform.tag = "Untagged";
