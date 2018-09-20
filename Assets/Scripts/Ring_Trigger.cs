@@ -15,6 +15,7 @@ public class Ring_Trigger : MonoBehaviour {
 
     // Elevator variables
     public GameObject elevatorObject;
+    public GameObject elevatorTrigger;
 
     // Fire variables
     public float damage;
@@ -31,6 +32,10 @@ public class Ring_Trigger : MonoBehaviour {
     public AudioClip countryMusic;
     public AudioClip rockMusic;
 
+    public GameObject newCheckpoint;
+    private string restartAnimationName;
+    private string movementAnimationName;
+
 
 
     // Use this for initialization
@@ -42,6 +47,10 @@ public class Ring_Trigger : MonoBehaviour {
         }
 
         currentDisableTime = disableTime;
+
+        movementAnimationName = "Going_Down";
+        restartAnimationName = "Reset";
+
     }
 	
 	// Update is called once per frame
@@ -57,7 +66,7 @@ public class Ring_Trigger : MonoBehaviour {
     private void OnTriggerEnter(Collider other) {
         if(other.gameObject.tag == "Player") {
             if(isElevatorTrigger && !isTriggered) {
-                elevatorObject.GetComponent<Animator>().Play("Going_Down");
+                elevatorObject.GetComponent<Animator>().Play(movementAnimationName);
                 isTriggered = true;
             } else if(isDamage && !isTriggered) {
                 other.GetComponent<Player>().takeDamage(damage);
@@ -69,6 +78,9 @@ public class Ring_Trigger : MonoBehaviour {
                 }
                 isTriggered = true;
             } else if (isMusicChange) {
+                other.GetComponent<Player>().setCheckPoint(newCheckpoint);
+                elevatorTrigger.GetComponent<Ring_Trigger>().setMovementAnimationName("Going_Down2");
+                other.GetComponent<Player>().setTransitionAnimationName("Reset2");
                 cameraObject.GetComponent<AudioSource>().Stop();
                 cameraObject.GetComponent<AudioSource>().clip = rockMusic;
                 cameraObject.GetComponent<AudioSource>().Play();
@@ -86,6 +98,10 @@ public class Ring_Trigger : MonoBehaviour {
 
     public void SetIsTriggered(bool triggered) {
         isTriggered = triggered;
+    }
+
+    public void setMovementAnimationName(string newName) {
+        movementAnimationName = newName;
     }
 
 }

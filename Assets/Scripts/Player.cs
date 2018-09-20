@@ -226,6 +226,7 @@ public class Player : MonoBehaviour {
     public bool isTransiton;
     public GameObject elevatorTrigger;
     public Animator elevatorAnimator;
+    private string resetAnimationName;
     //---------------------------------------------------------------
 
     // Use this for initialization
@@ -236,6 +237,10 @@ public class Player : MonoBehaviour {
 		newRotation = transform.rotation;
         health = maxHealth;
         currentDirection = 1;
+
+        if (isTransiton) {
+            resetAnimationName = "Reset";
+        }
 
         // Make sure game over menu starts disabled
         restartMenu.SetActive(false);
@@ -345,7 +350,7 @@ public class Player : MonoBehaviour {
                     // Resetting Elevator in transition
                     if (isTransiton) {
                         transform.parent = null;
-                        elevatorAnimator.Play("Reset");
+                        elevatorAnimator.Play(resetAnimationName);
                         elevatorTrigger.GetComponent<Ring_Trigger>().SetIsTriggered(false);
                         GameManager.instance.killTheSpiders();
                     }
@@ -915,5 +920,11 @@ public class Player : MonoBehaviour {
 
     public GameObject getCurrentWindIcon() {
         return currentWindIcon;
+    }
+
+    //---------------------------------------------------------------------------------------------------------------------
+    // Getters and Setters for Transition Scene
+    public void setTransitionAnimationName(string newName) {
+        resetAnimationName = newName;
     }
 }
