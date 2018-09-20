@@ -54,6 +54,8 @@ public class Chaser : MonoBehaviour {
         EnemyHealth.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
 
         EnemyHealth.SetActive(false);
+
+        direction = (int)Mathf.Sign(transform.rotation.y);
     }
 
     private void Awake() {
