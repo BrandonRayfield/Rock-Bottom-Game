@@ -67,6 +67,7 @@ public class CameraScript : MonoBehaviour {
     public void SetFocusPoint(GameObject newFocus, float newFocusTime) {
         focusTime = newFocusTime;
         focusPoint = newFocus.transform.position;
+        time = 0;
         isFinished = false;
         boolNewFocus = true;
     }

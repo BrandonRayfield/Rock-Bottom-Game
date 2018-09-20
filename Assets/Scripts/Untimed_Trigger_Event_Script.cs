@@ -40,6 +40,12 @@ public class Untimed_Trigger_Event_Script : MonoBehaviour {
     public bool isQuestStage;
     public int questID;
     private int stageValue = 1;
+    public bool isGuitarOnly;
+    private bool isTalking;
+    private bool isFirstAttemmpt = true;
+    private GameObject currentGuitarObject;
+    public GameObject errorDialogueTrigger;
+    public GameObject workingDialogueTrigger;
 
     // Use this for initialization
     void Start () {
@@ -63,32 +69,58 @@ public class Untimed_Trigger_Event_Script : MonoBehaviour {
         }
     }
 
-    // Update is called once per frame
-    void Update() {
+    private void activatePad() {
+        currentAmount = playerObject.GetComponent<Player>().getCurrencyAmount();
+        if (currentAmount >= costAmount) {
+            playerObject.GetComponent<PauseMenu>().selectGuitar();
+            playerAnimator.Play("Guitar Playing");
+            Instantiate(guitarSound, transform.position, transform.rotation);
+            interactText.enabled = false;
+            padTriggered = true;
+            hasUsed = true;
 
-        if (isTouching && !hasUsed && Input.GetKeyDown(KeyCode.E)) {
+            playerObject.GetComponent<Player>().updateCurrencyAmount(costAmount);
+            costText.enabled = false;
 
-            currentAmount = playerObject.GetComponent<Player>().getCurrencyAmount();
-
-            if(currentAmount >= costAmount) {
-                playerAnimator.Play("Guitar Playing");
-                Instantiate(guitarSound, transform.position, transform.rotation);
-                interactText.enabled = false;
-                padTriggered = true;
-                hasUsed = true;
-
-                playerObject.GetComponent<Player>().updateCurrencyAmount(costAmount);
-                costText.enabled = false;
-
-                if (isQuestStage) {
-                    GameManager.instance.AddCounter(questID, stageValue);
-                }
+            if (isQuestStage) {
+                GameManager.instance.AddCounter(questID, stageValue);
             } else {
                 Instantiate(errorSound, transform.position, transform.rotation);
             }
-
-
         }
+    }
+
+    // Update is called once per frame
+    void Update() {
+        if (isGuitarOnly) {
+            isTalking = errorDialogueTrigger.GetComponent<DialogueTrigger>().isTalking;
+        }
+
+        currentGuitarObject = playerObject.GetComponent<Player>().currentGuitarObject;
+
+        if (isTouching && !hasUsed && Input.GetKeyDown(KeyCode.E)) {
+            if (isGuitarOnly && currentGuitarObject != playerObject.GetComponent<Player>().guitarObject) {
+                if(isFirstAttemmpt) {
+                    Instantiate(errorSound, transform.position, transform.rotation);
+                    errorDialogueTrigger.SetActive(true);
+                    interactText.gameObject.SetActive(false);
+                    isFirstAttemmpt = false;
+                }
+
+                if(!isTalking) {
+                    Instantiate(errorSound, transform.position, transform.rotation);
+                }
+
+            } else if (isGuitarOnly && currentGuitarObject == playerObject.GetComponent<Player>().guitarObject) {
+                activatePad();
+                workingDialogueTrigger.SetActive(true);
+                interactText.gameObject.SetActive(false);
+
+            } else if (!isGuitarOnly) {
+                activatePad();
+            }
+        }
+
 
         if (padTriggered) {
             time += Time.deltaTime;
@@ -106,6 +138,7 @@ public class Untimed_Trigger_Event_Script : MonoBehaviour {
         if (other.gameObject == playerObject) {
             isTouching = true;
             if(!hasUsed) {
+                interactText.gameObject.SetActive(true);
                 interactText.text = "Press 'E' to Rock out!";
                 interactText.enabled = true;
                 costText.text = "Required: " + costAmount + " Beat Coins";

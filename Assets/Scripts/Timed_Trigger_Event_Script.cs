@@ -73,6 +73,7 @@ public class Timed_Trigger_Event_Script : MonoBehaviour {
         }
 
         if (isTouching && Input.GetKeyDown(KeyCode.E) && !isCooldown) {
+            playerObject.GetComponent<PauseMenu>().selectGuitar();
             playerAnimator.Play("Guitar Playing");
             Instantiate(guitarSound, transform.position, transform.rotation);
             isCooldown = true;
