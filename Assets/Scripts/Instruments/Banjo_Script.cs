@@ -40,6 +40,8 @@ public class Banjo_Script : Weapon {
             guitarStance = 1;
             Instantiate(magicSound1, transform.position, transform.rotation);
             // Channel Ability
+            playerObject.GetComponent<Player>().setCanMove(false);
+            setCanAttack(false);
             Invoke("channelAbility", channelTime);
             magicTimer1 = Time.time + magicRate1;
         } else {
@@ -53,6 +55,8 @@ public class Banjo_Script : Weapon {
         lightningAttack(target);
         //currentChannelTime = 0;
         playerModel.transform.localEulerAngles = new Vector3(0, 0, 0);
+        playerObject.GetComponent<Player>().setCanMove(true);
+        setCanAttack(true);
         guitarStance = 0;
         //currentChannelTime = Time.time + channelTime;
     }

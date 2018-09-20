@@ -46,6 +46,8 @@ public class Guitar_Script : Weapon {
             guitarStance = 1;
             Instantiate(magicSound1, transform.position, transform.rotation);
             // Channel Ability
+            setCanAttack(false);
+            playerObject.GetComponent<Player>().setCanMove(false);
             Invoke("channelAbility", channelTime);
             magicTimer1 = Time.time + magicRate1;
         } else {
@@ -60,6 +62,8 @@ public class Guitar_Script : Weapon {
         guitarStance = 1;
         Instantiate(forceObject, transform.position, new Quaternion(0,0,0,0));
         Instantiate(magicSound1, transform.position, transform.rotation);
+        setCanAttack(false);
+        playerObject.GetComponent<Player>().setCanMove(false);
         Invoke("channelAbility2", channelTime);
         magicTimer2 = Time.time + magicRate2;
     }
@@ -71,11 +75,15 @@ public class Guitar_Script : Weapon {
         //currentChannelTime = 0;
         playerModel.transform.localEulerAngles = new Vector3(0, 0, 0);
         guitarStance = 0;
+        setCanAttack(true);
+        playerObject.GetComponent<Player>().setCanMove(true);
         //currentChannelTime = Time.time + channelTime;
     }
 
     private void channelAbility2() {
         playerModel.transform.localEulerAngles = new Vector3(0, 0, 0);
+        setCanAttack(true);
+        playerObject.GetComponent<Player>().setCanMove(true);
         guitarStance = 0;
     }
 

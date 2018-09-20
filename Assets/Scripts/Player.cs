@@ -316,6 +316,8 @@ public class Player : MonoBehaviour {
         } else if (dead) {
             animator.Play("Dead");
 
+            currentGuitarObject.GetComponent<Weapon>().setCanAttack(false);
+
             time -= Time.deltaTime;
 
             if (livesLeft < 0) {
@@ -332,6 +334,8 @@ public class Player : MonoBehaviour {
                     gameResult.enabled = false;
                     restartMenu.SetActive(true);
                 } else {
+                    animator.Play("Idle");
+                    currentGuitarObject.GetComponent<Weapon>().setCanAttack(true);
                     gameResult.enabled = false;
                     dead = false;
                     if (spawnPoint == null) {
