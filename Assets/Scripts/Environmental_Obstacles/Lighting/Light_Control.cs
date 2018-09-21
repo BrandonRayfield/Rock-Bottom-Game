@@ -7,6 +7,7 @@ public class Light_Control : MonoBehaviour {
     public Light mainLight;
     public GameObject mainCamera;
     public bool isDark;
+    public bool stillDark;
     public int dimSpeed = 5;
 
     private float maxIntensity = 0.5f;
@@ -34,8 +35,10 @@ public class Light_Control : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        mainLight.intensity = currentIntensity;
-        mainCamera.GetComponent<AudioSource>().volume = currentVolume;
+        if(stillDark) {
+            mainLight.intensity = currentIntensity;
+            mainCamera.GetComponent<AudioSource>().volume = currentVolume;
+        }
 
         if (isDark) {
             currentVolume = minVolume;
@@ -46,6 +49,8 @@ public class Light_Control : MonoBehaviour {
             currentVolume = maxVolume;
             if (currentIntensity < maxIntensity) {
                 currentIntensity += (Time.deltaTime / dimSpeed);
+            } else {
+                stillDark = false;
             }
         }
 	}
@@ -53,12 +58,16 @@ public class Light_Control : MonoBehaviour {
     private void OnTriggerEnter(Collider other) {
         if(other.gameObject.tag == "Player") {
             isDark = true;
+            stillDark = true;
         }
     }
 
     private void OnTriggerExit(Collider other) {
         if (other.gameObject.tag == "Player") {
-            isDark = false;
+            if(stillDark) {
+                isDark = false;
+            }
+
         }
     }
 
