@@ -73,9 +73,15 @@ public class New_Comic_Controller : MonoBehaviour {
             if(!finishedTalking) {
                 DisplayNextSentence();
             } else {
-                Debug.Log("Loading Next Scene");
-                fadeImage.GetComponent<Fade_Script>().LoadNewLevel(0, true);
-                Invoke("LoadNextScene", 1);
+                if(!isEnding) {
+                    Debug.Log("Loading Next Scene");
+                    fadeImage.GetComponent<Fade_Script>().LoadNewLevel(0, true);
+                    Invoke("LoadNextScene", 1);
+                } else {
+                    fadeImage.GetComponent<Fade_Script>().LoadNewLevel(0, true);
+                    Invoke("showEndScreen", 1);
+                }
+
             }
         }
     }
@@ -153,6 +159,11 @@ public class New_Comic_Controller : MonoBehaviour {
     public void skipTextAnimation(string sentence) {
         dialogueText.text = sentence;
         finishedTalking = true;
+    }
+
+
+    public void showEndScreen() {
+        endScreen.SetActive(true);
     }
 
     public void LoadNextScene() {
