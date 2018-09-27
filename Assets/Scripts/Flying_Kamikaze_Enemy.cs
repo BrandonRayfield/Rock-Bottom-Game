@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Flying_Enemy : MonoBehaviour {
+public class Flying_Kamikaze_Enemy : MonoBehaviour {
 
     public Player player;
     public Projectile shot;
@@ -33,7 +33,7 @@ public class Flying_Enemy : MonoBehaviour {
     public bool activated = false;
 
     //health
-    public int health = 100;
+    public int health = 50;
     public GameObject EnemyHealthBar;
     private Transform healthBarTarget;
     public GameObject EnemyHealth;
@@ -46,7 +46,8 @@ public class Flying_Enemy : MonoBehaviour {
     void Start() {
         try {
             player = GameObject.Find("Player").GetComponent<Player>();
-        } catch {
+        }
+        catch {
             player = null;
         }
 
@@ -55,7 +56,7 @@ public class Flying_Enemy : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
 
         enemygeneric = GetComponent<EnemyGeneric>();
-        enemygeneric.health = 100;
+        enemygeneric.health = health;
 
         //health bar
         EnemyHealth = Instantiate(EnemyHealthBar);
@@ -69,11 +70,12 @@ public class Flying_Enemy : MonoBehaviour {
 
 
     // Update is called once per frame
-    void Update () {
+    void Update() {
         // Search();
         if (activated) {
             Movement();
-        } else {
+        }
+        else {
             Search();
         }
 
@@ -89,8 +91,8 @@ public class Flying_Enemy : MonoBehaviour {
             Vector3.Distance(transform.position, player.transform.position) < 7.5f) {
 
             activated = true;
-            
-        } 
+
+        }
     }
 
     public void Movement() {
@@ -101,16 +103,15 @@ public class Flying_Enemy : MonoBehaviour {
 
                 if (!Physics.Linecast(transform.position, player.transform.position, mask) &&
                     Vector3.Distance(player.transform.position, transform.position) < 5f) {
-                    if (Mathf.Abs(transform.position.y - player.transform.position.y) <= 1f &&
+                    if (Mathf.Abs(transform.position.y - player.transform.position.y) <= 5f &&
                         Mathf.Abs(transform.position.x - player.transform.position.x) <= 5f) {
-                        swoop_target = player.transform.position + (player.transform.position - transform.position);
-                        swoop_target.y = transform.position.y;
+                        swoop_target = player.transform.position;
                         moveTimer = Time.time + 0.5f;
                         speed = 250f;
                     }
                     else {
-                        swoop_target = new Vector3(Random.Range(-4, 4) + player.transform.position.x,
-                            player.transform.position.y, 0f);
+                        swoop_target = new Vector3(Random.Range(-4, 4) + transform.position.x,
+                        Random.Range(-4, 4) + transform.position.y, 0f);
                         moveTimer = Time.time + 0.5f;
                         speed = 110f;
                     }
@@ -178,7 +179,7 @@ public class Flying_Enemy : MonoBehaviour {
             float adjRotSpeed = Mathf.Min(rotationSpeed * Time.deltaTime, 1f);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, adjRotSpeed);
 
-            rb.AddRelativeForce(Vector3.forward * speed  * Time.deltaTime);
+            rb.AddRelativeForce(Vector3.forward * speed * Time.deltaTime);
         }
     }
 
@@ -187,20 +188,11 @@ public class Flying_Enemy : MonoBehaviour {
         if (otherObject.transform.tag == "Player") {
             otherObject.GetComponent<Player>().takeDamage(damage);
 
-            Vector3 away = transform.position - player.transform.position;
-            Vector3.Normalize(away);
-            away.z = 0;
-            //away *= 10;
-            
-            away.x *= 100;
-            if (Mathf.Sign(away.y) == -1f) {
-                away.y *= -10;
-            } else {
-                away.y *= 10;
-            }
+            dead = true;
+            this.transform.tag = "Untagged";
+            Destroy(EnemyHealth.gameObject);
+            Destroy(this.gameObject);
 
-            swoop_target = away;
-            moveTimer = Time.time + 1f;
         }
     }
 

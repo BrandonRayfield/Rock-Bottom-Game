@@ -33,7 +33,9 @@ public class DamageHitBox : MonoBehaviour {
             //----------------------------------------------------------------------------------
             // These are 'work arounds' for now. Delete after reworking enemy class.
             else if (otherObject.transform.tag == "FlyingEnemy") {
-                otherObject.GetComponent<Flying_Enemy>().takeDamage(damage);
+                if (otherObject.GetComponent<Flying_Enemy>()) otherObject.GetComponent<Flying_Enemy>().takeDamage(damage);
+                else if (otherObject.GetComponent<Flying_Crush_Enemy>()) otherObject.GetComponent<Flying_Crush_Enemy>().takeDamage(damage);
+                else if (otherObject.GetComponent<Flying_Kamikaze_Enemy>()) otherObject.GetComponent<Flying_Kamikaze_Enemy>().takeDamage(damage);
                 Destroy(gameObject);
             } else if (otherObject.transform.tag == "Ranged_Enemy") {
                 otherObject.GetComponent<Ranged_Enemy>().takeDamage(damage);
