@@ -80,7 +80,6 @@ public class Chaser : MonoBehaviour {
                 direction = direction * -1;
 
                 turnTimer = Time.time + 0.1f;
-
             }
 
             if (platform()) {
@@ -102,7 +101,6 @@ public class Chaser : MonoBehaviour {
 
                 //attacked = true;
                 stupidAttackLandingTimer = Time.time + 0.1f;
-
             }
 
             if ((noDrop() && !blocked()) || isJumping) {
@@ -116,8 +114,6 @@ public class Chaser : MonoBehaviour {
             if (IsGrounded()) {
                 isJumping = false;
             }
-
-
         }
         
 
@@ -125,6 +121,7 @@ public class Chaser : MonoBehaviour {
         //searchTimer -= Time.deltaTime;
         if (searchTimer <= Time.time) {
             playerSeen = false;
+            moveSpeed = 2;
             search();
         }
 
@@ -211,9 +208,11 @@ public class Chaser : MonoBehaviour {
             Debug.DrawLine(transform.position, player.transform.position, Color.yellow);
 
             playerSeen = true;
+            moveSpeed = 3.5f;
             searchTimer = Time.time + 2f;
         } else {
             playerSeen = false;
+            moveSpeed = 2;
             searchTimer = Time.time + 0.25f;
         }
 
