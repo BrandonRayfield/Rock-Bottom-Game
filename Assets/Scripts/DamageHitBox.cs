@@ -28,6 +28,8 @@ public class DamageHitBox : MonoBehaviour {
                     otherObject.GetComponent<Chaser>().takeDamage(damage);
                 else if (otherObject.GetComponent<Boss>() != null)
                     otherObject.GetComponent<Boss>().takeDamage(damage);
+                else if (otherObject.GetComponent<Large_Spider>() != null)
+                    otherObject.GetComponent<Large_Spider>().takeDamage(damage);
                 hasDamaged = true;
             }
             //----------------------------------------------------------------------------------
