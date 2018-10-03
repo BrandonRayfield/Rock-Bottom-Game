@@ -123,7 +123,12 @@ public class Chaser : MonoBehaviour {
         //searchTimer -= Time.deltaTime;
         if (searchTimer <= Time.time) {
             playerSeen = false;
-            moveSpeed = 2;
+            if (moveSpeed == 1 || moveSpeed == 1.5f) {
+                moveSpeed = 1;
+            }
+            else {
+                moveSpeed = 2;
+            }
             search();
         }
 
@@ -210,11 +215,22 @@ public class Chaser : MonoBehaviour {
             Debug.DrawLine(transform.position, player.transform.position, Color.yellow);
 
             playerSeen = true;
-            moveSpeed = 3.5f;
+            if (moveSpeed == 1 || moveSpeed == 1.5f) {
+                moveSpeed = 1.5f;
+            }
+            else {
+                moveSpeed = 3.5f;
+            }
+            
             searchTimer = Time.time + 2f;
         } else {
             playerSeen = false;
-            moveSpeed = 2;
+            if (moveSpeed == 1 || moveSpeed == 1.5f) {
+                moveSpeed = 1;
+            }
+            else {
+                moveSpeed = 2;
+            }
             searchTimer = Time.time + 0.25f;
         }
 
