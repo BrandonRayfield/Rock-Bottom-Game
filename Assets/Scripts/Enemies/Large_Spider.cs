@@ -65,13 +65,13 @@ public class Large_Spider : MonoBehaviour {
         }
 
         if (shootTimer < Time.time ) {
-            GameObject shot = Instantiate(projectile, transform.position, transform.rotation);
+            GameObject shot = Instantiate(projectile, transform.position + Vector3.up, transform.rotation);
             if (shots < 3 ) {
                 shots++;
-                shootTimer = Time.time + 3f;
+                shootTimer = Time.time + 1f;
             } else {
                 shots = 0;
-                shootTimer = Time.time + 12f;
+                shootTimer = Time.time + 10f;
             }
         }
     }
