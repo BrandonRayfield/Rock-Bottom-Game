@@ -29,6 +29,7 @@ public class Chaser : MonoBehaviour {
     private float attackTimer = 0;
     private bool attacked = false;
     private float stupidAttackLandingTimer = 0;
+    public float damage = 10;
 
     //Health Bar Objects
     public int health = 100;
@@ -52,7 +53,7 @@ public class Chaser : MonoBehaviour {
         player  = GameObject.FindGameObjectsWithTag("Player")[0].GetComponent<Player>();
 
         enemygeneric = GetComponent<EnemyGeneric>();
-        enemygeneric.health = 100;
+        //enemygeneric.health = 100;
 
         //health bar
         EnemyHealth = Instantiate(EnemyHealthBar);
@@ -94,6 +95,7 @@ public class Chaser : MonoBehaviour {
                 isJumping = true;
                 GameObject damageBox = Instantiate(damageHitBox, transform.position, transform.rotation);
                 damageBox.transform.parent = transform;
+                damageBox.GetComponent<DamageHitBox>().damage = damage;
 
                 playerSeen = false;
                 searchTimer = Time.time + 1f;
@@ -121,7 +123,12 @@ public class Chaser : MonoBehaviour {
         //searchTimer -= Time.deltaTime;
         if (searchTimer <= Time.time) {
             playerSeen = false;
-            moveSpeed = 2;
+            if (moveSpeed == 1 || moveSpeed == 1.5f) {
+                moveSpeed = 1;
+            }
+            else {
+                moveSpeed = 2;
+            }
             search();
         }
 
@@ -208,11 +215,22 @@ public class Chaser : MonoBehaviour {
             Debug.DrawLine(transform.position, player.transform.position, Color.yellow);
 
             playerSeen = true;
-            moveSpeed = 3.5f;
+            if (moveSpeed == 1 || moveSpeed == 1.5f) {
+                moveSpeed = 1.5f;
+            }
+            else {
+                moveSpeed = 3.5f;
+            }
+            
             searchTimer = Time.time + 2f;
         } else {
             playerSeen = false;
-            moveSpeed = 2;
+            if (moveSpeed == 1 || moveSpeed == 1.5f) {
+                moveSpeed = 1;
+            }
+            else {
+                moveSpeed = 2;
+            }
             searchTimer = Time.time + 0.25f;
         }
 

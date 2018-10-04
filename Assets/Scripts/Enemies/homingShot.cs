@@ -17,7 +17,7 @@ public class homingShot : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         Quaternion targetRotation = Quaternion.LookRotation(player.transform.position - transform.position);
-        float adjRotSpeed = Mathf.Min(rotationSpeed * Time.deltaTime, 1f);
+        float adjRotSpeed = Mathf.Min(rotationSpeed * Time.deltaTime * 1.5f, 1f);
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, adjRotSpeed);
 
         rb.AddRelativeForce(Vector3.forward * 50 * Time.deltaTime);
