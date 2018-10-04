@@ -13,7 +13,7 @@ public class Flying_Enemy : MonoBehaviour {
 
     private float moveTimer;
     private float moveTime;
-    private float speed = 150;
+    public float speed = 150;
     private Vector3 direction;
     private Rigidbody rb;
 
@@ -55,7 +55,6 @@ public class Flying_Enemy : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
 
         enemygeneric = GetComponent<EnemyGeneric>();
-        enemygeneric.health = 100;
 
         //health bar
         EnemyHealth = Instantiate(EnemyHealthBar);
