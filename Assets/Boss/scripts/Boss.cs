@@ -16,7 +16,7 @@ public class Boss : MonoBehaviour {
 
     //player tracking
     public Player player;
-    private int direction = 0;
+    public int direction = 0;
     private float cycle_timer = 0;
 
     //Summon variables
@@ -107,7 +107,10 @@ public class Boss : MonoBehaviour {
                     break;
             }
 
-            if (cycle_timer < Time.time) cycle();
+            if (cycle_timer < Time.time && current_state != state.idle) {
+                current_state = state.idle;
+                cycle_timer = Time.time + 1f;
+            }else if (cycle_timer < Time.time) cycle();
         } else {
             if (EnemyHealth != null) {
                 EnemyHealth.SetActive(false);
@@ -214,7 +217,7 @@ public class Boss : MonoBehaviour {
 
     private void summon() {
         if (cycle_timer - Time.time >= 1.0f) {
-            MoveTowards(player.transform.position);
+            MoveTowards(transform.position + new Vector3(direction,0f,0f));
         } else if (!summoned) {
             GameObject spawn1 = Instantiate(summons[0], transform.position + new Vector3(2f,-1.25f,0f), crushAttack.transform.rotation);
             GameObject spawn2 = Instantiate(summons[0], transform.position + new Vector3(-2f, -1.25f, 0f), crushAttack.transform.rotation);
@@ -227,7 +230,7 @@ public class Boss : MonoBehaviour {
 
     public void MoveTowards(Vector3 location) {
         //if (Mathf.Abs(Vector3.Distance(transform.position, location)) >= 1) {
-            rb.velocity = new Vector3(speed * Mathf.Sign(location.x - transform.position.x) * Time.deltaTime * 2.5f, 0, 0);
+            rb.velocity = new Vector3((speed/35) * Mathf.Sign(location.x - transform.position.x) * Time.deltaTime * 2.5f, 0, 0);
         //} else {
            // rb.velocity = new Vector3(0f, 0f, 0f);
        // }
