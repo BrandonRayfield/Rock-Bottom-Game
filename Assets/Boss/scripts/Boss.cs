@@ -170,7 +170,8 @@ public class Boss : MonoBehaviour {
             case 2:
                 
                 current_state = state.crush;
-                //cycle_timer = Time.time + 1.5f;
+                crush_location = Vector3.zero;
+                cycle_timer = Time.time + 1.5f;
                 break;
             case 3:
                 animator.Play("Roar");
@@ -230,7 +231,7 @@ public class Boss : MonoBehaviour {
 
     public void MoveTowards(Vector3 location) {
         //if (Mathf.Abs(Vector3.Distance(transform.position, location)) >= 1) {
-            rb.velocity = new Vector3((speed/35) * Mathf.Sign(location.x - transform.position.x) * Time.deltaTime * 2.5f, 0, 0);
+            rb.velocity = new Vector3((speed/35f) * Mathf.Sign(location.x - transform.position.x) * Time.deltaTime * 2.5f, 0, 0);
         //} else {
            // rb.velocity = new Vector3(0f, 0f, 0f);
        // }
