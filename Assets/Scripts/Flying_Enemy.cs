@@ -42,6 +42,11 @@ public class Flying_Enemy : MonoBehaviour {
     //Object Spawn Variables
     private int randomNumberDrop;
     public GameObject healthDrop;
+
+    //Quest Variables
+    public bool isQuestEnemy;
+    public int questID;
+
     // Use this for initialization
     void Start() {
         try {
@@ -156,7 +161,10 @@ public class Flying_Enemy : MonoBehaviour {
             if (enemygeneric.health <= 0) {
                 dead = true;
                 randomDrop();
-                //Instantiate(deathSound, transform.position, transform.rotation);
+                if (isQuestEnemy) {
+                    GameManager.instance.AddCounter(questID, 1);
+                }
+                    //Instantiate(deathSound, transform.position, transform.rotation);
                 this.transform.tag = "Untagged";
                 Destroy(EnemyHealth.gameObject);
                 Destroy(this.gameObject);

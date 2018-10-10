@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class DialogueTrigger : MonoBehaviour {
 
     // Dialogue Variables
+    [Header("Dialogue Variables")]
     public int NpcID;
     public Dialogue[] dialogue;
     public Dialogue[] dialogueDuringQuest;
@@ -16,6 +17,7 @@ public class DialogueTrigger : MonoBehaviour {
     public bool isQuestGiver;
 
     // Completed Quest Objects
+    [Header("Reward Variables")]
     public bool isRewardGiver;
     public GameObject rewardObject;
     public float rewardHeightPosition = 1.0f;
@@ -36,19 +38,23 @@ public class DialogueTrigger : MonoBehaviour {
     private GameObject cameraObject;
 
     // Autotrigger Variables
+    [Header("Autotrigger Variables")]
     public bool isAutomatic;
     public bool isStageDialogue;
     private bool hasTriggered;
     private bool autoComplete;
 
     // Boss Variables
+    [Header("Boss Variables")]
     public bool isBossCutscene;
     public GameObject bossObject;
     private bool bossActivate;
     private bool bossComplete;
 
     //UI Elements
+    [Header("UI Variables")]
     public Text interactText;
+    public string interactMessage = "Press 'e' to talk";
 
     // Expression Variables
     public GameObject questionObject;
@@ -204,7 +210,7 @@ public class DialogueTrigger : MonoBehaviour {
         if(!isAutomatic && other.gameObject.tag == "Player") {
             if(!isTalking) {
                 interactText.enabled = true;
-                interactText.text = "Press 'E' to talk!";
+                interactText.text = interactMessage;
             } else {
                 interactText.enabled = false;
                 interactText.text = "";
