@@ -43,6 +43,7 @@ public class Guitar_Script : Weapon {
 
             playerModel.transform.localEulerAngles = new Vector3(0, currentDirection * 90, 0);
             animator.Play("Guitar Playing");
+            animator.speed = 1;
             guitarStance = 1;
             Instantiate(magicSound1, transform.position, transform.rotation);
             // Channel Ability
@@ -59,6 +60,7 @@ public class Guitar_Script : Weapon {
         currentDirection = playerObject.GetComponent<Player>().getPlayerDirection();
         playerModel.transform.localEulerAngles = new Vector3(0, currentDirection * 90, 0);
         animator.Play("Guitar Playing");
+        animator.speed = 1;
         guitarStance = 1;
         Instantiate(forceObject, transform.position, new Quaternion(0,0,0,0));
         Instantiate(magicSound1, transform.position, transform.rotation);
