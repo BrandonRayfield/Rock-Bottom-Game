@@ -261,7 +261,7 @@ public class Boss : MonoBehaviour {
 
     public void smash() {
         if (!drop) {
-            GameObject projectile = Instantiate(smash_projectile, transform.position + new Vector3(direction, -0.85f, 0f), crush_rotation);
+            GameObject projectile = Instantiate(smash_projectile, transform.position + new Vector3(direction, -0.25f, 0f), crush_rotation);
             Rigidbody projectile_rb = projectile.GetComponent<Rigidbody>();
             projectile_rb.velocity = new Vector3(direction * speed * Time.deltaTime, 0f, 0f);
             projectile_rb.useGravity = false;

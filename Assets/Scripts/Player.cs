@@ -115,8 +115,8 @@ public class Player : MonoBehaviour {
 
     private float lightningDamage = 150.0f;
 
-    private float damageTimer;
-    private float damageTime = 0.5f;
+    //private float damageTimer;
+    //private float damageTime = 0.5f;
     //---------------------------------------------------------------
     // Obstacle Variables
     private bool touchTopCrush;
@@ -577,9 +577,8 @@ public class Player : MonoBehaviour {
     }
 
     public void takeDamage(float damage) {
-        if (Time.time >= damageTimer && !invulnerable) {
+        if ( !invulnerable) {
             health -= damage;
-            damageTimer = Time.time + damageTime;
             //isSlowed = true;
 
             if (health <= 0 && !dead) {
