@@ -13,7 +13,7 @@ public abstract class Weapon : MonoBehaviour {
     // Damage variables
     public float weaponDamage = 50.0f;
     protected float attackTimer;
-    public float attackRate = 1.5f;
+    public float attackRate = 0.75f;
     public GameObject damageLocation;
     public GameObject damageHitBox;
     protected float magicTimer1;
@@ -64,6 +64,7 @@ public abstract class Weapon : MonoBehaviour {
             if (Input.GetMouseButtonDown(0) && Time.time > attackTimer) {
                 //Debug.Log("Player Attacked");
                 animator.SetTrigger(attackAnimationName);
+                animator.speed = 2;
                 Instantiate(attackSound, transform.position, transform.rotation);
                 Damage();
 

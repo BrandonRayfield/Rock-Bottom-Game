@@ -16,7 +16,7 @@ public class Boss : MonoBehaviour {
 
     //player tracking
     public Player player;
-    private int direction = 0;
+    public int direction = 0;
     private float cycle_timer = 0;
 
     //Summon variables
@@ -107,7 +107,10 @@ public class Boss : MonoBehaviour {
                     break;
             }
 
-            if (cycle_timer < Time.time) cycle();
+            if (cycle_timer < Time.time && current_state != state.idle) {
+                current_state = state.idle;
+                cycle_timer = Time.time + 1f;
+            }else if (cycle_timer < Time.time) cycle();
         } else {
             if (EnemyHealth != null) {
                 EnemyHealth.SetActive(false);
@@ -162,12 +165,14 @@ public class Boss : MonoBehaviour {
                 current_state = state.charge;
                 GameObject charge = Instantiate(chargeAttack, chargeLocation.transform.position, chargeLocation.transform.rotation);
                 charge.transform.parent = transform;
-                cycle_timer = Time.time + 3f;
+                drop = false;
+                cycle_timer = Time.time + 2f;
                 break;
             case 2:
                 
                 current_state = state.crush;
-                //cycle_timer = Time.time + 1.5f;
+                crush_location = Vector3.zero;
+                cycle_timer = Time.time + 2f;
                 break;
             case 3:
                 animator.Play("Roar");
@@ -195,26 +200,29 @@ public class Boss : MonoBehaviour {
     }
 
     public void charge() {
-        rb.velocity = new Vector3(speed * direction * Time.deltaTime * 2.5f, 0, 0);
-        
+        if (transform.position.y <= -4) {
+            Vector3 momentum = rb.velocity;
+            momentum.x = speed * direction * Time.deltaTime * 3f;
+            rb.velocity = momentum;
+        }        
     }
 
     public void OnTriggerEnter(Collider other) {
         if (current_state == state.charge && other.transform.tag == "Wall") {
             cycle();
-            cycle_timer = Time.time + 15f;
+            //cycle_timer = Time.time + 15f;
             animator.Play("Idle");
         }
         if (current_state == state.crush && other.transform.tag == "Wall") {
             GameObject projectile = Instantiate(crush_effect, transform.position + new Vector3(direction, 0.5f, 0), crush_rotation);
             cycle();
-            cycle_timer = Time.time + 15f;
+            //cycle_timer = Time.time + 15f;
         }
-    }
+   }
 
     private void summon() {
         if (cycle_timer - Time.time >= 1.0f) {
-            MoveTowards(player.transform.position);
+            MoveTowards(transform.position + new Vector3(direction,0f,0f));
         } else if (!summoned) {
             GameObject spawn1 = Instantiate(summons[0], transform.position + new Vector3(2f,-1.25f,0f), crushAttack.transform.rotation);
             GameObject spawn2 = Instantiate(summons[0], transform.position + new Vector3(-2f, -1.25f, 0f), crushAttack.transform.rotation);
@@ -227,7 +235,7 @@ public class Boss : MonoBehaviour {
 
     public void MoveTowards(Vector3 location) {
         //if (Mathf.Abs(Vector3.Distance(transform.position, location)) >= 1) {
-            rb.velocity = new Vector3(speed * Mathf.Sign(location.x - transform.position.x) * Time.deltaTime * 2.5f, 0, 0);
+            rb.velocity = new Vector3((speed/35f) * Mathf.Sign(location.x - transform.position.x) * Time.deltaTime * 2.5f, 0, 0);
         //} else {
            // rb.velocity = new Vector3(0f, 0f, 0f);
        // }
@@ -253,7 +261,7 @@ public class Boss : MonoBehaviour {
 
     public void smash() {
         if (!drop) {
-            GameObject projectile = Instantiate(smash_projectile, transform.position + new Vector3(direction, -1.15f, 0f), crush_rotation);
+            GameObject projectile = Instantiate(smash_projectile, transform.position + new Vector3(direction, -0.25f, 0f), crush_rotation);
             Rigidbody projectile_rb = projectile.GetComponent<Rigidbody>();
             projectile_rb.velocity = new Vector3(direction * speed * Time.deltaTime, 0f, 0f);
             projectile_rb.useGravity = false;
@@ -261,6 +269,8 @@ public class Boss : MonoBehaviour {
             
 
             drop = true;
+        } else if (cycle_timer - Time.time  <= 1f){
+            cycle();
         }
     }
 
