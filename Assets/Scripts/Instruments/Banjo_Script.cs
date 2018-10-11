@@ -6,68 +6,65 @@ public class Banjo_Script : Weapon {
 
     //Magic Variables
     public GameObject lightningControl;
-    public GameObject cowObject;
     public float lightningDamage = 100;
     private float currentChannelTime;
     public float channelTime = 1.0f; // How long it takes for attack to charge before actually activating
     public Vector3 target;
     private Vector3 nullTarget = new Vector3(0, 0, 0);
 
+    public GameObject fireSpell;
+
+    private float angle;
+    private GameObject bullet;
+    
+    //Rotation vars
+    private float rotationSpeed = 1.5f;
+    private float adjRotSpeed;
+
     protected override void Update() {
         base.Update();
 
-        target = lightningControl.GetComponent<ThunderCollider>().findClosest();
-        //Debug.Log(target);
-        if (target != new Vector3(0, 0, 0)) {
-            canUse1 = true;
-        } else {
-            canUse1 = false;
+        Vector3 mousePos;
+        Vector3 attackPos = damageLocation.transform.position;
+
+        mousePos = Input.mousePosition;
+        mousePos.z = Vector3.Distance(Camera.main.transform.position, transform.position);
+        attackPos = Camera.main.WorldToScreenPoint(attackPos);
+        mousePos.x -= attackPos.x;
+        mousePos.y -= attackPos.y;
+        angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
+
+        if (bullet != null) {
+            adjRotSpeed = Mathf.Min(rotationSpeed * Time.deltaTime, 1);
+            bullet.gameObject.transform.rotation = Quaternion.Lerp(bullet.transform.rotation, Quaternion.Euler(new Vector3(-angle, 90, 0)), adjRotSpeed);
+            //bullet.gameObject.transform.rotation = new Quaternion(Mathf.Lerp(bullet.transform.rotation.x, -angle, adjRotSpeed), bullet.transform.rotation.y, bullet.transform.rotation.z, 1);
         }
+
+        //target = lightningControl.GetComponent<ThunderCollider>().findClosest();
+        //Debug.Log(target);
+        //if (target != new Vector3(0, 0, 0)) {
+        //    canUse1 = true;
+        //} else {
+        //    canUse1 = false;
+        //}
     }
 
     protected override void SpecialAttack1() {
-        target = lightningControl.GetComponent<ThunderCollider>().findClosest();
 
-        if (target != nullTarget) {
+        //playerObject.GetComponent<Player>().setCurrentlyCasting(true);
+        animator.SetTrigger("Playing");
+        Instantiate(magicSound1, transform.position, transform.rotation);
+        bullet = Instantiate(fireSpell, damageLocation.transform.position, Quaternion.Euler(new Vector3(-angle, 90, 0)), damageLocation.gameObject.transform);
+        magicTimer1 = Time.time + magicRate1;
 
-            Debug.Log("Target Found");
+        //Invoke("setCastFalse", 4);
 
-            currentDirection = playerObject.GetComponent<Player>().getPlayerDirection();
-            Debug.Log(currentDirection);
-
-            playerModel.transform.localEulerAngles = new Vector3(0, currentDirection * 90, 0);
-            animator.Play("Guitar Playing");
-            guitarStance = 1;
-            Instantiate(magicSound1, transform.position, transform.rotation);
-            // Channel Ability
-            playerObject.GetComponent<Player>().setCanMove(false);
-            setCanAttack(false);
-            Invoke("channelAbility", channelTime);
-            magicTimer1 = Time.time + magicRate1;
-        } else {
-            Debug.Log("No valid target.");
-        }
+        //bullet.GetComponent<Projectile_Script>().SetDamage(weaponDamage);
+        //bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.right * bulletSpeed);
     }
 
-    private void channelAbility() {
-        target = lightningControl.GetComponent<ThunderCollider>().findClosest();
-        //target.y += 8.5f;
-        lightningAttack(target);
-        //currentChannelTime = 0;
-        playerModel.transform.localEulerAngles = new Vector3(0, 0, 0);
-        playerObject.GetComponent<Player>().setCanMove(true);
-        setCanAttack(true);
-        guitarStance = 0;
-        //currentChannelTime = Time.time + channelTime;
-    }
-
-    public void lightningAttack(Vector3 target) {
-        if (target != null) {
-            GameObject prefab = Instantiate(cowObject, new Vector3(target.x, target.y + 4, target.z), transform.rotation);
-            prefab.GetComponent<DamageHitBox>().damage = lightningDamage;
-            prefab.GetComponent<DamageHitBox>().player = true;
-            //Instantiate(attackSound, transform.position, transform.rotation);
-        }
+    private void setCastFalse() {
+        playerObject.GetComponent<Player>().setCurrentlyCasting(false);
     }
 
 }

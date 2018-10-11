@@ -19,52 +19,52 @@ public class Guitar_Script : Weapon {
     public float growTime;
     private float currentGrowTime;
 
+    public GameObject lightningSpell;
+
+    private float angle;
+    private GameObject bullet;
+
+    //Rotation vars
+    private float rotationSpeed = 1.5f;
+    private float adjRotSpeed;
+
     protected override void Update() {
         base.Update();
 
-        target = lightningControl.GetComponent<ThunderCollider>().findClosest();
-        //Debug.Log(target);
-        if(target != new Vector3(0, 0, 0)) {
-            canUse1 = true;
-        } else {
-            canUse1 = false;
+        Vector3 mousePos;
+        Vector3 attackPos = damageLocation.transform.position;
+
+        mousePos = Input.mousePosition;
+        mousePos.z = Vector3.Distance(Camera.main.transform.position, transform.position);
+        attackPos = Camera.main.WorldToScreenPoint(attackPos);
+        mousePos.x -= attackPos.x;
+        mousePos.y -= attackPos.y;
+        angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
+
+        if (bullet != null) {
+            adjRotSpeed = Mathf.Min(rotationSpeed * Time.deltaTime, 1);
+            bullet.gameObject.transform.rotation = Quaternion.Lerp(bullet.transform.rotation, Quaternion.Euler(new Vector3(-angle, 90, 0)), adjRotSpeed);
+            //bullet.gameObject.transform.rotation = new Quaternion(Mathf.Lerp(bullet.transform.rotation.x, -angle, adjRotSpeed), bullet.transform.rotation.y, bullet.transform.rotation.z, 1);
         }
     }
 
     protected override void SpecialAttack1() {
-        target = lightningControl.GetComponent<ThunderCollider>().findClosest();
-
-        if (target != new Vector3(0,0,0)) {
-
-            //Debug.Log("Target Found");
-
-            currentDirection = playerObject.GetComponent<Player>().getPlayerDirection();
-            Debug.Log(currentDirection);
-
-            playerModel.transform.localEulerAngles = new Vector3(0, currentDirection * 90, 0);
-            animator.Play("Guitar Playing");
-            guitarStance = 1;
-            Instantiate(magicSound1, transform.position, transform.rotation);
-            // Channel Ability
-            setCanAttack(false);
-            playerObject.GetComponent<Player>().setCanMove(false);
-            Invoke("channelAbility", channelTime);
-            magicTimer1 = Time.time + magicRate1;
-        } else {
-            //Debug.Log("No valid target.");
-        }
+        animator.SetTrigger("Playing");
+        Instantiate(magicSound1, transform.position, transform.rotation);
+        bullet = Instantiate(lightningSpell, damageLocation.transform.position, Quaternion.Euler(new Vector3(-angle, 90, 0)), damageLocation.gameObject.transform);
+        magicTimer1 = Time.time + magicRate1;
     }
 
     protected override void SpecialAttack2() {
         currentDirection = playerObject.GetComponent<Player>().getPlayerDirection();
-        playerModel.transform.localEulerAngles = new Vector3(0, currentDirection * 90, 0);
-        animator.Play("Guitar Playing");
+        //playerModel.transform.localEulerAngles = new Vector3(0, currentDirection * 90, 0);
+        animator.SetTrigger("Playing");
         guitarStance = 1;
         Instantiate(forceObject, transform.position, new Quaternion(0,0,0,0));
-        Instantiate(magicSound1, transform.position, transform.rotation);
-        setCanAttack(false);
-        playerObject.GetComponent<Player>().setCanMove(false);
-        Invoke("channelAbility2", channelTime);
+        Instantiate(magicSound2, transform.position, transform.rotation);
+        //setCanAttack(false);
+        //playerObject.GetComponent<Player>().setCanMove(false);
+        //Invoke("channelAbility2", channelTime);
         magicTimer2 = Time.time + magicRate2;
     }
 

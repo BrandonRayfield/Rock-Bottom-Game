@@ -30,7 +30,6 @@ public class ThunderCollider : MonoBehaviour {
     public void enterRange(EnemyGeneric enemy) {
         //Get the count which will be the index of the newly added enemy
         int length = (InRange.Count);
-        print(length.ToString());
         //Add the enemy (at index length (because indexes start at 0))
         InRange.Add(enemy);
         enemy.LightningChange(length);
@@ -52,8 +51,6 @@ public class ThunderCollider : MonoBehaviour {
     public void OnTriggerEnter(Collider other) {
         //If it's an enemy
         if (other.tag == "Enemy" || other.tag == "FlyingEnemy" || other.tag == "Chaser") {
-            //Check
-            print("collision.lightning detected");
             //Add the enemy to the list
             enterRange(other.GetComponent<EnemyGeneric>());
             checkDuplicates();
@@ -64,8 +61,6 @@ public class ThunderCollider : MonoBehaviour {
     public void OnTriggerExit(Collider other) {
         //If it's an enemy
         if (other.tag == "Enemy" || other.tag == "FlyingEnemy" || other.tag == "Chaser") {
-            //Check
-            Debug.Log("collision.lightning detected");
             //Add the enemy to the list
             if (other.GetComponent<EnemyGeneric>().lightningListLocation != -1) {
                 removeEnemy(other.GetComponent<EnemyGeneric>().lightningListLocation);

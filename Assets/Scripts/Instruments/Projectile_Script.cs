@@ -7,13 +7,32 @@ public class Projectile_Script : MonoBehaviour {
     public bool isFriendly;
     private float damage;
 
+    public bool isExplosive;
+    public bool upgradedExplosive;
+    public GameObject explosion;
+    public GameObject explosionSound;
+
+    private float time;
+    private float lifeTime = 3;
+
 	// Use this for initialization
 	void Start () {
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+    }
+
+    private void Awake() {
+        time = 0;
+    }
+
+    // Update is called once per frame
+    void Update () {
+        if(isExplosive) {
+            time += Time.deltaTime;
+            if (time >= lifeTime) {
+                Instantiate(explosion, transform.position, transform.rotation);
+                Destroy(gameObject);
+            }
+        }
 	}
 
     private void OnTriggerEnter(Collider other) {
@@ -23,7 +42,13 @@ public class Projectile_Script : MonoBehaviour {
             Destroy(gameObject);
         } else if(isFriendly && other.transform.tag == "Enemy") {
             if (other.GetComponent<Enemy>() != null)
-                other.GetComponent<Enemy>().takeDamage(damage);
+                if(isExplosive) {
+                    Instantiate(explosion, transform.position, transform.rotation);
+                    Destroy(gameObject);
+                    //Instantiate(explosionSound, transform.position, transform.rotation);
+                } else {
+                    other.GetComponent<Enemy>().takeDamage(damage);
+                }
             else if (other.GetComponent<Chaser>() != null)
                 other.GetComponent<Chaser>().takeDamage(damage);
             else if (other.GetComponent<Boss>() != null)
@@ -55,7 +80,16 @@ public class Projectile_Script : MonoBehaviour {
             other.GetComponent<Destructable_Object>().takeDamage(damage);
             Destroy(gameObject);
         } else if (other.transform.tag == "Wall" || other.transform.tag == "Obstacle") {
-            Destroy(gameObject);
+            if (isExplosive && !upgradedExplosive) {
+                GetComponent<Rigidbody>().AddForce(transform.up * 50);
+                Instantiate(explosion, transform.position, transform.rotation);
+                Destroy(gameObject);
+                Instantiate(explosionSound, transform.position, transform.rotation);
+            } else if (isExplosive && upgradedExplosive) {
+                GetComponent<Rigidbody>().AddForce(transform.up * 50);
+            } else {
+                Destroy(gameObject);
+            }
         }
 
 
@@ -65,5 +99,4 @@ public class Projectile_Script : MonoBehaviour {
     public void SetDamage(float damageAmount) {
         damage = damageAmount;
     }
-
 }
