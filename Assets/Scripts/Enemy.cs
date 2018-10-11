@@ -111,7 +111,7 @@ public class Enemy : MonoBehaviour {
         isFalling = isFall;
     }
 
-	private void Attack(){
+    private void Attack(){
 
 		//Get in range
 		if (Vector3.Distance (transform.position, target.transform.position) > attackRange) {
@@ -161,27 +161,25 @@ public class Enemy : MonoBehaviour {
     }
 
     public void takeDamage(float damage) {
+        if (currentHealthDisTime < Time.time) {
 
-        Debug.Log("Enemy Took Damage: " + damage);
+            enemygeneric.health -= damage;
+            animator.Play("Damage");
+            Instantiate(attackSound, transform.position, transform.rotation);
+            attackTimer = Time.time + attackRate / 2;
 
-        currentHealthDisTime = 0;
-        hasBeenDamaged = true;
+            EnemyHealth.SetActive(true);
+            EnemyHealth.GetComponent<Slider>().value = (enemygeneric.health / enemygeneric.maxHealth);
 
-        enemygeneric.health -= damage;
-        animator.Play("Damage");
-        Instantiate(attackSound, transform.position, transform.rotation);
-        attackTimer = Time.time + attackRate / 2;
+            currentHealthDisTime = Time.time + 0.5f;
+            hasBeenDamaged = true;
 
-        EnemyHealth.SetActive(true);
-        Debug.Log("Enemy health: " + enemygeneric.health);
-        Debug.Log("Enemy Max health: " + enemygeneric.maxHealth);
-        EnemyHealth.GetComponent<Slider>().value = (enemygeneric.health / enemygeneric.maxHealth);
-
-        if (enemygeneric.health <= 0) {
-            dead = true;
-            randomDrop();
-            Instantiate(deathSound, transform.position, transform.rotation);
-            this.transform.tag = "Untagged";
+            if (enemygeneric.health <= 0) {
+                dead = true;
+                randomDrop();
+                Instantiate(deathSound, transform.position, transform.rotation);
+                this.transform.tag = "Untagged";
+            }
         }
     }
 
