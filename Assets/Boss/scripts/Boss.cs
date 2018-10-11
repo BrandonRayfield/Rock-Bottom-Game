@@ -165,13 +165,14 @@ public class Boss : MonoBehaviour {
                 current_state = state.charge;
                 GameObject charge = Instantiate(chargeAttack, chargeLocation.transform.position, chargeLocation.transform.rotation);
                 charge.transform.parent = transform;
-                cycle_timer = Time.time + 3f;
+                drop = false;
+                cycle_timer = Time.time + 2f;
                 break;
             case 2:
                 
                 current_state = state.crush;
                 crush_location = Vector3.zero;
-                cycle_timer = Time.time + 1.5f;
+                cycle_timer = Time.time + 2f;
                 break;
             case 3:
                 animator.Play("Roar");
@@ -199,22 +200,25 @@ public class Boss : MonoBehaviour {
     }
 
     public void charge() {
-        rb.velocity = new Vector3(speed * direction * Time.deltaTime * 2.5f, 0, 0);
-        
+        if (transform.position.y <= -4) {
+            Vector3 momentum = rb.velocity;
+            momentum.x = speed * direction * Time.deltaTime * 3f;
+            rb.velocity = momentum;
+        }        
     }
 
     public void OnTriggerEnter(Collider other) {
         if (current_state == state.charge && other.transform.tag == "Wall") {
             cycle();
-            cycle_timer = Time.time + 15f;
+            //cycle_timer = Time.time + 15f;
             animator.Play("Idle");
         }
         if (current_state == state.crush && other.transform.tag == "Wall") {
             GameObject projectile = Instantiate(crush_effect, transform.position + new Vector3(direction, 0.5f, 0), crush_rotation);
             cycle();
-            cycle_timer = Time.time + 15f;
+            //cycle_timer = Time.time + 15f;
         }
-    }
+   }
 
     private void summon() {
         if (cycle_timer - Time.time >= 1.0f) {
@@ -257,7 +261,7 @@ public class Boss : MonoBehaviour {
 
     public void smash() {
         if (!drop) {
-            GameObject projectile = Instantiate(smash_projectile, transform.position + new Vector3(direction, -1.15f, 0f), crush_rotation);
+            GameObject projectile = Instantiate(smash_projectile, transform.position + new Vector3(direction, -0.85f, 0f), crush_rotation);
             Rigidbody projectile_rb = projectile.GetComponent<Rigidbody>();
             projectile_rb.velocity = new Vector3(direction * speed * Time.deltaTime, 0f, 0f);
             projectile_rb.useGravity = false;
@@ -265,6 +269,8 @@ public class Boss : MonoBehaviour {
             
 
             drop = true;
+        } else if (cycle_timer - Time.time  <= 1f){
+            cycle();
         }
     }
 
