@@ -12,6 +12,9 @@ public class MainMenu : MonoBehaviour {
     private bool cMenuOpen;
     private bool xMenuOpen;
 
+    public GameObject loadMenu;
+    public Animator animator;
+
     // Use this for initialization
     void Start () {
         quitMenu = quitMenu.GetComponent<Canvas>();
@@ -94,10 +97,12 @@ public class MainMenu : MonoBehaviour {
         SceneManager.LoadScene(7);
     }
 
-
-
     public void ExitGame() {
         Application.Quit();
     }
 
+    public void ActivateLoadMenu() {
+        loadMenu.SetActive(true);
+        animator.Play("Move_Left");
+    }
 }
