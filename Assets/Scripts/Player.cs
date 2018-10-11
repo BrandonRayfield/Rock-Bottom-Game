@@ -315,6 +315,7 @@ public class Player : MonoBehaviour {
             Controls();
         } else if (dead) {
             animator.Play("Dead");
+            animator.speed = 1;
 
             currentGuitarObject.GetComponent<Weapon>().setCanAttack(false);
 
@@ -335,6 +336,7 @@ public class Player : MonoBehaviour {
                     restartMenu.SetActive(true);
                 } else {
                     animator.Play("Idle");
+                    animator.speed = 1;
                     currentGuitarObject.GetComponent<Weapon>().setCanAttack(true);
                     gameResult.enabled = false;
                     dead = false;
@@ -454,6 +456,7 @@ public class Player : MonoBehaviour {
 
         if (!IsGrounded()) {
             animator.Play("Jump");
+            animator.speed = 1;
             animator.SetBool("isJumping", true);
         } else {
             animator.SetBool("isJumping", false);
@@ -470,6 +473,7 @@ public class Player : MonoBehaviour {
                     if (Input.GetKeyDown("space") && !IsGrounded() && canDoubleJump) {
                         animator.SetBool("isJumping", false);
                         animator.Play("Jump");
+                        animator.speed = 1;
                         animator.SetBool("isJumping", true);
                         Vector3 velocity = rb.velocity;
                         velocity.y = jumpForce * Time.deltaTime;
@@ -538,10 +542,12 @@ public class Player : MonoBehaviour {
                 movementSpeed = runSpeed;
                 newMovementSpeed = newRunSpeed;
                 animator.Play("Run");
+                animator.speed = 1;
             } else {
                 movementSpeed = walkSpeed;
                 newMovementSpeed = newWalkSpeed;
                 animator.Play("Walk");
+                animator.speed = 1;
                 animator.SetBool("isWalking", true);
             }
         }

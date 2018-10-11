@@ -37,6 +37,7 @@ public class Banjo_Script : Weapon {
 
             playerModel.transform.localEulerAngles = new Vector3(0, currentDirection * 90, 0);
             animator.Play("Guitar Playing");
+            animator.speed = 1;
             guitarStance = 1;
             Instantiate(magicSound1, transform.position, transform.rotation);
             // Channel Ability
