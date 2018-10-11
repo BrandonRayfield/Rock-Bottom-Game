@@ -38111,6 +38111,31 @@ Prefab:
       propertyPath: guitarUnlocked
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 224697369523043562, guid: 91d2a99b0f9ccec4888bad4517867ca9,
+        type: 2}
+      propertyPath: m_RootOrder
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 224399091898490512, guid: 91d2a99b0f9ccec4888bad4517867ca9,
+        type: 2}
+      propertyPath: m_RootOrder
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 224229095197448798, guid: 91d2a99b0f9ccec4888bad4517867ca9,
+        type: 2}
+      propertyPath: m_RootOrder
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 224877518731666614, guid: 91d2a99b0f9ccec4888bad4517867ca9,
+        type: 2}
+      propertyPath: m_RootOrder
+      value: 19
+      objectReference: {fileID: 0}
+    - target: {fileID: 224752926251533754, guid: 91d2a99b0f9ccec4888bad4517867ca9,
+        type: 2}
+      propertyPath: m_RootOrder
+      value: 16
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 91d2a99b0f9ccec4888bad4517867ca9, type: 2}
   m_IsPrefabAsset: 0
