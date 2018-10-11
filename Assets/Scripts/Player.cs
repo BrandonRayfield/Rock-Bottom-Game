@@ -62,6 +62,7 @@ public class Player : MonoBehaviour {
     private int currentDirection;
     [Header("Movment Variables")]
     public int movementSpeed;
+    private bool currentlyCasting;
     private int walkSpeed = 10;
     private int runSpeed = 20;
 
@@ -105,6 +106,21 @@ public class Player : MonoBehaviour {
     private int livesLeft;
     public bool invulnerable = false;
     public bool dead = false;
+
+    [Header("Colour Text Variables")]
+    public Color[] colors;
+
+    private int currentIndex = 0;
+    private int nextIndex;
+
+    public float changeColourTime = 0.5f;
+    private float lastChange = 0.0f;
+    private float colourTimer = 0.0f;
+    private bool rainbowText;
+
+    public float maxChangeTime = 3.0f;
+    private float currentChangeTime;
+
 
     [Header("Player Damage Variables")]
     private float damage = 50.0f;
@@ -222,6 +238,21 @@ public class Player : MonoBehaviour {
     private bool guitarEquipped;
     //---------------------------------------------------------------
     // Transition Scene Variables
+    [Header("Damage Indicator Variables")]
+    public Image damageUI;
+
+    private int fade;
+    private int startFade = 120;
+    private float fadeCount;
+    private bool tookDamage = false;
+    private int fadeScale;
+    private int startFadeScale = 5;
+    private int lastFade;
+    private int minFade = 20;
+    private int fadeIncrease = 8;
+    private int fadeIncrement = 5;
+    //---------------------------------------------------------------
+    // Transition Scene Variables
     [Header("Transition Scene Variables")]
     public bool isTransiton;
     public GameObject elevatorTrigger;
@@ -237,6 +268,18 @@ public class Player : MonoBehaviour {
 		newRotation = transform.rotation;
         health = maxHealth;
         currentDirection = 1;
+
+        // Assigning damage fade variables
+        fade = startFade;
+        fadeCount = startFade;
+        lastFade = startFade;
+        fadeScale = startFadeScale;
+
+        // Assigning Rainbow Colour variables
+        if (colors == null || colors.Length < 2)
+            Debug.Log("Need to setup colors array in inspector");
+
+        nextIndex = (currentIndex + 1) % colors.Length;
 
         if (isTransiton) {
             resetAnimationName = "Reset";
@@ -306,10 +349,38 @@ public class Player : MonoBehaviour {
 
     }
 
+    private void RainbowLife() {
+        colourTimer += Time.deltaTime;
+        currentChangeTime += Time.deltaTime;
+
+        if (colourTimer > changeColourTime) {
+            currentIndex = (currentIndex + 1) % colors.Length;
+            nextIndex = (currentIndex + 1) % colors.Length;
+            colourTimer = 0.0f;
+        }
+
+        if(currentChangeTime >= maxChangeTime) {
+            currentChangeTime = 0.0f;
+            colourTimer = 0.0f;
+            rainbowText = false;
+            livesText.GetComponent<Text>().color = Color.white;
+            Debug.Log("Text is white");
+        }
+
+        if (rainbowText) {
+            livesText.GetComponent<Text>().color = Color.Lerp(colors[currentIndex], colors[nextIndex], colourTimer / changeColourTime);
+        }
+    }
+
     // Update is called once per frame
     void Update() {
 
         AbilityCooldowns();
+        CheckDamageFade();
+
+        if (rainbowText) {
+            RainbowLife();
+        }
 
         if (!dead && !isCutscene) {
             Controls();
@@ -399,6 +470,33 @@ public class Player : MonoBehaviour {
             canDoubleJump = true;
             //jumpTime = Time.time + jumpCoolDown;
             wantsToJump = false;
+        }
+    }
+
+    /// <summary>
+    /// Used to activate and control the damage UI effect
+    /// </summary>
+    private void CheckDamageFade() {
+        if (tookDamage) {
+            damageUI.gameObject.SetActive(true);
+
+            fadeCount -= Time.unscaledDeltaTime * fadeScale;
+
+            if (fade >= minFade) {
+                fade = Mathf.FloorToInt(fadeCount);
+                damageUI.GetComponent<Image>().color = new Color32(255, 0, 0, (byte)fade);
+
+                if (fade <= lastFade - fadeIncrement) {
+                    lastFade = fade;
+                    fadeScale += fadeIncrease;
+                }
+            } else {
+                damageUI.gameObject.SetActive(false);
+                fade = startFade;
+                damageUI.GetComponent<Image>().color = new Color32(255, 0, 0, (byte)fade);
+                fadeCount = startFade;
+                tookDamage = false;
+            }
         }
     }
 
@@ -549,9 +647,12 @@ public class Player : MonoBehaviour {
 		//else
 			//animator.Play ("Idle");
             //animator.SetBool("isWalking", false);
+        
+        if(!currentlyCasting) {
+            newRotation.eulerAngles = new Vector3(newRotation.eulerAngles.x, direction * 90, newRotation.eulerAngles.z);
+            transform.rotation = newRotation;
+        }
 
-        newRotation.eulerAngles = new Vector3 (newRotation.eulerAngles.x, direction * 90, newRotation.eulerAngles.z); 
-		transform.rotation = newRotation;
 
         // Testing new movement system... Might be too late to change now that levels have been designed with previous values.
         //Vector3 newVelocity = rb.velocity;
@@ -576,6 +677,16 @@ public class Player : MonoBehaviour {
             damageTimer = Time.time + damageTime;
             //isSlowed = true;
 
+            // Activate damage UI effect
+            if (!tookDamage) {
+                tookDamage = true;
+            } else { // If it's already active, reset fade effect
+                fade = startFade;
+                fadeCount = startFade;
+                lastFade = startFade;
+                fadeScale = startFadeScale;
+            }
+
             if (health <= 0 && !dead) {
                 dead = true;
                 livesLeft--;
@@ -585,6 +696,13 @@ public class Player : MonoBehaviour {
                 Instantiate(deathSound, transform.position, transform.rotation);
             }
         }
+    }
+
+    private void gainLife() {
+        Instantiate(shardSound, transform.position, transform.rotation);
+        livesLeft++;
+        livesText.text = "Lives: " + livesLeft;
+        rainbowText = true;
     }
 
 	void OnTriggerEnter(Collider otherObject) {
@@ -597,10 +715,8 @@ public class Player : MonoBehaviour {
 
             if (itemID == 420) { // Player picks up currency object
                 currencyCount += itemValue;
-                if (currencyCount%100 == 0) {
-                    Instantiate(shardSound, transform.position, transform.rotation);
-                    livesLeft++;
-                    livesText.text = "Lives: " + livesLeft;
+                if (currencyCount % 250 == 0) {
+                    gainLife();
                 }
                 currencyText.text = "Beat Coins: " + currencyCount.ToString();
 
@@ -621,9 +737,7 @@ public class Player : MonoBehaviour {
                 gainHealth(itemValue);
 
             } else if (itemID == 422) { // Player picks up health object
-                Instantiate(shardSound, transform.position, transform.rotation);
-                livesLeft = livesLeft + itemValue;
-                livesText.text = "Lives: " + livesLeft;
+                gainLife();
 
             } else if (itemID == 600) { // Player finds and unlocks Harmonica
                 setHarmonicaUnlocked(true);
@@ -929,6 +1043,10 @@ public class Player : MonoBehaviour {
 
     public GameObject getCurrentWindIcon() {
         return currentWindIcon;
+    }
+
+    public void setCurrentlyCasting(bool newCast) {
+        currentlyCasting = newCast;
     }
 
     //---------------------------------------------------------------------------------------------------------------------
