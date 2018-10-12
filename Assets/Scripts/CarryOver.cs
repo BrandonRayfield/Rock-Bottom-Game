@@ -19,20 +19,21 @@ public class CarryOver : MonoBehaviour {
 	
 	// Update is called once per frame crazy modifications woah
 	void Update () {
-	    if (SceneManager.GetActiveScene().buildIndex != 0 && !carried) {
+	    if ((SceneManager.GetActiveScene().buildIndex != 0 && SceneManager.GetActiveScene().buildIndex != 1) && !carried) {
             carried = true;
-        } else if (SceneManager.GetActiveScene().buildIndex == 0 && carried) {
+        } else if ((SceneManager.GetActiveScene().buildIndex == 0 || SceneManager.GetActiveScene().buildIndex == 1) && carried) {
             Destroy(this.gameObject);
         }
 
-        if (SceneManager.GetActiveScene().buildIndex != scene && SceneManager.GetActiveScene().buildIndex != 0) {
+        if (SceneManager.GetActiveScene().buildIndex != scene && 
+            (SceneManager.GetActiveScene().buildIndex != 0 && SceneManager.GetActiveScene().buildIndex != 1)) {
             scene = SceneManager.GetActiveScene().buildIndex;
             player = (Player)FindObjectOfType(typeof(Player));
             player.GetComponent<Player>().currencyCount = coins;
             player.GetComponent<Player>().livesLeft = lives;
-            player.GetComponent<Player>().currencyText.text = "Beat Coins: " + currencyCount.ToString();
-            player.GetComponent<Player>().livesText.text = "Lives: " + livesLeft;
-        } else if (SceneManager.GetActiveScene().buildIndex != 0) {
+            player.GetComponent<Player>().currencyText.text = "Beat Coins: " + coins.ToString();
+            player.GetComponent<Player>().livesText.text = "Lives: " + lives;
+        } else if (SceneManager.GetActiveScene().buildIndex != 0 && SceneManager.GetActiveScene().buildIndex != 1) {
             coins = player.GetComponent<Player>().currencyCount;
             lives = player.GetComponent<Player>().livesLeft;
         }
