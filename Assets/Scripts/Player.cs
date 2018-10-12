@@ -103,7 +103,7 @@ public class Player : MonoBehaviour {
     [Header("Player Health Variables")]
     public float health;
     public float maxHealth = 100.0f;
-    private int livesLeft;
+    public int livesLeft;
     public bool invulnerable = false;
     public bool dead = false;
 
@@ -346,6 +346,7 @@ public class Player : MonoBehaviour {
 
         abilty2TimerText.gameObject.SetActive(false);
         AbilityUI2_CD.gameObject.SetActive(false);
+
 
     }
 
