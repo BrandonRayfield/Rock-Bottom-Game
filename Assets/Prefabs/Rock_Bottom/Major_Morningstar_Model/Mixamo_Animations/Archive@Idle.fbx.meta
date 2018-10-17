@@ -1,9 +1,7 @@
 fileFormatVersion: 2
 guid: 1ff4996af82ef6948bcae8697c299faf
-timeCreated: 1526649210
-licenseType: Free
 ModelImporter:
-  serializedVersion: 21
+  serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
     100002: default
@@ -68,10 +66,63 @@ ModelImporter:
     7400000: Idle
     9500000: //RootNode
     13700000: morningstar
+    2186277476908879412: ImportLogs
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Major_Morningstar_V2_3_Materialmat
+    second: {fileID: 2100000, guid: 19b448e6c35628c4f85f2fffb858fa71, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert2SGmat
+    second: {fileID: 2100000, guid: d96ed19244a7ef641a3209912f653499, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert3SGmat
+    second: {fileID: 2100000, guid: 0949a8ae3c8204b45be5e2ec3e45150e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert4SGmat
+    second: {fileID: 2100000, guid: b227240a72ba84a4d98f61778350456f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert5SGmat
+    second: {fileID: 2100000, guid: d08649407192d9d42bade0d2e5641376, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert6SGmat
+    second: {fileID: 2100000, guid: 30ef373729af9dd49acf5331db749b3d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert7SGmat
+    second: {fileID: 2100000, guid: a1c217adebe5657429abb3675b1d6c67, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert8SGmat
+    second: {fileID: 2100000, guid: 2f3fa48c0835dd742b66bbe327047bdb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: phong1SGmat
+    second: {fileID: 2100000, guid: 91ce8ea4363a98a4183e5111549a24d9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: phong2SGmat
+    second: {fileID: 2100000, guid: e6d3033bcfa6fb2498387add02d14be1, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
+    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -84,6 +135,8 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -115,14 +168,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0
-        functionName: IdleStance
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -143,11 +189,15 @@ ModelImporter:
     optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
