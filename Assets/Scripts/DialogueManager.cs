@@ -34,6 +34,9 @@ public class DialogueManager : MonoBehaviour {
     // GameManager Object for quests
     private GameManager gameManager;
 
+    // Sound Variable
+    public GameObject[] dialogueOpenSound;
+
     // Use this for initialization
     void Start() {
 
@@ -61,6 +64,7 @@ public class DialogueManager : MonoBehaviour {
         }
 
         animator.SetBool("IsOpen", true);
+        Instantiate(dialogueOpenSound[Random.Range(0,dialogueOpenSound.Length)], transform.position, transform.rotation);
         //Debug.Log("Starting Coversation with " + dialogue.name);
         sentences.Clear();
 
