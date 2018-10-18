@@ -22,4 +22,9 @@ public class homingShot : MonoBehaviour {
 
         rb.AddRelativeForce(Vector3.forward * 50 * Time.deltaTime);
     }
+
+    public void OnTriggerEnter(Collider other) {
+
+        if (other.tag == "Wall") Destroy(this.gameObject);
+    }
 }
