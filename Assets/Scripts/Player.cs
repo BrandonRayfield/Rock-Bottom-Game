@@ -567,12 +567,12 @@ public class Player : MonoBehaviour {
         if (canMove && GameManager.instance.isTalking == false) {
             //Jumping
             if(canJump) {
-                if (Input.GetKeyDown("space") && IsGrounded() && Time.time > jumpTime) {
+                if ((Input.GetKeyDown("space") || Input.GetKeyDown(KeyCode.W)) && IsGrounded() && Time.time > jumpTime) {
                     wantsToJump = true;
                 }
 
                 if(unlockedDoubleJump) {
-                    if (Input.GetKeyDown("space") && !IsGrounded() && canDoubleJump) {
+                    if ((Input.GetKeyDown("space") || Input.GetKeyDown(KeyCode.W))) && !IsGrounded() && canDoubleJump) {
                         animator.SetBool("isJumping", false);
                         animator.Play("Jump");
                         animator.speed = 1;
