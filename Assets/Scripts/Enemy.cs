@@ -24,6 +24,8 @@ public class Enemy : MonoBehaviour {
     private float healthBarDisappearTime = 3.0f;
     private float currentHealthDisTime;
 
+    private float invinceTime;
+
     //Damage variables
     public EnemyGeneric enemygeneric;
     private bool dead = false;
@@ -161,7 +163,7 @@ public class Enemy : MonoBehaviour {
     }
 
     public void takeDamage(float damage) {
-        if (currentHealthDisTime < Time.time) {
+        if (invinceTime < Time.time) {
 
             enemygeneric.health -= damage;
             animator.Play("Damage");
@@ -171,7 +173,7 @@ public class Enemy : MonoBehaviour {
             EnemyHealth.SetActive(true);
             EnemyHealth.GetComponent<Slider>().value = (enemygeneric.health / enemygeneric.maxHealth);
 
-            currentHealthDisTime = Time.time + 0.5f;
+            invinceTime = Time.time + 0.5f;
             hasBeenDamaged = true;
 
             if (enemygeneric.health <= 0) {

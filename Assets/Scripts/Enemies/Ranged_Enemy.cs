@@ -32,6 +32,7 @@ public class Ranged_Enemy : MonoBehaviour {
     private bool hasBeenDamaged;
     private float healthBarDisappearTime = 3.0f;
     private float currentHealthDisTime;
+    public float health = 100;
 
     //Sound Variables
     public GameObject attackSound;
@@ -50,7 +51,7 @@ public class Ranged_Enemy : MonoBehaviour {
 
         // Enemy Generic Setup (will need to rework this)
         enemygeneric = GetComponent<EnemyGeneric>();
-        enemygeneric.health = 100;
+        enemygeneric.health = health;
         enemygeneric.maxHealth = enemygeneric.health;
 
         // Healthbar Setup
