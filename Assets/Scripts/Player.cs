@@ -107,6 +107,8 @@ public class Player : MonoBehaviour {
     public bool invulnerable = false;
     public bool dead = false;
 
+    private int amountForLife = 250;
+
     [Header("Colour Text Variables")]
     public Color[] colors;
 
@@ -184,7 +186,8 @@ public class Player : MonoBehaviour {
     public GameObject checkpointSound;
 
     private float minPitch = 0.5f;
-    private float maxPitch = 1.5f;
+    private float maxPitch = 2.0f;
+    private float pitchIncrease = 0.06f;
     private float currentPitch;
     //---------------------------------------------------------------
     //Magic Variables
@@ -623,6 +626,7 @@ public class Player : MonoBehaviour {
                 animator.SetBool("isRunning", false);
             }
         } else if (GameManager.instance.isTalking == true) {
+            animator.Play("Idle");
             Vector3 velocity = rb.velocity;
             if (velocity.y > 0f) velocity.y = 0f;
             velocity.x = 0f;
@@ -721,7 +725,7 @@ public class Player : MonoBehaviour {
 
             if (itemID == 420) { // Player picks up currency object
                 currencyCount += itemValue;
-                if (currencyCount % 250 == 0) {
+                if (currencyCount % amountForLife == 0) {
                     gainLife();
                 }
                 currencyText.text = "Beat Coins: " + currencyCount.ToString();
@@ -729,14 +733,12 @@ public class Player : MonoBehaviour {
                 if (randomPickupPitch) {
                     musicNoteSound.GetComponent<AudioSource>().pitch = Random.Range(0.7f, 1.5f);  // Changes pitch of sound every time a new note is picked up
                 } else {
-                    currentPitch += 0.1f;
-                    if (currentPitch >= maxPitch) {
-                        currentPitch = minPitch;
-                    }
+                    currentPitch = minPitch + (((float)currencyCount % amountForLife) / amountForLife);
                     musicNoteSound.GetComponent<AudioSource>().pitch = currentPitch;
+                    if(currentPitch != minPitch) {
+                        Instantiate(musicNoteSound, transform.position, transform.rotation);
+                    }
                 }
-
-                Instantiate(musicNoteSound, transform.position, transform.rotation);
 
             } else if (itemID == 421) { // Player picks up health object
                 Instantiate(shardSound, transform.position, transform.rotation);

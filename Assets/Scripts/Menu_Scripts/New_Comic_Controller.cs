@@ -97,8 +97,7 @@ public class New_Comic_Controller : MonoBehaviour {
             if(!finishedTalking) {
                 DisplayNextSentence();
             } else {
-                Debug.Log("Error Sound");
-                Instantiate(errorSound, transform.position, transform.rotation);
+                SceneManager.LoadScene(0);
             }
         }
     }
