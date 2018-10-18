@@ -13,7 +13,9 @@ public class MainMenu : MonoBehaviour {
     private bool xMenuOpen;
 
     public GameObject loadMenu;
-    public Animator animator;
+    public Animator loadMenuAnimator;
+
+    public GameObject creditScreen;
 
     // Use this for initialization
     void Start () {
@@ -103,6 +105,15 @@ public class MainMenu : MonoBehaviour {
 
     public void ActivateLoadMenu() {
         loadMenu.SetActive(true);
-        animator.Play("Move_Left");
+        loadMenuAnimator.Play("Move_Left");
     }
+
+    public void ReturnToMenu() {
+        loadMenuAnimator.Play("LegalToMain");
+    }
+
+    public void LegalMenu() {
+        loadMenuAnimator.Play("LegalMenu");
+    }
+
 }
