@@ -156,7 +156,7 @@ public class Boss : MonoBehaviour {
         crush_location = Vector3.zero;
         drop = false;
 
-        int new_state = Random.Range(1, 6);
+        int new_state = Random.Range(1, 8);
         if (new_state > 5) new_state = 5;
         switch (new_state) {
             case 1:
@@ -225,10 +225,14 @@ public class Boss : MonoBehaviour {
         if (cycle_timer - Time.time >= 1.0f) {
             MoveTowards(transform.position + new Vector3(direction,0f,0f));
         } else if (!summoned) {
-            GameObject spawn1 = Instantiate(summons[0], transform.position + new Vector3(2f,-1.25f,0f), crushAttack.transform.rotation);
-            GameObject spawn2 = Instantiate(summons[0], transform.position + new Vector3(-2f, -1.25f, 0f), crushAttack.transform.rotation);
-            
-            summoned = true;
+            int random = Random.Range(1, 3);
+            if (random == 1) {
+                GameObject spawn1 = Instantiate(summons[0], transform.position + new Vector3(2f, -1.25f, 0f), crushAttack.transform.rotation);
+            }  else {
+                GameObject spawn1 = Instantiate(summons[1], transform.position + new Vector3(2f, -1.25f, 0f), crushAttack.transform.rotation);
+            }
+
+                summoned = true;
         } else {
             MoveTowards(player.transform.position);
         }
