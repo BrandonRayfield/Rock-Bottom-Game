@@ -42,7 +42,7 @@ public abstract class Weapon : MonoBehaviour {
     public GameObject guitarParentHand;
     
     // Use this for initialization
-    void Start () {
+    protected virtual void Start () {
         try {
             playerObject = GameObject.Find("Player");
             animator = playerObject.GetComponent<Animator>();
@@ -65,7 +65,6 @@ public abstract class Weapon : MonoBehaviour {
                 //Debug.Log("Player Attacked");
                 animator.SetTrigger(attackAnimationName);
                 animator.speed = 2;
-                Instantiate(attackSound, transform.position, transform.rotation);
                 Damage();
 
                 attackTimer = Time.time + attackRate;
@@ -74,6 +73,7 @@ public abstract class Weapon : MonoBehaviour {
             if(Input.GetKeyDown("x")) {
                 if (canUse1 && Time.time > magicTimer1) {
                     SpecialAttack1();
+                    animator.speed = 1;
                     playerObject.GetComponent<Player>().updateAbilityCooldown1(magicTimer1);
                     //magicTimer1 = Time.time + magicRate1;
                 } else if (!canUse1 || Time.time < magicTimer1) {
@@ -84,6 +84,7 @@ public abstract class Weapon : MonoBehaviour {
             if(Input.GetKeyDown("c")) {
                 if (canUse2 && Time.time > magicTimer2) {
                     SpecialAttack2();
+                    animator.speed = 1;
                     //magicTimer2 = Time.time + magicRate2;
                     playerObject.GetComponent<Player>().updateAbilityCooldown2(magicTimer2);
                 } else if (!canUse2 || (Time.time < magicTimer2)) {
@@ -98,6 +99,8 @@ public abstract class Weapon : MonoBehaviour {
 
         //GameObject hitBox = Instantiate(damageHitBox, damageLocation.transform.position, damageLocation.transform.rotation, damageLocation.transform);
 
+        Instantiate(attackSound, transform.position, transform.rotation);
+
         Vector3 mousePos;
         Vector3 attackPos = damageLocation.transform.position;
         float angle;
@@ -111,8 +114,8 @@ public abstract class Weapon : MonoBehaviour {
         Vector3 offset = mousePos - transform.position;
         offset = Vector3.Normalize(offset);
 
-        GameObject hitBox = Instantiate(damageHitBox, damageLocation.transform.position + 1.2f * offset,
-            Quaternion.Euler(new Vector3(angle, 90, 0)), damageLocation.transform);
+        GameObject hitBox = Instantiate(damageHitBox, damageLocation.transform.position ,
+            Quaternion.Euler(new Vector3(0, 0, angle)), damageLocation.transform);
         hitBox.GetComponent<DamageHitBox>().damage = weaponDamage;
         hitBox.GetComponent<DamageHitBox>().moveForward(1f);
 

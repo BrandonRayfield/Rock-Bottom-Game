@@ -16,13 +16,41 @@ public class Megaphone_Script : Weapon {
 
     // Special Attack 2 Variables
     public GameObject lightningControl;
+    public GameObject knockBackObject;
 
     // Explosive Variables
     public bool isExplosive;
     public GameObject grenadeObject;
 
+    // Sound Variables
+    private float currentShootTime;
+    private float soundWaitDuration = 6.0f;
+    public GameObject shootSound;
+
+    protected override void Start() {
+        base.Start();
+
+        currentShootTime = soundWaitDuration;
+        attackAnimationName = "";
+    }
+
+    protected override void Update() {
+        base.Update();
+
+        currentShootTime += Time.deltaTime;
+    }
 
     protected override void Damage() {
+
+        if (currentShootTime >= soundWaitDuration) {
+            Instantiate(attackSound, transform.position, transform.rotation);
+            currentShootTime = 0;
+        } else {
+            Instantiate(shootSound, transform.position, transform.rotation);
+            currentShootTime = 0;
+        }
+
+
         Vector3 mousePos;
         Vector3 attackPos = damageLocation.transform.position;
         float angle;
@@ -99,11 +127,28 @@ public class Megaphone_Script : Weapon {
     }
 
     protected override void SpecialAttack2() {
-        List<EnemyGeneric> enemies = lightningControl.GetComponent<ThunderCollider>().InRange;
 
-        for (int i = 0; i < enemies.Count; i++) {
-            enemies[i].GetComponent<EnemyGeneric>().CopyrightNeutralBoop(playerObject.transform.position);
-        }
+        Instantiate(attackSound, transform.position, transform.rotation);
+
+        Vector3 mousePos;
+        Vector3 attackPos = damageLocation.transform.position;
+        float angle;
+
+        mousePos = Input.mousePosition;
+        mousePos.z = Vector3.Distance(Camera.main.transform.position, transform.position);
+        attackPos = Camera.main.WorldToScreenPoint(attackPos);
+        mousePos.x -= attackPos.x;
+        mousePos.y -= attackPos.y;
+
+        angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
+
+        GameObject bullet = Instantiate(knockBackObject, damageLocation.transform.position, Quaternion.Euler(new Vector3(0, 180, -angle)));
+
+        //List<EnemyGeneric> enemies = lightningControl.GetComponent<ThunderCollider>().InRange;
+
+        //for (int i = 0; i < enemies.Count; i++) {
+        //    enemies[i].GetComponent<EnemyGeneric>().CopyrightNeutralBoop(playerObject.transform.position);
+        //}
 
         magicTimer2 = Time.time + magicRate1;
 

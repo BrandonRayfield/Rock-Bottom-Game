@@ -18,8 +18,35 @@ public class Harmonica_Script : Weapon {
     public bool isExplosive;
     public GameObject grenadeObject;
 
+    // Sound Variables
+    private float currentShootTime;
+    private float soundWaitDuration = 6.0f;
+    public GameObject shootSound;
+
+    protected override void Start() {
+        base.Start();
+
+        currentShootTime = soundWaitDuration;
+    }
+
+    protected override void Update() {
+        base.Update();
+
+        currentShootTime += Time.deltaTime;
+        attackAnimationName = "";
+    }
+
 
     protected override void Damage() {
+
+        if(currentShootTime >= soundWaitDuration) {
+            Instantiate(attackSound, transform.position, transform.rotation);
+            currentShootTime = 0;
+        } else {
+            Instantiate(shootSound, transform.position, transform.rotation);
+            currentShootTime = 0;
+        }
+
         Vector3 mousePos;
         Vector3 attackPos = damageLocation.transform.position;
         float angle;
