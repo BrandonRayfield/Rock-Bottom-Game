@@ -162,6 +162,7 @@ public class Boss : MonoBehaviour {
             case 1:
                 //transform.Rotate(Vector3.forward * 55 * -direction);
                 animator.Play("Charge");
+                Debug.Log("Enemy is Charging");
                 current_state = state.charge;
                 GameObject charge = Instantiate(chargeAttack, chargeLocation.transform.position, chargeLocation.transform.rotation);
                 charge.transform.parent = transform;
@@ -244,7 +245,7 @@ public class Boss : MonoBehaviour {
     public void crush() {
         if (crush_location == Vector3.zero) {
             crush_location = player.transform.position + new Vector3(0f, 8f, 0f);
-            animator.Play("Smash");
+            animator.Play("Leap");
             
         }
         if (!drop) {
@@ -253,9 +254,11 @@ public class Boss : MonoBehaviour {
                 drop = true;
                 GameObject crush = Instantiate(crushAttack, crushLocation.transform.position, crushLocation.transform.rotation);
                 crush.transform.parent = transform;
+                animator.Play("Smash");
             }
         } else {
             rb.velocity = Vector3.down * speed * 4 * Time.deltaTime;
+            animator.Play("Smash");
         }
     }
 
