@@ -1093,7 +1093,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1298939426043040}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -55.9, y: -6.5, z: 1.191849}
+  m_LocalPosition: {x: 6.03055, y: 5.3809915, z: -8.014499}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4698246879677806}
@@ -1610,7 +1610,7 @@ MonoBehaviour:
   swoop_target: {x: -46.152634, y: -3.8753154, z: 1.7362049}
   targetRadius: 1
   rotationSpeed: 20
-  activated: 1
+  activated: 0
   health: 100
   EnemyHealthBar: {fileID: 1428795662049260, guid: 275ddf16fc43b7c458a314c95369a0d2,
     type: 2}
