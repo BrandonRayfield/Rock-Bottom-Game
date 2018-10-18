@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.542
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.11755849, g: 0.17087966, b: 0.25638786, a: 0.542}
+  m_IndirectSpecularColor: {r: 0.117558114, g: 0.17087665, b: 0.256387, a: 0.542}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &4
 LightmapSettings:
@@ -42458,6 +42458,11 @@ Prefab:
       propertyPath: m_Name
       value: Bat (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 114498782178809610, guid: 6174f23a974e9f240905f2b5ab3e4f5f,
+        type: 2}
+      propertyPath: isQuestEnemy
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6174f23a974e9f240905f2b5ab3e4f5f, type: 2}
   m_IsPrefabAsset: 0
@@ -69667,6 +69672,16 @@ Prefab:
     - target: {fileID: 4413294690406960, guid: 91d2a99b0f9ccec4888bad4517867ca9, type: 2}
       propertyPath: m_RootOrder
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 224352630041249586, guid: 91d2a99b0f9ccec4888bad4517867ca9,
+        type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224094177529648034, guid: 91d2a99b0f9ccec4888bad4517867ca9,
+        type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 91d2a99b0f9ccec4888bad4517867ca9, type: 2}

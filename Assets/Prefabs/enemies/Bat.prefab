@@ -1616,7 +1616,7 @@ MonoBehaviour:
     type: 2}
   EnemyHealth: {fileID: 0}
   healthDrop: {fileID: 1512581214245466, guid: 3c25736760f5df34daf456262dab6e57, type: 2}
-  isQuestEnemy: 1
+  isQuestEnemy: 0
   questID: 1
 --- !u!114 &114702755466915178
 MonoBehaviour:
