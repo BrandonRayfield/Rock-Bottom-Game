@@ -271,6 +271,7 @@ GameObject:
   - component: {fileID: 54502811574938732}
   - component: {fileID: 114702755466915178}
   - component: {fileID: 135895385365774944}
+  - component: {fileID: 135171751733174214}
   m_Layer: 0
   m_Name: Bat
   m_TagString: FlyingEnemy
@@ -1065,7 +1066,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1182356001119600}
   m_LocalRotation: {x: -0.2876413, y: -0.20135623, z: -0.09190724, w: 0.93181074}
-  m_LocalPosition: {x: 0.26964408, y: 0.28673488, z: -0.9215843}
+  m_LocalPosition: {x: 0.2207616, y: 0.29261255, z: -0.9400782}
   m_LocalScale: {x: 1.0000001, y: 1, z: 1}
   m_Children:
   - {fileID: 4924480776490566}
@@ -1092,7 +1093,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1298939426043040}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -162.17, y: 0.26, z: -0.06}
+  m_LocalPosition: {x: -55.9, y: -6.5, z: 1.191849}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4698246879677806}
@@ -1134,7 +1135,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1234458053283326}
   m_LocalRotation: {x: -0.2915349, y: 0.11426111, z: 0.06014186, w: 0.9478053}
-  m_LocalPosition: {x: -0.29770792, y: 0.27668995, z: -0.9099121}
+  m_LocalPosition: {x: -0.24776271, y: 0.27686718, z: -0.92638195}
   m_LocalScale: {x: 1, y: 1, z: 0.9999999}
   m_Children:
   - {fileID: 4862519887225404}
@@ -1230,7 +1231,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1998255226965742}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0, y: 0, z: -0.224}
   m_LocalScale: {x: 0.064527035, y: 0.064527035, z: 0.064527035}
   m_Children:
   - {fileID: 4896485054006278}
@@ -1327,7 +1328,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1264214497426140}
   m_LocalRotation: {x: 0.0000001980336, y: -0.003793368, z: 0.00000012555329, w: 0.99999285}
-  m_LocalPosition: {x: -0.02948061, y: 2.1458402, z: -0.63685197}
+  m_LocalPosition: {x: 0.02650233, y: 2.1458402, z: -0.6394434}
   m_LocalScale: {x: 1.0000001, y: 1, z: 1.0000002}
   m_Children:
   - {fileID: 4834498764595720}
@@ -1421,7 +1422,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1728356535942982}
   m_LocalRotation: {x: -0.00000004619035, y: 0.00373482, z: 0.000000070015915, w: 0.999993}
-  m_LocalPosition: {x: -0.070448175, y: 2.1459224, z: -0.6336292}
+  m_LocalPosition: {x: -0.1261478, y: 2.1459224, z: -0.6274366}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4107279104208006}
@@ -1567,7 +1568,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 56
+  m_Constraints: 104
   m_CollisionDetection: 0
 --- !u!95 &95525880921508302
 Animator:
@@ -1601,20 +1602,19 @@ MonoBehaviour:
   player: {fileID: 0}
   shot: {fileID: 114510161299969574, guid: 0c5cb684ef862bf41aa99b2a12874007, type: 2}
   shotRate: 5
-  shotTimer: 0
-  speed: 150
-  enemygeneric: {fileID: 0}
+  shotTimer: 0.66021204
+  speed: 250
+  enemygeneric: {fileID: 114702755466915178}
   damage: 10
   lightningListLocation: -1
-  swoop_target: {x: 0, y: 0, z: 0}
+  swoop_target: {x: -46.152634, y: -3.8753154, z: 1.7362049}
   targetRadius: 1
   rotationSpeed: 20
-  activated: 0
+  activated: 1
   health: 100
   EnemyHealthBar: {fileID: 1428795662049260, guid: 275ddf16fc43b7c458a314c95369a0d2,
     type: 2}
-  EnemyHealth: {fileID: 1428795662049260, guid: 275ddf16fc43b7c458a314c95369a0d2,
-    type: 2}
+  EnemyHealth: {fileID: 0}
   healthDrop: {fileID: 1512581214245466, guid: 3c25736760f5df34daf456262dab6e57, type: 2}
   isQuestEnemy: 1
   questID: 1
@@ -1629,9 +1629,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13ae1f6bd108297429db9e83fd36d5f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  health: 50
   maxHealth: 100
-  lightningListLocation: -1
+  lightningListLocation: 1
 --- !u!135 &135012807078216956
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -1644,6 +1644,18 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.22873211
   m_Center: {x: 0.0046920776, y: -0.0031814575, z: 0}
+--- !u!135 &135171751733174214
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1298939426043040}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.19137481
+  m_Center: {x: 0, y: 0, z: 0.27}
 --- !u!135 &135895385365774944
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -1655,7 +1667,7 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.23444366
-  m_Center: {x: 0.0075912476, y: 0, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!137 &137011380582705266
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

@@ -108,10 +108,11 @@ public abstract class Weapon : MonoBehaviour {
         mousePos.x -= attackPos.x;
         mousePos.y -= attackPos.y;
         angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
+        Vector3 offset = mousePos - transform.position;
+        offset = Vector3.Normalize(offset);
 
-
-        GameObject hitBox = Instantiate(damageHitBox, damageLocation.transform.position,
-            Quaternion.Euler(new Vector3(0, 0, angle)), damageLocation.transform);
+        GameObject hitBox = Instantiate(damageHitBox, damageLocation.transform.position + 1.2f * offset,
+            Quaternion.Euler(new Vector3(angle, 90, 0)), damageLocation.transform);
         hitBox.GetComponent<DamageHitBox>().damage = weaponDamage;
         hitBox.GetComponent<DamageHitBox>().moveForward(1f);
 
