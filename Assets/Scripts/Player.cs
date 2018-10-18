@@ -572,7 +572,7 @@ public class Player : MonoBehaviour {
                 }
 
                 if(unlockedDoubleJump) {
-                    if ((Input.GetKeyDown("space") || Input.GetKeyDown(KeyCode.W))) && !IsGrounded() && canDoubleJump) {
+                    if ((Input.GetKeyDown("space") || Input.GetKeyDown(KeyCode.W)) && !IsGrounded() && canDoubleJump) {
                         animator.SetBool("isJumping", false);
                         animator.Play("Jump");
                         animator.speed = 1;
