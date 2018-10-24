@@ -61,6 +61,11 @@ public class Boss : MonoBehaviour {
     public GameObject weaponObjectSlot;
     private int guitarStance;
 
+    // Sound Variables
+    public GameObject roarSound;
+    public GameObject chargeSound;
+    public GameObject damageSound;
+
     // Winning Variables
     public GameObject bossZone;
     public GameObject finalDialogue;
@@ -162,7 +167,7 @@ public class Boss : MonoBehaviour {
             case 1:
                 //transform.Rotate(Vector3.forward * 55 * -direction);
                 animator.Play("Charge");
-                Debug.Log("Enemy is Charging");
+                Instantiate(chargeSound, transform.position, transform.rotation);
                 current_state = state.charge;
                 GameObject charge = Instantiate(chargeAttack, chargeLocation.transform.position, chargeLocation.transform.rotation);
                 charge.transform.parent = transform;
@@ -177,6 +182,7 @@ public class Boss : MonoBehaviour {
                 break;
             case 3:
                 animator.Play("Roar");
+                Instantiate(roarSound, transform.position, transform.rotation);
                 current_state = state.smash;
                 cycle_timer = Time.time + 1.5f;
                 break;
@@ -304,6 +310,7 @@ public class Boss : MonoBehaviour {
 
                 EnemyHealth.SetActive(true);
                 EnemyHealth.GetComponent<Slider>().value = enemygeneric.health;
+                Instantiate(damageSound, transform.position, transform.rotation);
 
                 currentHealthDisTime = Time.time + 0.5f;
 
@@ -316,6 +323,7 @@ public class Boss : MonoBehaviour {
                     //animator.Play("Kneel");
                     animator.Play("Idle");
                     bossZone.GetComponent<Boss_Zone>().setIsDisabled(true);
+                    GameManager.instance.killTheSpiders();
                     finalDialogue.SetActive(true);
                     finalDialogue.transform.SetParent(null);
                 }
