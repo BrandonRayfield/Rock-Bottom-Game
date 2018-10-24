@@ -11,7 +11,12 @@ ModelImporter:
     4300000: bench_01
     7400000: Take 001
     9500000: //RootNode
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: 0-500x500
+    second: {fileID: 2800000, guid: 79ed1d9f5fc01be49ac1c075ffc460b4, type: 3}
   materials:
     importMaterials: 1
     materialName: 0

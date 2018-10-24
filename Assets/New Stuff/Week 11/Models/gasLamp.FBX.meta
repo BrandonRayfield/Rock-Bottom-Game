@@ -21,7 +21,17 @@ ModelImporter:
     4300002: Lanter_Handle_low
     7400000: Take 001
     9500000: //RootNode
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: download
+    second: {fileID: 2800000, guid: 8462689549a0e054c892fe7e95d3275f, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: glass-2418168_960_720
+    second: {fileID: 2800000, guid: 91ecc312667abe940886e55f6ac9056c, type: 3}
   materials:
     importMaterials: 1
     materialName: 0

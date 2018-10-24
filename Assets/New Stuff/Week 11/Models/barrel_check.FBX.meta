@@ -11,7 +11,12 @@ ModelImporter:
     4300000: Mesh
     7400000: Take 001
     9500000: //RootNode
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Barrels0031_1_200
+    second: {fileID: 2800000, guid: e0cf31647328c124bb638fd0ca5339bf, type: 3}
   materials:
     importMaterials: 1
     materialName: 0
