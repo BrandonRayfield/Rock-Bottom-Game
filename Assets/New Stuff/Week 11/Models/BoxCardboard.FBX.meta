@@ -11,7 +11,12 @@ ModelImporter:
     4300000: 4
     7400000: Take 001
     9500000: //RootNode
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: 14.cardboard-textures
+    second: {fileID: 2800000, guid: 393c64f1a617c9147b8dea25138df7ca, type: 3}
   materials:
     importMaterials: 1
     materialName: 0
