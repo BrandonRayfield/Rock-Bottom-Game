@@ -153,24 +153,24 @@ public class Boss : MonoBehaviour {
     }
     public void cycle() {
         //Get a new state
-        /*if (transform.rotation.z != 0) {
-            transform.Rotate(Vector3.forward * 55 * direction);
-        }*/
 
         //Reset variables
         crush_location = Vector3.zero;
         drop = false;
+        crushLocation.GetComponent<ChaserHitBox>().Deactivate();
+        chargeLocation.GetComponent<ChaserHitBox>().Deactivate();
 
         int new_state = Random.Range(1, 8);
         if (new_state > 5) new_state = 5;
         switch (new_state) {
             case 1:
-                //transform.Rotate(Vector3.forward * 55 * -direction);
+                print("Charging");
                 animator.Play("Charge");
                 Instantiate(chargeSound, transform.position, transform.rotation);
                 current_state = state.charge;
-                GameObject charge = Instantiate(chargeAttack, chargeLocation.transform.position, chargeLocation.transform.rotation);
-                charge.transform.parent = transform;
+                chargeLocation.GetComponent<ChaserHitBox>().Activate();
+
+
                 drop = false;
                 cycle_timer = Time.time + 2f;
                 break;
@@ -262,9 +262,7 @@ public class Boss : MonoBehaviour {
             rb.velocity = Vector3.Normalize(crush_location - transform.position) * speed * 1.5f * Time.deltaTime;
             if (Vector3.Distance(crush_location, transform.position) <= 0.2f) {
                 drop = true;
-                GameObject crush = Instantiate(crushAttack, crushLocation.transform.position, crushLocation.transform.rotation);
-                crush.transform.parent = transform;
-                animator.Play("Smash");
+                crushLocation.GetComponent<ChaserHitBox>().Activate();
             }
         } else {
             rb.velocity = Vector3.down * speed * 4 * Time.deltaTime;
