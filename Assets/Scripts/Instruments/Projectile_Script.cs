@@ -29,50 +29,70 @@ public class Projectile_Script : MonoBehaviour {
         if(isExplosive) {
             time += Time.deltaTime;
             if (time >= lifeTime) {
-                Instantiate(explosion, transform.position, transform.rotation);
-                Destroy(gameObject);
+                Detonate();
             }
         }
 	}
 
     private void OnTriggerEnter(Collider other) {
-        if(!isFriendly && other.transform.tag == "Player") {
+        if (!isFriendly && other.transform.tag == "Player") {
             other.GetComponent<Player>().takeDamage(damage);
-            //Create explosion effect?
             Destroy(gameObject);
-        } else if(isFriendly && other.transform.tag == "Enemy") {
-            if (other.GetComponent<Enemy>() != null)
-                if(isExplosive) {
-                    Instantiate(explosion, transform.position, transform.rotation);
-                    Destroy(gameObject);
-                    //Instantiate(explosionSound, transform.position, transform.rotation);
+        } else if (isFriendly && other.transform.tag == "Enemy") {
+            if (other.GetComponent<Enemy>() != null) {
+                if (isExplosive) {
+                    Detonate();
                 } else {
                     other.GetComponent<Enemy>().takeDamage(damage);
+                    Destroy(gameObject);
                 }
-            else if (other.GetComponent<Chaser>() != null)
-                other.GetComponent<Chaser>().takeDamage(damage);
-            else if (other.GetComponent<Boss>() != null)
-                other.GetComponent<Boss>().takeDamage(damage);
+            } else if (other.GetComponent<Chaser>() != null) {
+                if (isExplosive) {
+                    Detonate();
+                } else {
+                    other.GetComponent<Chaser>().takeDamage(damage);
+                    Destroy(gameObject);
+                }
+            } else if (other.GetComponent<Boss>() != null) {
+                if (isExplosive) {
+                    Detonate();
+                } else {
+                    other.GetComponent<Boss>().takeDamage(damage);
+                    Destroy(gameObject);
+                }
+            }
         }
 
         //----------------------------------------------------------------------------------
         // These are 'work arounds' for now. Delete after reworking enemy class.
         else if (isFriendly && other.transform.tag == "FlyingEnemy") {
-            other.GetComponent<Flying_Enemy>().takeDamage(damage);
-            //Create explosion effect?
-            Destroy(gameObject);
+            if (isExplosive) {
+                Detonate();
+            } else {
+                other.GetComponent<Flying_Enemy>().takeDamage(damage);
+                Destroy(gameObject);
+            }
         } else if (isFriendly && other.transform.tag == "Ranged_Enemy") {
-            other.GetComponent<Ranged_Enemy>().takeDamage(damage);
-            //Create explosion effect?
-            Destroy(gameObject);
+            if (isExplosive) {
+                Detonate();
+            } else {
+                other.GetComponent<Ranged_Enemy>().takeDamage(damage);
+                Destroy(gameObject);
+            }
         } else if (isFriendly && other.transform.tag == "Ranged_Enemy2") {
-            other.GetComponent<Ranged_Enemy2>().takeDamage(damage);
-            //Create explosion effect?
-            Destroy(gameObject);
+            if (isExplosive) {
+                Detonate();
+            } else {
+                other.GetComponent<Ranged_Enemy2>().takeDamage(damage);
+                Destroy(gameObject);
+            }
         } else if (isFriendly && other.transform.tag == "Chaser") {
-            other.GetComponent<Chaser>().takeDamage(damage);
-            //Create explosion effect?
-            Destroy(gameObject);
+            if (isExplosive) {
+                Detonate();
+            } else {
+                other.GetComponent<Chaser>().takeDamage(damage);
+                Destroy(gameObject);
+            }
         }
         //----------------------------------------------------------------------------------
 
@@ -82,11 +102,10 @@ public class Projectile_Script : MonoBehaviour {
         } else if (other.transform.tag == "Wall" || other.transform.tag == "Obstacle") {
             if (isExplosive && !upgradedExplosive) {
                 GetComponent<Rigidbody>().AddForce(transform.up * 50);
-                Instantiate(explosion, transform.position, transform.rotation);
-                Destroy(gameObject);
-                Instantiate(explosionSound, transform.position, transform.rotation);
+                Detonate();
+                //Instantiate(explosionSound, transform.position, transform.rotation);
             } else if (isExplosive && upgradedExplosive) {
-                GetComponent<Rigidbody>().AddForce(transform.up * 50);
+                //GetComponent<Rigidbody>().AddForce(transform.up * 50);
             } else {
                 Destroy(gameObject);
             }
@@ -94,6 +113,11 @@ public class Projectile_Script : MonoBehaviour {
 
 
 
+    }
+
+    public void Detonate() {
+        Instantiate(explosion, transform.position, transform.rotation);
+        Destroy(gameObject);
     }
 
     public void SetDamage(float damageAmount) {
