@@ -91,7 +91,8 @@ public class Ranged_Enemy : MonoBehaviour {
 
         if(!dead) {
             shootLocation.transform.LookAt(playerObject.transform);
-            shootLocation.transform.right = (playerObject.transform.position - transform.position).normalized;
+            Vector3 temp = new Vector3(0, 1f, 0);
+            shootLocation.transform.right = ((playerObject.transform.position + temp) - transform.position).normalized;
 
             if (isPlayerNear)
             {

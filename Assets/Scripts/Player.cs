@@ -626,7 +626,6 @@ public class Player : MonoBehaviour {
                 animator.SetBool("isRunning", false);
             }
         } else if (GameManager.instance.isTalking == true) {
-            animator.Play("Idle");
             Vector3 velocity = rb.velocity;
             if (velocity.y > 0f) velocity.y = 0f;
             velocity.x = 0f;

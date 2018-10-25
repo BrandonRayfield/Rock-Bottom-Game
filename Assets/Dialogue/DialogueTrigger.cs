@@ -36,10 +36,12 @@ public class DialogueTrigger : MonoBehaviour {
 
     private GameManager gameManager;
     private GameObject cameraObject;
+    private GameObject playerObject;
 
     // Autotrigger Variables
     [Header("Autotrigger Variables")]
     public bool isAutomatic;
+    public bool isStageTrigger;
     public bool isStageDialogue;
     private bool hasTriggered;
     private bool autoComplete;
@@ -69,8 +71,9 @@ public class DialogueTrigger : MonoBehaviour {
 
     void Start() {
         gameManager = FindObjectOfType<GameManager>();
+        playerObject = GameObject.FindGameObjectWithTag("Player");
 
-        if(isProgressor) {
+        if (isProgressor) {
             progressObjectAnimator = progressObject.GetComponent<Animator>();
         }
 
@@ -124,12 +127,20 @@ public class DialogueTrigger : MonoBehaviour {
         }
 
         if (!isAutomatic && canTalk && Input.GetKeyDown(KeyCode.E)) {
+            gameManager.isTalking = true;
+            playerObject.GetComponent<Animator>().Play("Idle");
             StartTalking();
         }
 
         // Used to continue to next sentence, without allowing player to repeat dialogue after completed
         if(isAutomatic && !autoComplete && canTalk && Input.GetKeyDown(KeyCode.E)) {
-            StartTalking();
+            if (!isStageDialogue) {
+                gameManager.isTalking = true;
+                playerObject.GetComponent<Animator>().Play("Idle");
+                StartTalking();
+            } else {
+                StartTalking();
+            }
         }
 
         if (currentNpcID == NpcID && !canTalk) {
@@ -199,7 +210,13 @@ public class DialogueTrigger : MonoBehaviour {
             FindObjectOfType<DialogueManager>().setIsBoss(isBossCutscene);
             canTalk = true;
 
-            if (isAutomatic && !hasTriggered) {
+            if (isAutomatic && !hasTriggered&& !isStageDialogue) {
+                gameManager.isTalking = true;
+                playerObject.GetComponent<Animator>().Play("Idle");
+                StartTalking();
+                hasTriggered = true;
+            }
+            else if (isAutomatic && !hasTriggered && isStageDialogue) {
                 StartTalking();
                 hasTriggered = true;
             }

@@ -23,6 +23,8 @@ public class DialogueManager : MonoBehaviour {
 
     private int currentNpcID;
 
+    private GameObject playerObject;
+
     // Automatic Trigger Variables
     private bool isAutomatic;
     private bool autoComplete;
@@ -54,7 +56,7 @@ public class DialogueManager : MonoBehaviour {
     public void StartDialogue(Dialogue[] dialogue) {
 
         isTalking = true;
-        gameManager.isTalking = true;
+
         if (isAutomatic) {
             autoComplete = false;
         }

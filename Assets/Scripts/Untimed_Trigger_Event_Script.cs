@@ -72,8 +72,12 @@ public class Untimed_Trigger_Event_Script : MonoBehaviour {
     private void activatePad() {
         currentAmount = playerObject.GetComponent<Player>().getCurrencyAmount();
         if (currentAmount >= costAmount) {
+            if(isGuitarOnly) {
+                workingDialogueTrigger.SetActive(true);
+                interactText.gameObject.SetActive(false);
+            }
             //pause enemies
-            GameManager.instance.isTalking = true;
+            //GameManager.instance.isTalking = true;
             playerObject.GetComponent<PauseMenu>().selectGuitar();
             playerAnimator.Play("Guitar Playing");
             Instantiate(guitarSound, transform.position, transform.rotation);
@@ -98,25 +102,13 @@ public class Untimed_Trigger_Event_Script : MonoBehaviour {
             isTalking = errorDialogueTrigger.GetComponent<DialogueTrigger>().isTalking;
         }
 
-        currentGuitarObject = playerObject.GetComponent<Player>().currentGuitarObject;
+        //currentGuitarObject = playerObject.GetComponent<Player>().currentGuitarObject;
 
         if (isTouching && !hasUsed && Input.GetKeyDown(KeyCode.E)) {
-            if (isGuitarOnly && currentGuitarObject != playerObject.GetComponent<Player>().guitarObject) {
-                if(isFirstAttemmpt) {
-                    Instantiate(errorSound, transform.position, transform.rotation);
-                    errorDialogueTrigger.SetActive(true);
-                    interactText.gameObject.SetActive(false);
-                    isFirstAttemmpt = false;
-                }
+            if (isGuitarOnly && isTalking) {
 
-                if(!isTalking) {
-                    Instantiate(errorSound, transform.position, transform.rotation);
-                }
-
-            } else if (isGuitarOnly && currentGuitarObject == playerObject.GetComponent<Player>().guitarObject) {
+            }  else if (isGuitarOnly) {
                 activatePad();
-                workingDialogueTrigger.SetActive(true);
-                interactText.gameObject.SetActive(false);
 
             } else if (!isGuitarOnly) {
                 activatePad();

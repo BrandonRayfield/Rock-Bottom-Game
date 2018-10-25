@@ -70,6 +70,9 @@ public class GameManager : MonoBehaviour {
         Physics.IgnoreLayerCollision(10, 11);
         Physics.IgnoreLayerCollision(10, 13);
         Physics.IgnoreLayerCollision(12, 13);
+
+        Physics.IgnoreLayerCollision(15, 8);
+        Physics.IgnoreLayerCollision(15, 13);
     }
 	
 	// Update is called once per frame
