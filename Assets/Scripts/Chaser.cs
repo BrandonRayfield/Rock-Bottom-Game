@@ -180,6 +180,7 @@ public class Chaser : MonoBehaviour {
     private void jump() {
         if (IsGrounded()) {
             rb.AddForce(Vector3.up * 90);
+            rb.AddForce((Vector3.right * direction) * 40);
             isJumping = true;
         }
     }
