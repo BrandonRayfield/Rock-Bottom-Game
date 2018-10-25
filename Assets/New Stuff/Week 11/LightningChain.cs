@@ -27,99 +27,49 @@ public class LightningChain : MonoBehaviour {
 	}
 
     private void OnTriggerEnter(Collider otherObject) {
-        if (otherObject.transform.tag == "Enemy") {
-            Enemy e = otherObject.gameObject.GetComponent<Enemy>();
-
-            if (e == null) {  // It is not enemy
-                return;
-            }
-
-            Struck hit = otherObject.gameObject.GetComponent<Struck>();
-
-            if (hit == null) { // the enemy is yet to be hit
-                target = otherObject.gameObject;
-                if (target != null) {
-                    targetPos = otherObject.transform.position;
-                    SpawnChain(transform.position, targetPos);
-                }
-                //Create another copy of this lightning field, by doing this, it will start chaining when the condition is right
-                Instantiate(gameObject, otherObject.gameObject.transform.position, Quaternion.identity);
-                //Mark the enemy as hit
-                hit = otherObject.gameObject.AddComponent<Struck>();
-                hit.killDelay = enemyRestruckDelay;
-                //Kill this gameObject once you have struck the closest enemy
-                //Remove the Kill() if you want to strike everyone in the proximity
-                Kill();
-            }
+        if (otherObject.transform.tag == "Enemy" || otherObject.transform.tag == "FlyingEnemy" || otherObject.transform.tag == "Ranged_Enemy" 
+                                        || otherObject.transform.tag == "Ranged_Enemy2" || otherObject.transform.tag == "Chaser") {
+            CheckChain(otherObject);
         }
-        //----------------------------------------------------------------------------------
-        else if (otherObject.transform.tag == "FlyingEnemy") {
-            Flying_Enemy e = otherObject.gameObject.GetComponent<Flying_Enemy>();
+    }
 
-            if (e == null) {  // It is not enemy
-                Debug.Log("No Enemy");
-                return;
-            }
+    private void CheckChain(Collider targetObject) {
+    Struck hit = targetObject.gameObject.GetComponent<Struck>();
 
-            Struck hit = otherObject.gameObject.GetComponent<Struck>();
+    if (hit == null) { // the enemy is yet to be hit
+        Debug.Log("Tagged Enemy");
 
-            if (hit == null) { // the enemy is yet to be hit
-                Debug.Log("Tagged Enemy");
-
-                target = otherObject.gameObject;
-                if (target != null) {
-                    targetPos = otherObject.transform.position;
-                    SpawnChain(transform.position, targetPos);
-                }
-
-                //Create another copy of this lightning field, by doing this, it will start chaining when the condition is right
-                Instantiate(gameObject, otherObject.gameObject.transform.position, Quaternion.identity);
-
-                //Mark the enemy as hit
-                hit = otherObject.gameObject.AddComponent<Struck>();
-                hit.killDelay = enemyRestruckDelay;
-                //Kill this gameObject once you have struck the closest enemy
-                //Remove the Kill() if you want to strike everyone in the proximity
-                Kill();
-            }
+        target = targetObject.gameObject;
+        if (target != null) {
+            targetPos = targetObject.transform.position;
+            SpawnChain(transform.position, targetPos);
         }
-        //----------------------------------------------------------------------------------
-        else if (otherObject.transform.tag == "Ranged_Enemy") {
 
-        }
-        //----------------------------------------------------------------------------------
-        else if (otherObject.transform.tag == "Ranged_Enemy2") {
+        //Create another copy of this lightning field, by doing this, it will start chaining when the condition is right
+        Instantiate(gameObject, targetObject.gameObject.transform.position, Quaternion.identity);
 
-        }
-        //----------------------------------------------------------------------------------
-        else if (otherObject.transform.tag == "Chaser") {
+        //Mark the enemy as hit
+        hit = targetObject.gameObject.AddComponent<Struck>();
+        hit.killDelay = enemyRestruckDelay;
+            //Kill this gameObject once you have struck the closest enemy
+            //Remove the Kill() if you want to strike everyone in the proximity
+            //Kill();
         }
     }
 
     void SpawnChain(Vector3 startPos, Vector3 endPos) {
-        Debug.Log("Made a new lightning");
         GameObject lightningChain = Instantiate(lightningEffect, transform.position, transform.rotation);
-        Vector3 centerPos = new Vector3(startPos.x + endPos.x, startPos.y + endPos.y) / 2;
 
-        float scaleX = Mathf.Abs(startPos.x - endPos.x);
-        float scaleY = Mathf.Abs(startPos.y - endPos.y);
+        var dir = endPos - startPos;
+        lightningChain.transform.rotation = Quaternion.FromToRotation(Vector3.right, dir);
 
-        Vector3 newTarget;
-        Vector3 currentPos = transform.position;
+        Quaternion originalRot = lightningChain.transform.rotation;
+        lightningChain.transform.rotation = originalRot * Quaternion.AngleAxis(90, Vector3.up);
 
-        newTarget = Input.mousePosition;
-        newTarget.z = Vector3.Distance(Camera.main.transform.position, transform.position);
-        currentPos = Camera.main.WorldToScreenPoint(currentPos);
-        newTarget.x -= currentPos.x;
-        newTarget.y -= currentPos.y;
-        angle = Mathf.Atan2(newTarget.y, newTarget.x) * Mathf.Rad2Deg;
+        Vector3 scale = lightningChain.transform.localScale;
+        scale.z = dir.magnitude * 0.25f;
+        lightningChain.transform.localScale = scale;
 
-        lightningChain.transform.rotation = Quaternion.Euler(new Vector3(-angle, 90, 0));
-
-        centerPos.x -= 0.5f;
-        centerPos.y += 0.5f;
-        lightningChain.transform.position = centerPos;
-        lightningChain.transform.localScale = new Vector3(scaleX, scaleY, 1);
     }
 
     // Also called in an animation event, in case the sphere strikes nothing at all

@@ -81,7 +81,7 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1819590284681178}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -173,7 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcb1e8d52b0a6e34d9c73bdc3842e6c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lightningEffect: {fileID: 1552596084186180, guid: f4aa7aee3388f80458409656266d6a52,
+  lightningEffect: {fileID: 1320292853940048, guid: 0a6d67e50b818f244b9714954784c527,
     type: 2}
   enemyRestruckDelay: 5
 --- !u!135 &135075192291886448

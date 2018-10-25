@@ -28,6 +28,16 @@ public class LightningDamage : MonoBehaviour {
 
     }
 
+    private void StartChain(Collider targetObject) {
+        Struck hitTarget = targetObject.gameObject.GetComponent<Struck>();
+        if (hitTarget == null) {
+            hitTarget = targetObject.gameObject.AddComponent<Struck>();
+            hitTarget.killDelay = 5f;
+            GameObject newLightning = Instantiate(ChainChecker, targetObject.transform.position, ChainChecker.transform.rotation);
+        }
+    }
+
+
     void OnTriggerStay(Collider otherObject) {
 
         RaycastHit hit;
@@ -38,17 +48,17 @@ public class LightningDamage : MonoBehaviour {
                                                             Vector3.Distance(guitarPoint.transform.position, otherObject.transform.position))) {
                     if (hit.transform.GetComponent<Enemy>() != null) {
                         hit.transform.GetComponent<Enemy>().takeDamage(damage);
-                        GameObject newLightning = Instantiate(ChainChecker, otherObject.transform.position, ChainChecker.transform.rotation);
-                        newLightning.GetComponent<LightningChain>().SetParent(gameObject);
-                    }
-
-
-                    else if (hit.transform.GetComponent<Chaser>() != null)
+                        StartChain(otherObject);
+                    } else if (hit.transform.GetComponent<Chaser>() != null) {
                         hit.transform.GetComponent<Chaser>().takeDamage(damage);
-                    else if (hit.transform.GetComponent<Boss>() != null)
+                        StartChain(otherObject);
+                    } else if (hit.transform.GetComponent<Boss>() != null) {
                         hit.transform.GetComponent<Boss>().takeDamage(damage);
-                    else if (hit.transform.GetComponent<Large_Spider>() != null)
+                        StartChain(otherObject);
+                    } else if (hit.transform.GetComponent<Large_Spider>() != null) {
                         hit.transform.GetComponent<Large_Spider>().takeDamage(damage);
+                        StartChain(otherObject);
+                    }
                 }
             }
             //----------------------------------------------------------------------------------
@@ -57,16 +67,18 @@ public class LightningDamage : MonoBehaviour {
                                                                 Vector3.Distance(guitarPoint.transform.position, otherObject.transform.position))) {
                     if (otherObject.GetComponent<Flying_Enemy>()) {
                         otherObject.GetComponent<Flying_Enemy>().takeDamage(damage);
-                        if(!hasntSpawned) {
-                            GameObject newLightning = Instantiate(ChainChecker, otherObject.transform.position, ChainChecker.transform.rotation);
-                            newLightning.GetComponent<LightningChain>().SetParent(gameObject);
-                            hasntSpawned = true;
-                        }
+                        StartChain(otherObject);
                     }
-                    else if (otherObject.GetComponent<Flying_Crush_Enemy>())
+                    else if (otherObject.GetComponent<Flying_Crush_Enemy>()) {
                         otherObject.GetComponent<Flying_Crush_Enemy>().takeDamage(damage);
-                    else if (otherObject.GetComponent<Flying_Kamikaze_Enemy>())
+                        StartChain(otherObject);
+                    }
+                        
+                    else if (otherObject.GetComponent<Flying_Kamikaze_Enemy>()) {
                         otherObject.GetComponent<Flying_Kamikaze_Enemy>().takeDamage(damage);
+                        StartChain(otherObject);
+                    }
+
                 }
             }
             //----------------------------------------------------------------------------------
@@ -74,6 +86,7 @@ public class LightningDamage : MonoBehaviour {
                 if (!Physics.Raycast(guitarPoint.transform.position, -(guitarPoint.transform.position - otherObject.transform.position).normalized, out hit,
                                                                 Vector3.Distance(guitarPoint.transform.position, otherObject.transform.position))) {
                     otherObject.GetComponent<Ranged_Enemy>().takeDamage(damage);
+                    StartChain(otherObject);
                 }
             }
             //----------------------------------------------------------------------------------
@@ -81,6 +94,7 @@ public class LightningDamage : MonoBehaviour {
                 if (!Physics.Raycast(guitarPoint.transform.position, -(guitarPoint.transform.position - otherObject.transform.position).normalized, out hit,
                                                                 Vector3.Distance(guitarPoint.transform.position, otherObject.transform.position))) {
                     otherObject.GetComponent<Ranged_Enemy2>().takeDamage(damage);
+                    StartChain(otherObject);
                 }
             }
             //----------------------------------------------------------------------------------
@@ -88,6 +102,7 @@ public class LightningDamage : MonoBehaviour {
                 if (Physics.Raycast(guitarPoint.transform.position, -(guitarPoint.transform.position - otherObject.transform.position).normalized, out hit,
                                                                 Vector3.Distance(guitarPoint.transform.position, otherObject.transform.position))) {
                     otherObject.GetComponent<Chaser>().takeDamage(damage);
+                    StartChain(otherObject);
                 }
             }
         }

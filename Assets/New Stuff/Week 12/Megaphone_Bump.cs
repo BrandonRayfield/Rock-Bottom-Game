@@ -31,7 +31,7 @@ public class Megaphone_Bump : MonoBehaviour {
 
             Vector3 angle = new Vector3(direction * 5f, 2f, 0f);
             angle = Vector3.Normalize(angle);
-            other.GetComponent<Rigidbody>().AddForce(angle * 500);
+            other.GetComponent<Rigidbody>().AddForce(angle * 250);
         }
     }
 
